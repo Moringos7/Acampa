@@ -25,7 +25,7 @@ if(isset($_GET["idfotoalrededores"])){
 }else{
 	$resultado["success"] = 0;
 	$resultado["message"] = "ws no Retorna";
-	$json['Dependencia'][] = $resultado;
+	$json['FotoAlrededores'][] = $resultado;
 	echo json_encode($json);
 }
 ?>

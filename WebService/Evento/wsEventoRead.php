@@ -34,7 +34,7 @@ if(isset($_GET["idevento"])){
 }else{
 	$resultado["success"] = 0;
 	$resultado["message"] = "ws no Retorna";
-	$json['Dependencia'][] = $resultado;
+	$json['Evento'][] = $resultado;
 	echo json_encode($json);
 }
 ?>

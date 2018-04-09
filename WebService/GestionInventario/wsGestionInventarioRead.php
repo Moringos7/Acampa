@@ -28,7 +28,7 @@ if(isset($_GET["idgestioninventario"])){
 }else{
 	$resultado["success"] = 0;
 	$resultado["message"] = "ws no Retorna";
-	$json['Dependencia'][] = $resultado;
+	$json['GestionInventario'][] = $resultado;
 	echo json_encode($json);
 }
 ?>

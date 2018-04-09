@@ -3,24 +3,21 @@
 require("../wsBDcredencial.php");
 
 $json = array();
-if(isset($_GET["idpassword"])){
-	$IdPassword = $_GET["idpassword"];
+if(isset($_GET["idvoluntariofrecuente"])){
+	$IdDomicilio =$_GET["idvoluntariofrecuente"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
-	$select = "SELECT * FROM password WHERE IdPassword = '$IdPassword'";	
+	$select = "SELECT * FROM voluntariofrecuente WHERE IdVoluntarioFrecuente = '$IdVoluntarioFrecuente'";	
 	$resultado = mysqli_query($conexion,$select);
 	
 	if($registro = mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
-		
-		$registro['Password'] = utf8_encode($registro['Password']);
-		
-		$json['Password'][] = $registro;
+
+		$json['VoluntarioFrecuente'][] = $registro;
 	
 	}else{
-		$resultado["IdPassword"] = 0;
-		$resultado["Password"] = '***';
-		$resultado["Intentos"] = 0;
+		$resultado["IdVoluntarioFrecuente"] = 0;
 		$resultado["FkUsuario"] = 0;
-		$json['Password'][] = $resultado;
+		$resultado["FkAdultoMayor"] = 0;
+		$json['VoluntarioFrecuente'][] = $resultado;
 	}
 	mysqli_close($conexion);
 	echo json_encode($json);
@@ -28,7 +25,7 @@ if(isset($_GET["idpassword"])){
 }else{
 	$resultado["success"] = 0;
 	$resultado["message"] = "ws no Retorna";
-	$json['Password'][] = $resultado;
+	$json['VoluntarioFrecuente'][] = $resultado;
 	echo json_encode($json);
 }
 ?>

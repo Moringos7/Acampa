@@ -15,7 +15,7 @@ if(isset($_GET["iddomicilio"])){
 		$registro['Colonia'] = utf8_encode($registro['Colonia']);
 		$registro['Foto'] = utf8_encode($registro['Foto']);
 		
-		$json['Dependencia'][] = $registro;
+		$json['Domicilio'][] = $registro;
 	
 	}else{
 		$resultado["IdDomicilio"] = 0;
@@ -32,7 +32,7 @@ if(isset($_GET["iddomicilio"])){
 }else{
 	$resultado["success"] = 0;
 	$resultado["message"] = "ws no Retorna";
-	$json['Dependencia'][] = $resultado;
+	$json['Domicilio'][] = $resultado;
 	echo json_encode($json);
 }
 ?>
