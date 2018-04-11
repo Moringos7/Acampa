@@ -3,9 +3,9 @@ require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
 
-$IdVoluntarioFrecuente = $_GET["idvoluntariofrecuente"];
-$FkUsuario = $_GET["fkusuario"];
-$FkAdultoMayor = $_GET["fkadultomayor"];
+$IdVoluntarioFrecuente = $_POST["idvoluntariofrecuente"];
+$FkUsuario = $_POST["fkusuario"];
+$FkAdultoMayor = $_POST["fkadultomayor"];
 
 
 $sql = "UPDATE voluntariofrecuente SET FkUsuario = ?, FkAdultoMayor = ? WHERE IdVoluntarioFrecuente = ?";

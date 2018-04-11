@@ -4,7 +4,7 @@ require("../wsBDcredencial.php");
 
 $json = array();
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
-	$select = "SELECT * FROM Usuario";	
+	$select = "SELECT * FROM usuario";	
 	$resultado = mysqli_query($conexion,$select);
 	//var_dump($resultado);
 	while($registro = mysqli_fetch_array($resultado,MYSQLI_ASSOC)){

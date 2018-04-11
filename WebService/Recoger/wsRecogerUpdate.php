@@ -3,9 +3,9 @@ require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
 
-$IdRecoger = $_GET["idrecoger"];
-$FkScouter = $_GET["fkscouter"];
-$FkAsignacion = $_GET["fkasignacion"];
+$IdRecoger = $_POST["idrecoger"];
+$FkScouter = $_POST["fkscouter"];
+$FkAsignacion = $_POST["fkasignacion"];
 
 
 $sql = "UPDATE recoger SET FkScouter = ? , FkAsignacion = ? WHERE IdRecoger = ?";

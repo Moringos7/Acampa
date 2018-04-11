@@ -3,8 +3,8 @@
 require("../wsBDcredencial.php");
 
 $json = array();
-if(isset($_GET["idusuario"])){
-	$IdUsuario =$_GET["idusuario"];
+if(isset($_POST["idusuario"])){
+	$IdUsuario =$_POST["idusuario"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	$select = "SELECT * FROM usuario WHERE IdUsuario = '$IdUsuario'";	
 	$resultado = mysqli_query($conexion,$select);
@@ -17,15 +17,15 @@ if(isset($_GET["idusuario"])){
 		$registro['Fotografia'] = utf8_encode($registro['Fotografia']);
 		$json['Usuario'][] = $registro;
 	}else{
-		$resultado["IdUsuario"] = 0;
-		$resultado["Nombre"] = '---';
-		$resultado["ApellidoPaterno"] = '---';
-		$resultado["ApellidoMaterno"] = '---';
-		$resultado["Correo"] = '---';
-		$resultado["Fotografia"] = '---';
-		$resultado["FechaNacimiento"] = '---';
-		$resultado["Fkseccion"] =0;
-		$json['Usuario'][] = $resultado;
+		$registro["IdUsuario"] = 0;
+		$registro["Nombre"] = '---';
+		$registro["ApellidoPaterno"] = '---';
+		$registro["ApellidoMaterno"] = '---';
+		$registro["Correo"] = '---';
+		$registro["Fotografia"] = '---';
+		$registro["FechaNacimiento"] = '---';
+		$registro["Fkseccion"] =0;
+		$json['Usuario'][] = $registro;
 	}
 	mysqli_close($conexion);
 	echo json_encode($json);

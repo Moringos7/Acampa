@@ -3,14 +3,14 @@ require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
 
-$IdAdultoMayor = $_GET["idadultomayor"];
-$Nombre = $_GET["nombre"];
-$ApellidoPaterno = $_GET["apellidomaterno"];
-$ApellidoMaterno = $_GET["apellidopaterno"];
-$Fotografia = $_GET["fotografia"];
-$Diabetico = $_GET["diabetico"]; 
-$FkDependencia = $_GET["fkdependencia"];
-$FkDomicilio = $_GET["fkdomicilio"];
+$IdAdultoMayor = $_POST["idadultomayor"];
+$Nombre = $_POST["nombre"];
+$ApellidoPaterno = $_POST["apellidomaterno"];
+$ApellidoMaterno = $_POST["apellidopaterno"];
+$Fotografia = $_POST["fotografia"];
+$Diabetico = $_POST["diabetico"]; 
+$FkDependencia = $_POST["fkdependencia"];
+$FkDomicilio = $_POST["fkdomicilio"];
 
 
 $sql = "UPDATE adultomayor SET Nombre = ?, ApellidoPaterno = ?,ApellidoMaterno = ?,Fotografia = ?,Diabetico = ?, FkDependencia = ?,FkDomicilio = ? WHERE IdAdultoMayor = ?";

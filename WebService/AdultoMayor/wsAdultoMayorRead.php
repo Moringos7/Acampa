@@ -3,8 +3,8 @@
 require("../wsBDcredencial.php");
 
 $json = array();
-if(isset($_GET["idadultomayor"])){
-	$IdAdultoMayor =$_GET["idadultomayor"];
+if(isset($_POST["idadultomayor"])){
+	$IdAdultoMayor =$_POST["idadultomayor"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	$select = "SELECT * FROM adultomayor WHERE IdAdultoMayor = '$IdAdultoMayor'";	
 	$resultado = mysqli_query($conexion,$select);
@@ -16,15 +16,15 @@ if(isset($_GET["idadultomayor"])){
 		$json['AdultoMayor'][] = $registro;
 		//echo $registro['IdAdultoMayor']."-".$registro['Nombre'];
 	}else{
-		$resultado["IdAdultoMayor"] = 0;
-		$resultado["Nombre"] = '---';
-		$resultado["ApellidoPaterno"] = '---';
-		$resultado["ApellidoMaterno"] = '---';
-		$resultado["Fotografia"] = '---';
-		$resultado["Diabetico"] = 0;
-		$resultado["FkDependencia"] = 0;
-		$resultado["FkDomicilio"] = 0;
-		$json['AdultoMayor'][] = $resultado;
+		$registro["IdAdultoMayor"] = 0;
+		$registro["Nombre"] = '---';
+		$registro["ApellidoPaterno"] = '---';
+		$registro["ApellidoMaterno"] = '---';
+		$registro["Fotografia"] = '---';
+		$registro["Diabetico"] = 0;
+		$registro["FkDependencia"] = 0;
+		$registro["FkDomicilio"] = 0;
+		$json['AdultoMayor'][] = $registro;
 	}
 	mysqli_close($conexion);
 	echo json_encode($json);

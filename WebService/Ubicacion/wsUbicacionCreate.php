@@ -1,8 +1,8 @@
 <?php
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
-$Longitud = $_GET["longitud"];
-$Latitud = $_GET["latitud"];
+$Longitud = $_POST["longitud"];
+$Latitud = $_POST["latitud"];
 
 $sql = "INSERT INTO ubicacion VALUES(null,?,?)";
 

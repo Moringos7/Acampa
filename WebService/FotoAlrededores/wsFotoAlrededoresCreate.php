@@ -1,8 +1,8 @@
 <?php
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
-$Foto = $_GET["foto"];
-$FkDomicilio = $_GET["fkdomicilio"];
+$Foto = $_POST["foto"];
+$FkDomicilio = $_POST["fkdomicilio"];
 
 $sql = "INSERT INTO fotoalrededores VALUES(null,?,?)";
 

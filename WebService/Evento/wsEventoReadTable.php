@@ -12,7 +12,7 @@ $json = array();
 		$registro['Fecha'] = utf8_encode($registro['Fecha']);
 		$registro['Hora'] = utf8_encode($registro['Hora']);
 		$registro['Lugar'] = utf8_encode($registro['Lugar']);
-		$registro['Comentario'] = utf8_encode($registro['Comentario']);
+		$registro['Informacion'] = utf8_encode($registro['Informacion']);
 		$json['Evento'][] = $registro;
 	}
 	mysqli_close($conexion);

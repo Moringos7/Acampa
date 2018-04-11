@@ -1,9 +1,9 @@
 <?php
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
-$Password = $_GET["password"];
-$Intentos = $_GET["intentos"];
-$FkUsuario = $_GET["fkusuario"];
+$Password = $_POST["password"];
+$Intentos = $_POST["intentos"];
+$FkUsuario = $_POST["fkusuario"];
 
 $sql = "INSERT INTO password VALUES(null,?,?,?)";
 

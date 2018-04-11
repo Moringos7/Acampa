@@ -3,8 +3,8 @@ require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
 
-$IdDependencia = $_GET["iddependencia"];
-$Nombre = $_GET["nombre"];
+$IdDependencia = $_POST["iddependencia"];
+$Nombre = $_POST["nombre"];
 
 $sql = "UPDATE dependencia SET Nombre = ? WHERE IdDependencia = ?";
 

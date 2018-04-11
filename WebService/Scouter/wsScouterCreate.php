@@ -1,9 +1,9 @@
 <?php
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
-$FechaInicio = $_GET["fechainicio"];
-$FechaFinal = $_GET["fechafinal"];
-$FkUsuario = $_GET["fkusuario"];
+$FechaInicio = $_POST["fechainicio"];
+$FechaFinal = $_POST["fechafinal"];
+$FkUsuario = $_POST["fkusuario"];
 
 $sql = "INSERT INTO domicilio VALUES(null,?,?,?,?,?)";
 

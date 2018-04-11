@@ -1,8 +1,8 @@
 <?php 
 require("../wsBDcredencial.php");
 
-if(isset($_GET["idgestioninventario"])){
-	$IdGestionInventario = $_GET["idgestioninventario"];
+if(isset($_POST["idgestioninventario"])){
+	$IdGestionInventario = $_POST["idgestioninventario"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	$sql = "DELETE FROM gestioninventario WHERE IdGestionInventario = ?";
 	$stm = $conexion->prepare($sql);

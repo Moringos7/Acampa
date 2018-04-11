@@ -1,10 +1,10 @@
 <?php
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
-$Status= $_GET["status"];
-$Fecha = $_GET["fecha"];
-$FkUsuario = $_GET["fkusuario"];
-$FkAdultoMayor = $_GET["fkadultomayor"];
+$Status= $_POST["status"];
+$Fecha = $_POST["fecha"];
+$FkUsuario = $_POST["fkusuario"];
+$FkAdultoMayor = $_POST["fkadultomayor"];
 
 $sql = "INSERT INTO asignacion VALUES(null,?,?,?,?)";
 

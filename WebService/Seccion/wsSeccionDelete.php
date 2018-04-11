@@ -1,8 +1,8 @@
 <?php 
 require("../wsBDcredencial.php");
 
-if(isset($_GET["idseccion"])){
-	$IdSeccion = $_GET["idseccion"];
+if(isset($_POST["idseccion"])){
+	$IdSeccion = $_POST["idseccion"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	$sql = "DELETE FROM seccion WHERE IdSeccion = ?";
 	$stm = $conexion->prepare($sql);

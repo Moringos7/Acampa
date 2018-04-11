@@ -8,7 +8,7 @@ $json = array();
 	$resultado = mysqli_query($conexion,$select);
 	//var_dump($resultado);
 	while($registro = mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
-		$resultado['Fecha'] = utf8_encode($resultado['Fecha']);
+		$registro['Fecha'] = utf8_encode($registro['Fecha']);
 		$json['GestionInventario'][] = $registro;
 	}
 	mysqli_close($conexion);

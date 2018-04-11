@@ -3,8 +3,8 @@ require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
 
-$IdTipoEvento = $_GET["idtipoproblematica"];
-$Nombre = $_GET["nombre"];
+$IdTipoEvento = $_POST["idtipoproblematica"];
+$Nombre = $_POST["nombre"];
 
 
 $sql = "UPDATE tipoproblematica SET Nombre = ? WHERE IdTipoProblematica = ?";

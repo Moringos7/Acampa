@@ -3,12 +3,12 @@ require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
 
-$IdProblematica = $_GET["idproblematica"];
-$Fecha = $_GET["fecha"];
-$Nombre = $_GET["nombre"];
-$Sugerencia = $_GET["sugerencia"];
-$FkUsuario = $_GET["fkusuario"];
-$FkTipoProblematica = $_GET["fktipoproblematica"];
+$IdProblematica = $_POST["idproblematica"];
+$Fecha = $_POST["fecha"];
+$Nombre = $_POST["nombre"];
+$Sugerencia = $_POST["sugerencia"];
+$FkUsuario = $_POST["fkusuario"];
+$FkTipoProblematica = $_POST["fktipoproblematica"];
 
 
 $sql = "UPDATE problematica SET Fecha = ?, Nombre = ?, Sugerencia = ?, FkUsuario = ?,FkTipoProblematica = ? WHERE IdProblematica = ?";

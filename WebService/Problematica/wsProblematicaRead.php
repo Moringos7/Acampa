@@ -18,13 +18,13 @@ if(isset($_GET["idproblematica"])){
 		$json['Problematica'][] = $registro;
 	
 	}else{
-		$resultado["IdProblematica"] = 0;
-		$resultado["Fecha"] = '---';
-		$resultado["Nombre"] = '---';
-		$resultado["Sugerencia"] = '---';
-		$resultado["FkUsuario"] = 0;
-		$resultado["FkTipoProblematica"] = 0;
-		$json['Problematica'][] = $resultado;
+		$registro["IdProblematica"] = 0;
+		$registro["Fecha"] = '---';
+		$registro["Nombre"] = '---';
+		$registro["Sugerencia"] = '---';
+		$registro["FkUsuario"] = 0;
+		$registro["FkTipoProblematica"] = 0;
+		$json['Problematica'][] = $registro;
 	}
 	mysqli_close($conexion);
 	echo json_encode($json);

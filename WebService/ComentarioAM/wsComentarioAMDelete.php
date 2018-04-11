@@ -1,8 +1,8 @@
 <?php 
 require("../wsBDcredencial.php");
 
-if(isset($_GET["idcomentarioam"])){
-	$IdAdultoMayor = $_GET["idcomentarioam"];
+if(isset($_POST["idcomentarioam"])){
+	$IdAdultoMayor = $_POST["idcomentarioam"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	$sql = "DELETE FROM comentarioam WHERE IdComentarioAM = ? ";
 	$stm = $conexion->prepare($sql);

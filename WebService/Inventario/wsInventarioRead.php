@@ -3,8 +3,8 @@
 require("../wsBDcredencial.php");
 
 $json = array();
-if(isset($_GET["idinventario"])){
-	$IdInventario = $_GET["idinventario"];
+if(isset($_POST["idinventario"])){
+	$IdInventario = $_POST["idinventario"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	$select = "SELECT * FROM inventario WHERE IdInventario = '$IdInventario'";	
 	$resultado = mysqli_query($conexion,$select);
@@ -40,10 +40,10 @@ if(isset($_GET["idinventario"])){
 }
 ?>
 
-$Producto = $_GET["producto"];
-$Cantidad = $_GET["cantidad"];
-$Existencia = $_GET["existencia"];
-$Descripcion = $_GET["descripcion"];
-$Imagen = $_GET["imagen"];
-$Comentario = $_GET["comentario"];
-$Extra = $_GET["extra"];
+$Producto = $_POST["producto"];
+$Cantidad = $_POST["cantidad"];
+$Existencia = $_POST["existencia"];
+$Descripcion = $_POST["descripcion"];
+$Imagen = $_POST["imagen"];
+$Comentario = $_POST["comentario"];
+$Extra = $_POST["extra"];

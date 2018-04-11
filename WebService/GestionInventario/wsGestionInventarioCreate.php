@@ -1,9 +1,9 @@
 <?php
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
-$Fecha = $_GET["fecha"];
-$FkScouter = $_GET["fkscouter"];
-$FkInventario = $_GET["fkinventario"];
+$Fecha = $_POST["fecha"];
+$FkScouter = $_POST["fkscouter"];
+$FkInventario = $_POST["fkinventario"];
 
 $sql = "INSERT INTO gestioninventario VALUES(null,?,?,?)";
 

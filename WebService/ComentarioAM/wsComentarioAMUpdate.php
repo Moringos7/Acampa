@@ -3,10 +3,10 @@ require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
 
-$IdComentarioAM = $_GET["idcomentarioam"];
-$Nombre = $_GET["nombre"];
-$Fecha = $_GET["fecha"];
-$FkAdultoMayor = $_GET["fkadultomayor"];
+$IdComentarioAM = $_POST["idcomentarioam"];
+$Nombre = $_POST["nombre"];
+$Fecha = $_POST["fecha"];
+$FkAdultoMayor = $_POST["fkadultomayor"];
 
 
 $sql = "UPDATE comentarioam SET Nombre = ?, Fecha = ?,FkAdultoMayor = ? WHERE IdComentarioAM= ?";

@@ -3,10 +3,10 @@ require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
 
-$IdPassword = $_GET["idpassword"];
-$Password = $_GET["password"];
-$Intentos = $_GET["intentos"];
-$FkUsuario = $_GET["fkusuario"];
+$IdPassword = $_POST["idpassword"];
+$Password = $_POST["password"];
+$Intentos = $_POST["intentos"];
+$FkUsuario = $_POST["fkusuario"];
 
 
 $sql = "UPDATE password SET Password = ?, Intentos = ?, FkUsuario = ? WHERE IdPassword = ?";

@@ -3,8 +3,8 @@
 require("../wsBDcredencial.php");
 
 $json = array();
-if(isset($_GET["idasignacion"])){
-	$IdAsignacion =$_GET["idasignacion"];
+if(isset($_POST["idasignacion"])){
+	$IdAsignacion =$_POST["idasignacion"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	$select = "SELECT * FROM asignacion WHERE IdAsignacion = '$IdAsignacion'";	
 	$resultado = mysqli_query($conexion,$select);
@@ -14,12 +14,12 @@ if(isset($_GET["idasignacion"])){
 		$json['Asignacion'][] = $registro;
 		//echo $registro['IdAsignacion']."-".$registro['Status'];
 	}else{
-		$resultado["IdAsignacion"] = 0;
-		$resultado["Status"] = 0;
-		$resultado["Fecha"] = '---';
-		$resultado["FkUsuario"] = 0;
-		$resultado["FkAdultoMayor"] = 0;
-		$json['Asignacion'][] = $resultado;
+		$registro["IdAsignacion"] = 0;
+		$registro["Status"] = 0;
+		$registro["Fecha"] = '---';
+		$registro["FkUsuario"] = 0;
+		$registro["FkAdultoMayor"] = 0;
+		$json['Asignacion'][] = $registro;
 	}
 	mysqli_close($conexion);
 	echo json_encode($json);

@@ -3,8 +3,8 @@
 require("../wsBDcredencial.php");
 
 $json = array();
-if(isset($_GET["idevento"])){
-	$IdEvento = $_GET["idevento"];
+if(isset($_POST["idevento"])){
+	$IdEvento = $_POST["idevento"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	$select = "SELECT * FROM evento WHERE IdEvento = '$IdEvento'";	
 	$resultado = mysqli_query($conexion,$select);
@@ -14,19 +14,19 @@ if(isset($_GET["idevento"])){
 		$registro['Fecha'] = utf8_encode($registro['Fecha']);
 		$registro['Hora'] = utf8_encode($registro['Hora']);
 		$registro['Lugar'] = utf8_encode($registro['Lugar']);
-		$registro['Comentario'] = utf8_encode($registro['Comentario']);
+		$registro['Informacion'] = utf8_encode($registro['Informacion']);
 		
 		$json['Evento'][] = $registro;
 	
 	}else{
 
-		$resultado["IdEvento"] = 0;
-		$resultado["Fecha"] = '---';
-		$resultado["Hora"] = '---';
-		$resultado["Lugar"] = '---';
-		$resultado["Comentario"] = '---';
-		$resultado["FkTipoEvento"] = 0;
-		$json['Evento'][] = $resultado;
+		$registro["IdEvento"] = 0;
+		$registro["Fecha"] = '---';
+		$registro["Hora"] = '---';
+		$registro["Lugar"] = '---';
+		$registro["Informacion"] = '---';
+		$registro["FkTipoEvento"] = 0;
+		$json['Evento'][] = $registro;
 	}
 	mysqli_close($conexion);
 	echo json_encode($json);

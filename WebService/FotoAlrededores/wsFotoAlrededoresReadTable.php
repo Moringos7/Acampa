@@ -8,7 +8,7 @@ $json = array();
 	$resultado = mysqli_query($conexion,$select);
 
 	while($registro = mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
-		$resultado['Foto'] = utf8_encode($resultado['Foto']);
+		$registro['Foto'] = utf8_encode($registro['Foto']);
 		$json['FotoAlrededores'][] = $registro;
 	}
 	mysqli_close($conexion);

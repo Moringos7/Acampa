@@ -3,10 +3,10 @@ require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
 
-$IdScouter = $_GET["idscouter"];
-$FechaInicio = $_GET["fechainicio"];
-$FechaFinal = $_GET["fechafinal"];
-$FkUsuario = $_GET["fkusuario"];
+$IdScouter = $_POST["idscouter"];
+$FechaInicio = $_POST["fechainicio"];
+$FechaFinal = $_POST["fechafinal"];
+$FkUsuario = $_POST["fkusuario"];
 
 $sql = "UPDATE scouter SET FechaInicio = ?, FechaFinal = ?, FkUsuario = ? WHERE IdScouter = ?";
 

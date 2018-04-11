@@ -16,11 +16,11 @@ if(isset($_GET["idscouter"])){
 		$json['Scouter'][] = $registro;
 	
 	}else{
-		$resultado["IdScouter"] = 0;
-		$resultado["FechaInicio"] = '---';
-		$resultado["FechaFinal"] = '---';
-		$resultado["FkUsuario"] = 0;
-		$json['Scouter'][] = $resultado;
+		$registro["IdScouter"] = 0;
+		$registro["FechaInicio"] = '---';
+		$registro["FechaFinal"] = '---';
+		$registro["FkUsuario"] = 0;
+		$json['Scouter'][] = $registro;
 	}
 	mysqli_close($conexion);
 	echo json_encode($json);

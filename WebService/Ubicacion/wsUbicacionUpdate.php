@@ -3,9 +3,9 @@ require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
 
-$IdUbicacion = $_GET["idubicacion"];
-$Longitud = $_GET["longitud"];
-$Latitud = $_GET["latitud"];
+$IdUbicacion = $_POST["idubicacion"];
+$Longitud = $_POST["longitud"];
+$Latitud = $_POST["latitud"];
 
 
 $sql = "UPDATE ubicacion SET Longitud = ?, Latitud = ?, WHERE IdUbicacion = ?";

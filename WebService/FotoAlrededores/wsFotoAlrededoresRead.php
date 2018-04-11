@@ -3,8 +3,8 @@
 require("../wsBDcredencial.php");
 
 $json = array();
-if(isset($_GET["idfotoalrededores"])){
-	$IdFotoAlrededores = $_GET["idfotoalrededores"];
+if(isset($_POST["idfotoalrededores"])){
+	$IdFotoAlrededores = $_POST["idfotoalrededores"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	$select = "SELECT * FROM fotoalrededores WHERE IdFotoAlrededores = '$IdFotoAlrededores'";	
 	$resultado = mysqli_query($conexion,$select);
@@ -14,10 +14,10 @@ if(isset($_GET["idfotoalrededores"])){
 		$json['FotoAlrededores'][] = $registro;
 	
 	}else{
-		$resultado["IdFotoAlrededores"] = 0;
-		$resultado["Foto"] = '---';
-		$resultado["FkDomicilio"] = 0;
-		$json['FotoAlrededores'][] = $resultado;
+		$registro["IdFotoAlrededores"] = 0;
+		$registro["Foto"] = '---';
+		$registro["FkDomicilio"] = 0;
+		$json['FotoAlrededores'][] = $registro;
 	}
 	mysqli_close($conexion);
 	echo json_encode($json);

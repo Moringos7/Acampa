@@ -2,13 +2,13 @@
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
 
-$Producto = $_GET["producto"];
-$Cantidad = $_GET["cantidad"];
-$Existencia = $_GET["existencia"];
-$Descripcion = $_GET["descripcion"];
-$Imagen = $_GET["imagen"];
-$Comentario = $_GET["comentario"];
-$Extra = $_GET["extra"];
+$Producto = $_POST["producto"];
+$Cantidad = $_POST["cantidad"];
+$Existencia = $_POST["existencia"];
+$Descripcion = $_POST["descripcion"];
+$Imagen = $_POST["imagen"];
+$Comentario = $_POST["comentario"];
+$Extra = $_POST["extra"];
 
 
 $sql = "INSERT INTO inventario VALUES(null,?,?,?,?,?,?,?)";

@@ -2,15 +2,15 @@
 require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
-$IdUsuario = $_GET["idusuario"];
-$Nombre = $_GET["nombre"];
-$ApellidoPaterno = $_GET["apellidomaterno"];
-$ApellidoMaterno = $_GET["apellidopaterno"];
-$Correo = $_GET["correo"];
-$Fotografia = $_GET["fotografia"];
-$FechaNacimiento = $_GET["fechanacimiento"];
-$Scout = $_GET["scout"];
-$FkSeccion = $_GET["fkseccion"];
+$IdUsuario = $_POST["idusuario"];
+$Nombre = $_POST["nombre"];
+$ApellidoPaterno = $_POST["apellidomaterno"];
+$ApellidoMaterno = $_POST["apellidopaterno"];
+$Correo = $_POST["correo"];
+$Fotografia = $_POST["fotografia"];
+$FechaNacimiento = $_POST["fechanacimiento"];
+$Scout = $_POST["scout"];
+$FkSeccion = $_POST["fkseccion"];
 
 $sql = "UPDATE 
 usuario SET IdUsuario = ?, Nombre = ?, ApellidoPaterno = ?,

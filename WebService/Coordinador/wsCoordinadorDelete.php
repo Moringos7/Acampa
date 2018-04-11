@@ -1,8 +1,8 @@
 <?php 
 require("../wsBDcredencial.php");
 
-if(isset($_GET["idcoordinador"])){
-	$IdCoordinador= $_GET["idcoordinador"];
+if(isset($_POST["idcoordinador"])){
+	$IdCoordinador= $_POST["idcoordinador"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	$sql = "DELETE FROM coordinador  WHERE IdCoordinador = ? ";
 	$stm = $conexion->prepare($sql);

@@ -14,10 +14,10 @@ if(isset($_GET["idrecoger"])){
 		$json['Recoger'][] = $registro;
 	
 	}else{
-		$resultado["IdRecoger"] = '---';
-		$resultado["FkScouter"] = '---';
-		$resultado["FkAsignacion"] = '---';
-		$json['Recoger'][] = $resultado;
+		$registro["IdRecoger"] = '---';
+		$registro["FkScouter"] = '---';
+		$registro["FkAsignacion"] = '---';
+		$json['Recoger'][] = $registro;
 	}
 	mysqli_close($conexion);
 	echo json_encode($json);

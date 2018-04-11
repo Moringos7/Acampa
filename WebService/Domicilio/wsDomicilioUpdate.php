@@ -3,12 +3,12 @@ require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
 
-$IdDomicilio = $_GET["iddomicilio"];
-$Numero= $_GET["numero"];
-$Calle = $_GET["calle"];
-$Colonia = $_GET["colonia"];
-$Foto = $_GET["foto"];
-$FkUbicacion = $_GET["fkubicacion"];
+$IdDomicilio = $_POST["iddomicilio"];
+$Numero= $_POST["numero"];
+$Calle = $_POST["calle"];
+$Colonia = $_POST["colonia"];
+$Foto = $_POST["foto"];
+$FkUbicacion = $_POST["fkubicacion"];
 
 
 $sql = "UPDATE domicilio SET Numero = ?, Calle = ?, Colonia = ?, Foto = ?,FkUbicacion = ? WHERE IdDomicilio = ?";

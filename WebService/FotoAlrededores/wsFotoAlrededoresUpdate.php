@@ -3,9 +3,9 @@ require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
 
-$IdFotoAlrededores = $_GET["idfotoalrededores"];
-$Foto = $_GET["foto"];
-$FkDomicilio = $_GET["fkdomicilio"];
+$IdFotoAlrededores = $_POST["idfotoalrededores"];
+$Foto = $_POST["foto"];
+$FkDomicilio = $_POST["fkdomicilio"];
 
 
 $sql = "UPDATE fotoalrededores SET Foto = ?,FkDomicilio = ? WHERE IdFotoAlrededores = ?";
