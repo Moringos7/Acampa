@@ -1,0 +1,209 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.rogzart.proyecto_interfaces.Fragmento01">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="Asignación Adultos Mayores"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <QuickContactBadge
+                android:id="@+id/quickContactBadge2"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="Francisco Daniel Castellanos"
+                android:textSize="24sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <SearchView
+                    android:layout_width="300dp"
+                    android:layout_height="50dp">
+
+                </SearchView>
+
+                <Button
+                    android:id="@+id/button11"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="Buscar" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal">
+
+                <QuickContactBadge
+                    android:id="@+id/quickContactBadge17"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/textView27"
+                    android:layout_width="250dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Alondra Ramirez" />
+
+                <CheckBox
+                    android:id="@+id/checkBox2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal">
+
+                <QuickContactBadge
+                    android:id="@+id/quickContactBadge18"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/textView28"
+                    android:layout_width="250dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Bartolo Hernandez" />
+                <CheckBox
+                    android:id="@+id/checkBox3"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal">
+
+                <QuickContactBadge
+                    android:id="@+id/quickContactBadge19"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/textView29"
+                    android:layout_width="250dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Carolina Mejia" />
+                <CheckBox
+                    android:id="@+id/checkBox4"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal">
+
+                <QuickContactBadge
+                    android:id="@+id/quickContactBadge20"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/holo_green_light"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/textView30"
+                    android:layout_width="250dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/holo_green_light"
+                    android:text="Daniel Cervantes" />
+
+                <CheckBox
+                    android:id="@+id/checkBox5"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/holo_green_light"
+                    android:checked="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal">
+
+                <QuickContactBadge
+                    android:id="@+id/quickContactBadge21"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/holo_green_light"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/textView31"
+                    android:layout_width="250dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/holo_green_light"
+                    android:text="Enrique Lazaro" />
+
+                <CheckBox
+                    android:id="@+id/checkBox6"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/holo_green_light"
+                    android:checked="true"
+                    android:focusable="auto" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

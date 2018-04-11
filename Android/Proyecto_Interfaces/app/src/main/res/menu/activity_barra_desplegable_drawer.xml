@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item android:title="Menu"></item>
+        <item
+            android:id="@+id/nav_RegistroAM"
+            android:title="Registro Adultos Mayores" />
+        <item
+            android:id="@+id/nav_EditarAdultos"
+            android:title="Editar Adultos Mayores" />
+        <item
+            android:id="@+id/nav_Novedades"
+            android:title="Novedades" />
+        <item
+            android:id="@+id/nav_camera"
+            android:title="Informacion Adultos Mayores" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:title="Localizaciòn de lugares" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:title="trazado de ruta" />
+        <item
+            android:id="@+id/nav_Asignacion"
+            android:title="Asignación Adultos Mayores" />
+        <item
+            android:id="@+id/nav_Inventario"
+            android:title="Inventario" />
+        <item
+            android:id="@+id/nav_Convivio"
+            android:title="Convivio" />
+        <item
+            android:id="@+id/nav_Scouters"
+            android:title="Scouters" />
+        <item
+            android:id="@+id/nav_Estadisticas"
+            android:title="Estadisticas" />
+        <item
+            android:id="@+id/nav_Eventos"
+            android:title="Eventos de Actualización" />
+
+    </group>
+    <item android:title="Comunicaciones">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>
+
+</menu>
