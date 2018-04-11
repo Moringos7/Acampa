@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-04-2018 a las 03:02:11
+-- Tiempo de generación: 11-04-2018 a las 01:59:01
 -- Versión del servidor: 10.1.30-MariaDB
 -- Versión de PHP: 7.2.1
 
@@ -32,6 +32,7 @@ DECLARE vCont Integer DEFAULT 1;
 SET vIdMax = (select IdUsuario from usuario order by idusuario desc limit 1);
 WHILE vCont <= vIdMax DO
 	Call prueba(vCont);
+    INSERT INTO `dependencia` (`Nombre`) VALUES ('Hola');
 	SET vCont = vCont + 1;
 END WHILE;
 END$$
@@ -55,8 +56,7 @@ IF vEdad < 11 THEN
     ELSE
     	SET vSeccion = (SELECT idseccion from seccion where Nombre = 'dirigente');
 END IF;
-UPDATE usuario SET ApellidoPaterno = vFecha where IdUsuario = Idu;
-UPDATE usuario SET ApellidoMaterno = vEdad where IdUsuario = Idu;
+
 UPDATE Usuario SET Fkseccion = vSeccion WHERE IdUsuario = Idu;
 
 END$$
@@ -307,7 +307,9 @@ CREATE TABLE `evento` (
 --
 
 INSERT INTO `evento` (`IdEvento`, `Fecha`, `Hora`, `Lugar`, `Informacion`, `FkTipoEvento`) VALUES
-(1, '2018-03-16', '12:00:00', 'Atemajac de Brizuela', '', 1);
+(1, '2018-03-16', '12:00:00', 'Atemajac de Brizuela', '', 1),
+(2, '2018-04-15', '08:00:00', '', '', NULL),
+(3, '2018-04-15', '08:00:00', 'Parque Alcalde', 'Llevar todas las ganas de ayudar y servir a los demás', 1);
 
 -- --------------------------------------------------------
 
@@ -321,6 +323,17 @@ CREATE TABLE `fotoalrededores` (
   `FkDomicilio` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `fotoalrededores`
+--
+
+INSERT INTO `fotoalrededores` (`IdFotoAlrededores`, `Foto`, `FkDomicilio`) VALUES
+(1, 'img/001.jpg', 4),
+(2, 'img/031.jpg', 5),
+(3, 'img/301.jpg', 2),
+(4, 'img/2001.jpg', 3),
+(5, 'img/031.jpg', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -333,6 +346,17 @@ CREATE TABLE `gestioninventario` (
   `FkScouter` int(11) NOT NULL,
   `FkInventario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `gestioninventario`
+--
+
+INSERT INTO `gestioninventario` (`IdGestionInventario`, `Fecha`, `FkScouter`, `FkInventario`) VALUES
+(1, '2018-10-02', 1, 4),
+(2, '2018-10-07', 2, 3),
+(3, '2018-04-01', 2, 2),
+(4, '2018-04-05', 2, 1),
+(5, '2018-04-02', 1, 3);
 
 -- --------------------------------------------------------
 
@@ -351,6 +375,17 @@ CREATE TABLE `inventario` (
   `Extra` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `inventario`
+--
+
+INSERT INTO `inventario` (`IdInventario`, `Producto`, `Cantidad`, `Existencia`, `Descripcion`, `Imagen`, `Comentario`, `Extra`) VALUES
+(1, 'Azucar', 1, 23, 'Kilogramo de Azuzar', 'img', '', 0),
+(2, 'Maceca', 1, 2, 'Kilogramo de Maceca', 'img', '', 0),
+(3, 'Lentejas', 0.5, 23, 'Kilogramo de Lenteja', 'img', '', 0),
+(4, 'Atun', 2, 0, 'Debe ser en lata', 'img', '', 0),
+(5, 'Manteca', 1, 10, 'Manteca empacada en bolsa de un cuarto', 'img', 'Fueron donandas por Asc', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -363,6 +398,16 @@ CREATE TABLE `password` (
   `Intentos` int(11) NOT NULL,
   `FkUsuario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `password`
+--
+
+INSERT INTO `password` (`IdPassword`, `Password`, `Intentos`, `FkUsuario`) VALUES
+(1, '12345', 1, 1),
+(2, '123456789', 0, 5),
+(3, '3efbgr4n', 2, 5),
+(4, 'ereede', 2, 10);
 
 -- --------------------------------------------------------
 
@@ -379,6 +424,14 @@ CREATE TABLE `problematica` (
   `FkTipoProblematica` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `problematica`
+--
+
+INSERT INTO `problematica` (`IdProblematica`, `Fecha`, `Nombre`, `Sugerencia`, `FkUsuario`, `FkTipoProblematica`) VALUES
+(1, '2018-03-12', 'No Funciona el boton color rojo de la primera interfaz', 'Cámbienlo a color azul', 5, 1),
+(2, '2018-01-19', 'El Viejito no vive en esa casa', 'Pongan el domicilio: Porfirio diaz 24  ', 9, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -390,6 +443,15 @@ CREATE TABLE `recoger` (
   `FkScouter` int(11) NOT NULL,
   `FkAsignacion` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `recoger`
+--
+
+INSERT INTO `recoger` (`IdRecoger`, `FkScouter`, `FkAsignacion`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 2, 8);
 
 -- --------------------------------------------------------
 
@@ -465,6 +527,14 @@ CREATE TABLE `tipoproblematica` (
   `Nombre` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `tipoproblematica`
+--
+
+INSERT INTO `tipoproblematica` (`IdTipoProblematica`, `Nombre`) VALUES
+(1, 'Fallo Aplicacion'),
+(2, 'Datos Incorrectos');
+
 -- --------------------------------------------------------
 
 --
@@ -526,13 +596,15 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`IdUsuario`, `Nombre`, `ApellidoPaterno`, `ApellidoMaterno`, `Correo`, `Fotografia`, `FechaNacimiento`, `Scout`, `FkSeccion`) VALUES
-(1, 'Jose Miguel', '1998-10-25', 'Reconocimos 1 plm', 'moringos7@gmail.com', 'Reconocimos 1 plm', '1998-10-25', 0, 4),
+(1, 'Jose Miguel', '1998-10-25', 'Reconocimos 1 plm', 'moringos7@gmail.com', 'Reconocimos 1 plm', '1998-10-25', 1, 5),
 (3, 'Daniel', 'Castellanos', 'Miranda', 'fdanycast@gmail.com', 'Reconocimos 1 plm', '1998-10-11', 0, 6),
 (4, 'Patricia Lorenza', 'González', 'Quintanar', 'patty_loren26@gmail.com', 'Reconocimos 1 plm', '2018-08-26', 1, 5),
-(5, 'Martin Ricardo ', 'Del Rio', 'Grageda', 'langur@gmail.com', 'Reconocimos 1 plm', '2018-11-17', 1, 4),
+(5, 'Martin Ricardo ', 'Del Rio', 'Grageda', 'langur@gmail.com', 'Reconocimos 1 plm', '2008-11-17', 1, 4),
 (6, 'Marcela María', 'Pérez', 'González', 'mace@hotmail.com', 'Reconocimos 1 plm', '2018-11-27', 1, 4),
 (8, 'Pancho', 'Hernandez', 'Chavez', 'pancho@gmail.com', 'Reconocimos 1 plm', '2018-07-29', 1, 5),
-(9, 'Miguel Angel', 'Pérez', 'Murillo', 'tekton.formen@gmail.com', 'Reconocimos 1 plm', '2018-09-30', 1, 6);
+(9, 'Miguel Angel', 'Pérez', 'Murillo', 'tekton.formen@gmail.com', 'Reconocimos 1 plm', '2018-09-30', 1, 6),
+(10, 'Trapos', 'Perez', 'Furto', 'ddede', 'wdwdw', '1999-10-02', 0, 6),
+(11, 'Pablo', 'hoy', 'fdf', 'fdf', 'dfdf', '2005-10-04', 1, 2);
 
 --
 -- Disparadores `usuario`
@@ -573,6 +645,16 @@ CREATE TABLE `voluntariofrecuente` (
   `FkUsuario` int(11) NOT NULL,
   `FkAdultoMayor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `voluntariofrecuente`
+--
+
+INSERT INTO `voluntariofrecuente` (`IdVoluntarioFrecuente`, `FkUsuario`, `FkAdultoMayor`) VALUES
+(1, 1, 3),
+(2, 1, 4),
+(3, 8, 5),
+(4, 6, 2);
 
 --
 -- Índices para tablas volcadas
@@ -750,7 +832,7 @@ ALTER TABLE `coordinador`
 -- AUTO_INCREMENT de la tabla `dependencia`
 --
 ALTER TABLE `dependencia`
-  MODIFY `IdDependencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `IdDependencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `domicilio`
@@ -762,43 +844,43 @@ ALTER TABLE `domicilio`
 -- AUTO_INCREMENT de la tabla `evento`
 --
 ALTER TABLE `evento`
-  MODIFY `IdEvento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `IdEvento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `fotoalrededores`
 --
 ALTER TABLE `fotoalrededores`
-  MODIFY `IdFotoAlrededores` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdFotoAlrededores` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `gestioninventario`
 --
 ALTER TABLE `gestioninventario`
-  MODIFY `IdGestionInventario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdGestionInventario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario`
 --
 ALTER TABLE `inventario`
-  MODIFY `IdInventario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdInventario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `password`
 --
 ALTER TABLE `password`
-  MODIFY `IdPassword` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdPassword` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `problematica`
 --
 ALTER TABLE `problematica`
-  MODIFY `IdProblematica` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdProblematica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `recoger`
 --
 ALTER TABLE `recoger`
-  MODIFY `IdRecoger` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdRecoger` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `scouter`
@@ -822,7 +904,7 @@ ALTER TABLE `tipoevento`
 -- AUTO_INCREMENT de la tabla `tipoproblematica`
 --
 ALTER TABLE `tipoproblematica`
-  MODIFY `IdTipoProblematica` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdTipoProblematica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `ubicacion`
@@ -834,13 +916,13 @@ ALTER TABLE `ubicacion`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `IdUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `IdUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `voluntariofrecuente`
 --
 ALTER TABLE `voluntariofrecuente`
-  MODIFY `IdVoluntarioFrecuente` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdVoluntarioFrecuente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
@@ -940,8 +1022,8 @@ DELIMITER $$
 --
 -- Eventos
 --
-CREATE DEFINER=`root`@`localhost` EVENT `CambioSeccion` ON SCHEDULE EVERY 100 SECOND STARTS '2018-03-28 19:50:52' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
-	INSERT INTO coordinador values (null,2);
+CREATE DEFINER=`root`@`localhost` EVENT `CambioSeccion` ON SCHEDULE EVERY 5 SECOND STARTS '2018-04-04 10:26:00' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+    INSERT Into dependencia (Nombre)VALUES ("Holapp");
 END$$
 
 DELIMITER ;
