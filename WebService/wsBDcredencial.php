@@ -1,11 +1,11 @@
 <?php
 $hostname = "localhost";
 //Local
-/*
+
 $database = "acampa_bd";
 $username = "root";
 $password = "";
-*/
+
 
 //Online
 /*

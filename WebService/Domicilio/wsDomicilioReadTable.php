@@ -8,9 +8,9 @@ $json = array();
 	$resultado = mysqli_query($conexion,$select);
 	//var_dump($resultado);
 	while($registro = mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
-		$resultado['Calle'] = utf8_encode($resultado['Calle']);
-		$resultado['Colonia'] = utf8_encode($resultado['Colonia']);
-		$resultado['Foto'] = utf8_encode($resultado['Foto']);
+		$registro['Calle'] = utf8_encode($registro['Calle']);
+		$registro['Colonia'] = utf8_encode($registro['Colonia']);
+		$registro['Foto'] = utf8_encode($registro['Foto']);
 		$json['Domicilio'][] = $registro;
 	}
 	mysqli_close($conexion);

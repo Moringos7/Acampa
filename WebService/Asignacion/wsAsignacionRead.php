@@ -9,7 +9,7 @@ if(isset($_GET["idasignacion"])){
 	$select = "SELECT * FROM asignacion WHERE IdAsignacion = '$IdAsignacion'";	
 	$resultado = mysqli_query($conexion,$select);
 	//var_dump($resultado);
-	if($registro = mysqli_fetch_array($resultado)){
+	if($registro = mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
 		
 		$json['Asignacion'][] = $registro;
 		//echo $registro['IdAsignacion']."-".$registro['Status'];
