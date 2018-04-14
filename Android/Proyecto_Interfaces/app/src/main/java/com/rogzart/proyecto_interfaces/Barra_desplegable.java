@@ -3,7 +3,6 @@ package com.rogzart.proyecto_interfaces;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +13,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.rogzart.proyecto_interfaces.FragmentosBarra.AdultosMayoresAE;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Editar_AdultosM;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento01;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento02;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento03;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento04;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento05;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento06;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento07;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento08;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento09;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento10;
 
 
 public class Barra_desplegable extends AppCompatActivity

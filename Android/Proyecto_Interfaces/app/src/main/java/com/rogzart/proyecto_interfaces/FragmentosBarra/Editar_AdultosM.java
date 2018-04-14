@@ -1,4 +1,4 @@
-package com.rogzart.proyecto_interfaces;
+package com.rogzart.proyecto_interfaces.FragmentosBarra;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,11 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.gms.common.api.Response;
-
-import org.json.JSONObject;
-
-import java.net.URL;
+import com.rogzart.proyecto_interfaces.R;
 
 
 /**
@@ -89,7 +85,7 @@ public class Editar_AdultosM extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View vista= inflater.inflate(R.layout.fragment_editar__adultos_m,container,false);
+        View vista= inflater.inflate(R.layout.f_editar_adultos,container,false);
         enombre= (EditText) vista.findViewById(R.id.enombre);
         eapellidopaterno= (EditText) vista.findViewById(R.id.eapellidopaterno);
         eapellidomaterno= (EditText) vista.findViewById(R.id.apellidomaterno);
@@ -113,7 +109,7 @@ public class Editar_AdultosM extends Fragment  {
 
 
 
-        return inflater.inflate(R.layout.fragment_editar__adultos_m, container, false);
+        return inflater.inflate(R.layout.f_editar_adultos, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.rogzart.proyecto_interfaces.ErrorPeticion">
+    tools:context="com.rogzart.proyecto_interfaces.ActivitysConexion.ErrorPeticion">
 
     <ImageView
         android:id="@+id/imageView2"

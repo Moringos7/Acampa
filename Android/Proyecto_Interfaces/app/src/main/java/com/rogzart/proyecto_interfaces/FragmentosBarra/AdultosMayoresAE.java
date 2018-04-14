@@ -1,8 +1,7 @@
-package com.rogzart.proyecto_interfaces;
+package com.rogzart.proyecto_interfaces.FragmentosBarra;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.icu.text.Replaceable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -19,7 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.api.Response;
+import com.rogzart.proyecto_interfaces.R;
 
 import org.json.JSONObject;
 
@@ -83,7 +82,7 @@ public class AdultosMayoresAE extends Fragment implements com.android.volley.Res
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View vista=inflater.inflate(R.layout.fragment_adultos_mayores_ae,container,false);
+        View vista=inflater.inflate(R.layout.f_adultos_mayores,container,false);
         nombre= (EditText) vista.findViewById(R.id.enombre);
         apellidopaterno= (EditText) vista.findViewById(R.id.apellidomaterno);
         apellidomaterno= (EditText) vista.findViewById(R.id.apellidopaterno);

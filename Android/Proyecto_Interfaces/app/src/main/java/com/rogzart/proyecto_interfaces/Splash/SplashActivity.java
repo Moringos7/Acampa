@@ -1,13 +1,14 @@
-package com.rogzart.proyecto_interfaces;
+package com.rogzart.proyecto_interfaces.Splash;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.BundleCompat;
 import android.view.WindowManager;
+
+import com.rogzart.proyecto_interfaces.InterfacesLogin.Inicio;
+import com.rogzart.proyecto_interfaces.R;
 
 public class SplashActivity extends Activity{
     private final int DURACION_SPLASH = 2000;

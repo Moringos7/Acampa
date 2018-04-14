@@ -1,4 +1,4 @@
-package com.rogzart.proyecto_interfaces;
+package com.rogzart.proyecto_interfaces.InterfacesLogin;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -30,6 +30,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.rogzart.proyecto_interfaces.Barra_desplegable;
+import com.rogzart.proyecto_interfaces.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +41,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -66,8 +69,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        // Set up the login form
+        setContentView(R.layout.activity_inicio);
+        // Set up the login form.
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.IdNombre);
+        populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -80,12 +85,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
-
-
-        Button BRegistro = (Button) findViewById(R.id.btnRegistrar);
-        BRegistro.setOnClickListener(new OnClickListener() {
+        Button Registro =  (Button) findViewById(R.id.email_sign_in_button2);
+        Registro.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent (view.getContext(), LoginActivity.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+        Button mEmailSignInButton = (Button) findViewById(R.id.btnInicio);
+        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //attemptLogin();
                 Intent intent = new Intent (view.getContext(), Barra_desplegable.class);
                 startActivityForResult(intent, 0);
             }
@@ -274,7 +286,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
+                new ArrayAdapter<>(Inicio.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);

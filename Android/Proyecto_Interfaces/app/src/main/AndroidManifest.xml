@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-       <activity android:name=".SplashActivity">
+       <activity android:name=".Splash.SplashActivity">
            <intent-filter>
                <action android:name="android.intent.action.MAIN" />
 
@@ -23,17 +23,17 @@
            </intent-filter>
        </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".InterfacesLogin.LoginActivity"
             android:label="Acampa">
         </activity>
         <activity
             android:name=".Barra_desplegable"
             android:label="Acampa"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Conexion_Exitosa" />
-        <activity android:name=".ErrorPeticion" />
+        <activity android:name=".ActivitysConexion.Conexion_Exitosa" />
+        <activity android:name=".ActivitysConexion.ErrorPeticion" />
         <activity
-            android:name=".Inicio"
+            android:name=".InterfacesLogin.Inicio"
             android:label="Acampa" />
     </application>
 

@@ -2,14 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.rogzart.proyecto_interfaces.Fragmento01">
+    tools:context="com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento01">
 
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Scouters"
+        android:text="Eventos de actualización"
         android:textSize="42sp" />
 </RelativeLayout>
