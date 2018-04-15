@@ -1,13 +1,14 @@
 <?php
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
-$Nombre = $_GET["nombre"];
-$ApellidoPaterno = $_GET["apellidopaterno"];
-$ApellidoMaterno = $_GET["apellidomaterno"];
-$Fotografia = $_GET["fotografia"];
-$Diabetico = $_GET["diabetico"];
-$FkDependencia = $_GET["fkdependencia"];
-$FkDomicilio = $_GET["fkdomicilio"];
+$Nombre = $_POST["nombre"];
+$ApellidoPaterno = $_POST["apellidomaterno"];
+$ApellidoMaterno = $_POST["apellidopaterno"];
+$Correo = $_POST["correo"];
+$Fotografia = $_POST["fotografia"];
+$FechaNacimiento = $_POST["fechanacimiento"];
+$Scout = $_POST["scout"];
+$FkSeccion = $_POST["fkseccion"];
 
 $sql = "INSERT INTO usuario VALUES(null,?,?,?,?,?,?,?,?)";
 
