@@ -22,23 +22,35 @@
             android:textStyle="bold"/>
 
         />
+
         <EditText
             android:id="@+id/nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nombre" />
+            android:hint="Nombre"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/apellidopaterno"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Apellido Paterno"/>
+            android:hint="Apellido Paterno"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/apellidomaterno"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Apellido Materno"/>
+            android:hint="Apellido Materno"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/fotografia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Fotografia"
+            android:inputType="text|textPersonName" />
 
         <Switch
             android:id="@+id/diabetico"

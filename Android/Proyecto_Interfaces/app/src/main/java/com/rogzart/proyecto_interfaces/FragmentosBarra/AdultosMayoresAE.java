@@ -5,12 +5,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -46,7 +48,8 @@ public class AdultosMayoresAE extends Fragment implements com.android.volley.Res
     public AdultosMayoresAE() {
         // Required empty public constructor
     }
-    EditText nombre,apellidopaterno,apellidomaterno,diabetico;
+    EditText nombre,apellidopaterno,apellidomaterno,fotografia;
+    Switch diabetico;
     Button btnRegistrar;
     ProgressDialog progreso;
 
@@ -83,9 +86,10 @@ public class AdultosMayoresAE extends Fragment implements com.android.volley.Res
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View vista=inflater.inflate(R.layout.f_adultos_mayores,container,false);
-        nombre= (EditText) vista.findViewById(R.id.enombre);
+        nombre= (EditText) vista.findViewById(R.id.nombre);
         apellidopaterno= (EditText) vista.findViewById(R.id.apellidomaterno);
         apellidomaterno= (EditText) vista.findViewById(R.id.apellidopaterno);
+        fotografia= (EditText) vista.findViewById(R.id.fotografia);
         btnRegistrar= (Button) vista.findViewById((R.id.btnRegistro));
         request= Volley.newRequestQueue(getContext());
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +107,7 @@ public class AdultosMayoresAE extends Fragment implements com.android.volley.Res
         progreso.setMessage("Cargando");
         progreso.show();
 
-    String url="http://192.168.100.5/WebService/AdultoMayor/wsAdultoMayorCreate.php";
+    String url="https://acampa.000webhostapp.com/WebService/AdultoMayor/wsAdultoMayorCreate.php";
     url=url.replace(" ","%20");
 
     Jsonobjectrequest= new JsonObjectRequest(Request.Method.GET,url,null,this,this);
@@ -121,6 +125,8 @@ public class AdultosMayoresAE extends Fragment implements com.android.volley.Res
         apellidopaterno.setText("");
         apellidomaterno.setText("");
         diabetico.setText("false");
+        fotografia.setText("");
+
 
 
     }

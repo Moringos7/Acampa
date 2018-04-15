@@ -55,10 +55,10 @@ public class Editar_AdultosM extends Fragment  {
      * @return A new instance of fragment Editar_AdultosM.
      */
     // TODO: Rename and change types and number of parameters
-    EditText enombre;
-    EditText eapellidopaterno;
-    EditText eapellidomaterno;
-    Switch ediabetico;
+    EditText nombre;
+    EditText apellidopaterno;
+    EditText apellidomaterno;
+    Switch diabetico;
     Button btnactualizar;
     Button btneliminar;
     ProgressDialog  pDialog;
@@ -86,10 +86,10 @@ public class Editar_AdultosM extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View vista= inflater.inflate(R.layout.f_editar_adultos,container,false);
-        enombre= (EditText) vista.findViewById(R.id.enombre);
-        eapellidopaterno= (EditText) vista.findViewById(R.id.eapellidopaterno);
-        eapellidomaterno= (EditText) vista.findViewById(R.id.apellidomaterno);
-        ediabetico= (Switch) vista.findViewById(R.id.ediabetico);
+        nombre = (EditText) vista.findViewById(R.id.enombre);
+        apellidopaterno = (EditText) vista.findViewById(R.id.eapellidopaterno);
+        apellidomaterno = (EditText) vista.findViewById(R.id.apellidomaterno);
+        diabetico = (Switch) vista.findViewById(R.id.ediabetico);
         btnactualizar= (Button) vista.findViewById(R.id.btnactualizar);
         btneliminar= (Button) vista.findViewById(R.id.btneliminar);
 
@@ -155,7 +155,7 @@ public class Editar_AdultosM extends Fragment  {
         pDialog.setMessage("Cargando...");
         pDialog.show();
         String ip="https://acampa.000webhostapp.com/";
-        String url =ip+"http://<192.168.100.5>/WebService/wsAdultoMayorUpdate.php?idadultomayor=&nombre="+enombre.getText().toString()+"&apellidopaterno="+eapellidopaterno.getText().toString()+"&apellidomaterno="+eapellidomaterno.getText().toString()+"&fotografia="+null+"&diabetico="+ediabetico.getSwitchPadding();
+        String url =ip+"http://<192.168.100.5>/WebService/wsAdultoMayorUpdate.php?idadultomayor=&nombre="+ nombre.getText().toString()+"&apellidopaterno="+ apellidopaterno.getText().toString()+"&apellidomaterno="+ apellidomaterno.getText().toString()+"&fotografia="+null+"&diabetico="+ diabetico.getSwitchPadding();
         stringRequest= new StringRequest(Request.Method.GET,url, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -183,17 +183,17 @@ public class Editar_AdultosM extends Fragment  {
         pDialog.setMessage("Cargando...");
         pDialog.show();
         String ip="https://acampa.000webhostapp.com/";
-        String url =ip+"http://<ip>/WebService/AdultoMayor/wsAdultoMayorDelete.php?nombre="+enombre.getText().toString();
+        String url =ip+"http://<ip>/WebService/AdultoMayor/wsAdultoMayorDelete.php?nombre="+ nombre.getText().toString();
         stringRequest=new StringRequest(Request.Method.GET, url, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 pDialog.hide();
 
                 if (response.trim().equalsIgnoreCase("eliminado")) {
-                    enombre.setText("");
-                    eapellidopaterno.setText("");
-                    eapellidomaterno.setText("");
-                    ediabetico.setTextOff("False");
+                    nombre.setText("");
+                    apellidopaterno.setText("");
+                    apellidomaterno.setText("");
+                    diabetico.setTextOff("False");
                     Toast.makeText(getContext(), "Se ha Eliminado con exito", Toast.LENGTH_SHORT).show();
                 } else {
                     if (response.trim().equalsIgnoreCase("NoExiste")) {
@@ -221,4 +221,5 @@ public class Editar_AdultosM extends Fragment  {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }
