@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-04-2018 a las 20:25:10
+-- Tiempo de generación: 19-04-2018 a las 01:15:00
 -- Versión del servidor: 10.1.30-MariaDB
 -- Versión de PHP: 7.2.1
 
@@ -26,18 +26,40 @@ DELIMITER $$
 --
 -- Procedimientos
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `contador` ()  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ActualizacionComentarios` ()  bEGIN
 DECLARE vIdMax Integer;
 DECLARE vCont Integer DEFAULT 1;
-SET vIdMax = (select IdUsuario from usuario order by idusuario desc limit 1);
+DECLARE vFecha Date;
+DECLARE vAntiguedad int;
+
+SET vIdMax = (select Idcomentarioam from comentarioam order by idcomentarioam desc limit 1);
 WHILE vCont <= vIdMax DO
-	Call prueba(vCont);
-    INSERT INTO `dependencia` (`Nombre`) VALUES ('Hola');
+	SET vFecha = (SELECT Fecha From comentarioam where idcomentarioam = vCont);
+    SET vAntiguedad = (SELECT TIMESTAMPDIFF(YEAR,vFecha,CURDATE()));
+    IF vAntiguedad >= 1 THEN
+    	DELETE FROM comentarioam WHERE idcomentarioam = vCont;
+    END IF;
 	SET vCont = vCont + 1;
 END WHILE;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `prueba` (IN `Idu` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ActualizacionScouter` ()  BEGIN
+DECLARE vIdMax Integer;
+DECLARE vCont Integer DEFAULT 1;
+DECLARE vFecha Date;
+DECLARE vFechaActual Date;
+SET vFechaActual = CURDATE();
+SET vIdMax = (select Idscouter from scouter order by idscouter desc limit 1);
+WHILE vCont <= vIdMax DO
+	SET vFecha = (SELECT FechaFinal From scouter where idscouter = vCont);
+    IF vFecha <= vFechaActual THEN
+    	DELETE FROM scouter WHERE IdScouter = vCont; 
+    END IF;
+	SET vCont = vCont + 1;
+END WHILE;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CambioSeccion` (IN `Idu` INT)  BEGIN
 DECLARE vFecha VarChar(50);
 DECLARE vEdad Integer;
 DECLARE vSeccion Integer;
@@ -59,6 +81,25 @@ END IF;
 
 UPDATE Usuario SET Fkseccion = vSeccion WHERE IdUsuario = Idu;
 
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `contador` ()  BEGIN
+DECLARE vIdMax Integer;
+DECLARE vCont Integer DEFAULT 1;
+SET vIdMax = (select IdUsuario from usuario order by idusuario desc limit 1);
+WHILE vCont <= vIdMax DO
+	INSERT INTO `dependencia` (`Nombre`) VALUES ('Hola');
+	SET vCont = vCont + 1;
+END WHILE;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `listadotabla` (IN `vTabla` VARCHAR(20), IN `vId` VARCHAR(20))  BEGIN
+DECLARE vIdMax Integer;
+Set vIdMax = 0;
+WHILE vIdMax<5 DO
+INSERT INTO dependencia (IdDependencia,Nombre)VALUES(NULL,'Prueba');
+Set vIdMax = vIdMax + 1;
+END WHILE;
 END$$
 
 DELIMITER ;
@@ -134,7 +175,9 @@ CREATE TABLE `comentarioam` (
 
 INSERT INTO `comentarioam` (`IdComentarioAM`, `Nombre`, `Fecha`, `FkAdultoMayor`) VALUES
 (1, 'Hola me parece buena personA', '2018-03-12', 1),
-(2, 'Hola es un poco extraño, pero me agrada', '2018-03-12', 2);
+(2, 'Hola es un poco extraño, pero me agrada', '2018-03-12', 2),
+(3, 'wdwdwd', '2018-04-03', 6),
+(233, 'wdwdwd', '2018-04-04', 3);
 
 -- --------------------------------------------------------
 
@@ -153,87 +196,7 @@ CREATE TABLE `coordinador` (
 
 INSERT INTO `coordinador` (`IdCoordinador`, `FkScouter`) VALUES
 (1, 1),
-(2, 2),
-(181, 2),
-(182, 2),
-(183, 2),
-(184, 2),
-(185, 2),
-(186, 2),
-(187, 2),
-(188, 2),
-(189, 2),
-(190, 2),
-(191, 2),
-(192, 2),
-(193, 2),
-(194, 2),
-(195, 2),
-(196, 2),
-(197, 2),
-(198, 2),
-(199, 2),
-(200, 2),
-(201, 2),
-(202, 2),
-(203, 2),
-(204, 2),
-(205, 2),
-(206, 2),
-(207, 2),
-(208, 2),
-(209, 2),
-(210, 2),
-(211, 2),
-(212, 2),
-(213, 2),
-(214, 2),
-(215, 2),
-(216, 2),
-(217, 2),
-(218, 2),
-(219, 2),
-(220, 2),
-(221, 2),
-(222, 2),
-(223, 2),
-(224, 2),
-(225, 2),
-(226, 2),
-(227, 2),
-(228, 2),
-(229, 2),
-(230, 2),
-(231, 2),
-(232, 2),
-(233, 2),
-(234, 2),
-(235, 2),
-(236, 2),
-(237, 2),
-(238, 2),
-(239, 2),
-(240, 2),
-(241, 2),
-(242, 2),
-(243, 2),
-(244, 2),
-(245, 2),
-(246, 2),
-(247, 2),
-(248, 2),
-(249, 2),
-(250, 2),
-(251, 2),
-(252, 2),
-(253, 2),
-(254, 2),
-(255, 2),
-(256, 2),
-(257, 2),
-(258, 2),
-(259, 2),
-(260, 2);
+(2, 2);
 
 -- --------------------------------------------------------
 
@@ -253,7 +216,11 @@ CREATE TABLE `dependencia` (
 INSERT INTO `dependencia` (`IdDependencia`, `Nombre`) VALUES
 (1, 'Bajo'),
 (2, 'Medio'),
-(3, 'Alto');
+(3, 'Alto'),
+(17, 'Hola2'),
+(18, 'Hola2'),
+(19, 'Hola2'),
+(20, 'Hola2');
 
 -- --------------------------------------------------------
 
@@ -383,8 +350,22 @@ INSERT INTO `inventario` (`IdInventario`, `Producto`, `Cantidad`, `Existencia`, 
 (1, 'Azucar', 1, 23, 'Kilogramo de Azuzar', 'img', '', 0),
 (2, 'Maceca', 1, 2, 'Kilogramo de Maceca', 'img', '', 0),
 (3, 'Lentejas', 0.5, 23, 'Kilogramo de Lenteja', 'img', '', 0),
-(4, 'Atun', 2, 0, 'Debe ser en lata', 'img', '', 0),
-(5, 'Manteca', 1, 10, 'Manteca empacada en bolsa de un cuarto', 'img', 'Fueron donandas por Asc', 1);
+(4, 'Atun', 2, 0, 'Lata', 'img', '', 0),
+(5, 'Manteca', 1, 10, 'Paquete de Kilogramo de Maseca', 'img', 'Fueron donandas por Asc', 0),
+(6, 'Galletas', 1, 12, 'Paquete de Galletas', '', '', 0),
+(7, 'Canela', 1, 5, 'Debe ser un Raja', '', '', 0),
+(8, 'Jabón de Tocador', 1, 3, 'Jabón de Tocador', '', '', 0),
+(9, 'Jabón Zote', 1, 12, 'Jabón Zote o similar', '', '', 0),
+(10, 'Gelatina', 1, 45, 'Puede ser en sobre o caja', '', '', 0),
+(11, 'Sal', 1, 45, 'Bolsita de Sal', '', '', 0),
+(12, 'Cerrillos', 1, 23, 'Caja de Cerrillos', '', '', 0),
+(13, 'Frijol', 1, 12, 'Kilogramo de Frijol', '', '', 0),
+(14, 'Aceite', 0.5, 23, 'Litro de Aceite', '', '', 0),
+(15, 'Trigo Inflado', 0.25, 11, 'Kilogramo de Trigo Inflado', '', '', 0),
+(16, 'Tablilla de Chocolate', 1, 12, 'Tablilla de chocolate', '', 'Puede ser de cualquier marca', 0),
+(17, 'Pasta', 2, 30, 'Paquete de pasta', '', '', 0),
+(18, 'Arroz', 1, 12, 'Kilogramo de Arroz', '', '', 0),
+(19, 'Splenda', 1, 12, 'Paquetes de 20 sobres de Splenda', '', '', 0);
 
 -- --------------------------------------------------------
 
@@ -404,10 +385,10 @@ CREATE TABLE `password` (
 --
 
 INSERT INTO `password` (`IdPassword`, `Password`, `Intentos`, `FkUsuario`) VALUES
-(1, '12345', 1, 1),
-(2, '123456789', 0, 5),
-(3, '3efbgr4n', 2, 5),
-(4, 'ereede', 2, 10);
+(1, '12345', 3, 1),
+(2, '123456789', 3, 5),
+(3, '3efbgr4n', 3, 5),
+(4, 'ereede', 3, 10);
 
 -- --------------------------------------------------------
 
@@ -472,7 +453,8 @@ CREATE TABLE `scouter` (
 
 INSERT INTO `scouter` (`IdScouter`, `FechaInicio`, `FechaFinal`, `FkUsuario`) VALUES
 (1, '2018-03-12', '9999-12-30', 1),
-(2, '2018-03-12', '9999-12-30', 3);
+(2, '2018-03-12', '9999-12-30', 3),
+(3, '2018-04-10', '2018-04-28', 6);
 
 -- --------------------------------------------------------
 
@@ -604,7 +586,7 @@ INSERT INTO `usuario` (`IdUsuario`, `Nombre`, `ApellidoPaterno`, `ApellidoMatern
 (8, 'Pancho', 'Hernandez', 'Chavez', 'pancho@gmail.com', 'Reconocimos 1 plm', '2018-07-29', 1, 5),
 (9, 'Miguel Angel', 'Pérez', 'Murillo', 'tekton.formen@gmail.com', 'Reconocimos 1 plm', '2018-09-30', 1, 6),
 (10, 'Trapos', 'Perez', 'Furto', 'ddede', 'wdwdw', '1999-10-02', 0, 6),
-(11, 'Pablo', 'hoy', 'fdf', 'fdf', 'dfdf', '2005-10-04', 1, 2);
+(11, 'Pablo', 'hoy', 'fdf', 'fdf', 'dfdf', '1998-10-25', 1, 4);
 
 --
 -- Disparadores `usuario`
@@ -820,19 +802,19 @@ ALTER TABLE `asignacion`
 -- AUTO_INCREMENT de la tabla `comentarioam`
 --
 ALTER TABLE `comentarioam`
-  MODIFY `IdComentarioAM` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `IdComentarioAM` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=234;
 
 --
 -- AUTO_INCREMENT de la tabla `coordinador`
 --
 ALTER TABLE `coordinador`
-  MODIFY `IdCoordinador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=261;
+  MODIFY `IdCoordinador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `dependencia`
 --
 ALTER TABLE `dependencia`
-  MODIFY `IdDependencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `IdDependencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `domicilio`
@@ -862,7 +844,7 @@ ALTER TABLE `gestioninventario`
 -- AUTO_INCREMENT de la tabla `inventario`
 --
 ALTER TABLE `inventario`
-  MODIFY `IdInventario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `IdInventario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `password`
@@ -886,7 +868,7 @@ ALTER TABLE `recoger`
 -- AUTO_INCREMENT de la tabla `scouter`
 --
 ALTER TABLE `scouter`
-  MODIFY `IdScouter` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `IdScouter` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `seccion`
@@ -1022,9 +1004,7 @@ DELIMITER $$
 --
 -- Eventos
 --
-CREATE DEFINER=`root`@`localhost` EVENT `CambioSeccion` ON SCHEDULE EVERY 5 SECOND STARTS '2018-04-04 10:26:00' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
-    INSERT Into dependencia (Nombre)VALUES ("Holapp");
-END$$
+CREATE DEFINER=`root`@`localhost` EVENT `ActualizacionIntentosPassword` ON SCHEDULE EVERY 5 SECOND STARTS '2018-04-18 09:28:00' ON COMPLETION NOT PRESERVE ENABLE DO Update password set Intentos = 3$$
 
 DELIMITER ;
 COMMIT;
