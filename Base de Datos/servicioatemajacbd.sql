@@ -24,87 +24,7 @@ SET time_zone = "+00:00";
 
 DELIMITER $$
 --
--- Procedimientos
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `ActualizacionComentarios` ()  bEGIN
-DECLARE vIdMax Integer;
-DECLARE vCont Integer DEFAULT 1;
-DECLARE vFecha Date;
-DECLARE vAntiguedad int;
 
-SET vIdMax = (select Idcomentarioam from comentarioam order by idcomentarioam desc limit 1);
-WHILE vCont <= vIdMax DO
-	SET vFecha = (SELECT Fecha From comentarioam where idcomentarioam = vCont);
-    SET vAntiguedad = (SELECT TIMESTAMPDIFF(YEAR,vFecha,CURDATE()));
-    IF vAntiguedad >= 1 THEN
-    	DELETE FROM comentarioam WHERE idcomentarioam = vCont;
-    END IF;
-	SET vCont = vCont + 1;
-END WHILE;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `ActualizacionScouter` ()  BEGIN
-DECLARE vIdMax Integer;
-DECLARE vCont Integer DEFAULT 1;
-DECLARE vFecha Date;
-DECLARE vFechaActual Date;
-SET vFechaActual = CURDATE();
-SET vIdMax = (select Idscouter from scouter order by idscouter desc limit 1);
-WHILE vCont <= vIdMax DO
-	SET vFecha = (SELECT FechaFinal From scouter where idscouter = vCont);
-    IF vFecha <= vFechaActual THEN
-    	DELETE FROM scouter WHERE IdScouter = vCont; 
-    END IF;
-	SET vCont = vCont + 1;
-END WHILE;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CambioSeccion` (IN `Idu` INT)  BEGIN
-DECLARE vFecha VarChar(50);
-DECLARE vEdad Integer;
-DECLARE vSeccion Integer;
-
-SET vFecha = (SELECT FechaNacimiento FROM usuario WHERE IdUsuario = Idu);
-SET vEdad = (SELECT TIMESTAMPDIFF(YEAR,vFecha,CURDATE()));
-
-IF vEdad < 11 THEN
-    	SET vSeccion = (SELECT idseccion from seccion where Nombre = 'manada');
-    ELSEIF vEdad < 15 THEN
-    	SET vSeccion = (SELECT idseccion from seccion where Nombre = 'tropa');
-    ELSEIF vEdad < 18 THEN
-    	SET vSeccion = (SELECT idseccion from seccion where Nombre = 'comunidad');
-    ElSEIF vEdad < 22 THEN
-    	SET vSeccion = (SELECT idseccion from seccion where Nombre = 'clan');
-    ELSE
-    	SET vSeccion = (SELECT idseccion from seccion where Nombre = 'dirigente');
-END IF;
-
-UPDATE Usuario SET Fkseccion = vSeccion WHERE IdUsuario = Idu;
-
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `contador` ()  BEGIN
-DECLARE vIdMax Integer;
-DECLARE vCont Integer DEFAULT 1;
-SET vIdMax = (select IdUsuario from usuario order by idusuario desc limit 1);
-WHILE vCont <= vIdMax DO
-	INSERT INTO `dependencia` (`Nombre`) VALUES ('Hola');
-	SET vCont = vCont + 1;
-END WHILE;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `listadotabla` (IN `vTabla` VARCHAR(20), IN `vId` VARCHAR(20))  BEGIN
-DECLARE vIdMax Integer;
-Set vIdMax = 0;
-WHILE vIdMax<5 DO
-INSERT INTO dependencia (IdDependencia,Nombre)VALUES(NULL,'Prueba');
-Set vIdMax = vIdMax + 1;
-END WHILE;
-END$$
-
-DELIMITER ;
-
--- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `adultomayor`
@@ -1000,13 +920,8 @@ ALTER TABLE `voluntariofrecuente`
   ADD CONSTRAINT `voluntariofrecuente_ibfk_1` FOREIGN KEY (`FkUsuario`) REFERENCES `usuario` (`IdUsuario`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `voluntariofrecuente_ibfk_2` FOREIGN KEY (`FkAdultoMayor`) REFERENCES `adultomayor` (`IdAdultoMayor`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-DELIMITER $$
---
--- Eventos
---
-CREATE DEFINER=`root`@`localhost` EVENT `ActualizacionIntentosPassword` ON SCHEDULE EVERY 5 SECOND STARTS '2018-04-18 09:28:00' ON COMPLETION NOT PRESERVE ENABLE DO Update password set Intentos = 3$$
 
-DELIMITER ;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
