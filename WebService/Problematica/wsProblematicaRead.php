@@ -3,8 +3,8 @@
 require("../wsBDcredencial.php");
 
 $json = array();
-if(isset($_GET["idproblematica"])){
-	$IdProblematica = $_GET["idproblematica"];
+if(isset($_POST["idproblematica"])){
+	$IdProblematica = $_POST["idproblematica"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	$select = "SELECT * FROM problematica WHERE IdProblematica = '$IdProblematica'";	
 	$resultado = mysqli_query($conexion,$select);

@@ -3,7 +3,7 @@ require("../wsBDcredencial.php");
 
 $conexion =mysqli_connect($hostname,$username,$password,$database);
 
-$IdTipoEvento = $_POST["idtipoproblematica"];
+$IdTipoProblematica = $_POST["idtipoproblematica"];
 $Nombre = $_POST["nombre"];
 
 

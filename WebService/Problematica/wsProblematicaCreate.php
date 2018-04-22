@@ -1,11 +1,11 @@
 <?php
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
-$Fecha = $_GET["fecha"];
-$Nombre = $_GET["nombre"];
-$Sugerencia = $_GET["sugerencia"];
-$FkUsuario = $_GET["fkusuario"];
-$FkTipoProblematica = $_GET["fktipoproblematica"];
+$Fecha = $_POST["fecha"];
+$Nombre = $_POST["nombre"];
+$Sugerencia = $_POST["sugerencia"];
+$FkUsuario = $_POST["fkusuario"];
+$FkTipoProblematica = $_POST["fktipoproblematica"];
 
 $sql = "INSERT INTO problematica VALUES(null,?,?,?,?,?)";
 

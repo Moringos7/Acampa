@@ -1,7 +1,7 @@
 <?php
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
-$Nombre = $_GET["nombre"];
+$Nombre = $_POST["nombre"];
 
 $sql = "INSERT INTO seccion VALUES(null,?)";
 

@@ -2,10 +2,10 @@
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
 
-$FkUsuario = $_GET["fkusuario"];
-$FkAdultoMayor = $_GET["fkadultomayor"];
+$FkUsuario = $_POST["fkusuario"];
+$FkAdultoMayor = $_POST["fkadultomayor"];
 
-$sql = "INSERT INTO voluntariofrecuente VALUES(null,?,?,)";
+$sql = "INSERT INTO voluntariofrecuente VALUES(null,?,?)";
 
 $stm = $conexion->prepare($sql);
 $stm->bind_param('ii',$FkUsuario,$FkAdultoMayor);

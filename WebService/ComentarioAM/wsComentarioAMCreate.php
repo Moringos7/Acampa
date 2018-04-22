@@ -8,7 +8,7 @@ $FkAdultoMayor = $_POST["fkadultomayor"];
 $sql = "INSERT INTO comentarioam VALUES(null,?,?,?)";
 
 $stm = $conexion->prepare($sql);
-$stm->bind_param('ssi',$Nombre,$fecha,$FkComentarioAM);
+$stm->bind_param('ssi',$Nombre,$Fecha,$FkAdultoMayor);
 if($stm->execute()){
 	echo "Creado";
 }else{

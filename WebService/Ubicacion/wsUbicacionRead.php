@@ -4,7 +4,7 @@ require("../wsBDcredencial.php");
 
 $json = array();
 if(isset($_POST["idubicacion"])){
-	$IdDomicilio =$_POST["idubicacion"];
+	$IdUbicacion =$_POST["idubicacion"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	$select = "SELECT * FROM ubicacion WHERE IdUbicacion = '$IdUbicacion'";	
 	$resultado = mysqli_query($conexion,$select);

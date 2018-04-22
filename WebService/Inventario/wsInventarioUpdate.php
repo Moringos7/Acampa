@@ -16,7 +16,7 @@ $Extra = $_POST["extra"];
 $sql = "UPDATE inventario SET Producto = ?, Cantidad = ?, Existencia = ?, Descripcion = ?,Imagen = ?, Comentario = ?, Extra = ? WHERE IdInventario = ?";
 
 $stm = $conexion->prepare($sql);
-$stm->bind_param('isssii',$Producto,$Cantidad,$Existencia,$Descripcion,$Imagen,$Comentario,$Extra,$IdInventario);
+$stm->bind_param('sdisssii',$Producto,$Cantidad,$Existencia,$Descripcion,$Imagen,$Comentario,$Extra,$IdInventario);
 if($stm->execute()){
 	echo "Actualizado";
 }else{

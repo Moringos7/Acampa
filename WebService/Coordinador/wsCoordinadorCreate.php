@@ -1,7 +1,7 @@
 <?php
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
-$Fkscouter= $_POST["status"];
+$Fkscouter= $_POST["fkscouter"];
 $sql = "INSERT INTO coordinador  VALUES (null,?)";
 
 $stm = $conexion->prepare($sql);

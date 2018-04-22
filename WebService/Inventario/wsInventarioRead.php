@@ -39,11 +39,3 @@ if(isset($_POST["idinventario"])){
 	echo json_encode($json);
 }
 ?>
-
-$Producto = $_POST["producto"];
-$Cantidad = $_POST["cantidad"];
-$Existencia = $_POST["existencia"];
-$Descripcion = $_POST["descripcion"];
-$Imagen = $_POST["imagen"];
-$Comentario = $_POST["comentario"];
-$Extra = $_POST["extra"];

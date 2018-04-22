@@ -9,7 +9,7 @@ $json = array();
 	//var_dump($resultado);
 	while($registro = mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
 		
-		$resultado['Nombre'] = utf8_encode($resultado['Nombre']);
+		$registro['Nombre'] = utf8_encode($registro['Nombre']);
 		$json['Seccion'][] = $registro;
 	}
 	mysqli_close($conexion);
