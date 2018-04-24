@@ -1,8 +1,8 @@
 <?php
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
-$FkScouter = $_GET["fkscouter"];
-$FkAsignacion = $_GET["fkasignacion"];
+$FkScouter = $_POST["fkscouter"];
+$FkAsignacion = $_POST["fkasignacion"];
 
 $sql = "INSERT INTO recoger VALUES(null,?,?)";
 

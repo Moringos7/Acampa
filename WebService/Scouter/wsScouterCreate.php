@@ -5,10 +5,10 @@ $FechaInicio = $_POST["fechainicio"];
 $FechaFinal = $_POST["fechafinal"];
 $FkUsuario = $_POST["fkusuario"];
 
-$sql = "INSERT INTO domicilio VALUES(null,?,?,?,?,?)";
+$sql = "INSERT INTO scouter VALUES(null,?,?,?)";
 
 $stm = $conexion->prepare($sql);
-$stm->bind_param('isssi',$Numero,$Calle,$Colonia,$Foto,$FkUbicacion);
+$stm->bind_param('ssi',$FechaInicio,$FechaFinal,$FkUsuario);
 if($stm->execute()){
 	echo "Creado";
 }else{

@@ -9,7 +9,7 @@ $FkScouter = $_POST["fkscouter"];
 $sql = "UPDATE coordinador SET FkScouter = ? WHERE IdCoordinador = ?";
 
 $stm = $conexion->prepare($sql);
-$stm->bind_param('ii'$FkScouter,$IdCoordinador);
+$stm->bind_param('ii',$FkScouter,$IdCoordinador);
 if($stm->execute()){
 	echo "Actualizado";
 }else{

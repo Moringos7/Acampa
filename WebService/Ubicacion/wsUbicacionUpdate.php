@@ -8,7 +8,7 @@ $Longitud = $_POST["longitud"];
 $Latitud = $_POST["latitud"];
 
 
-$sql = "UPDATE ubicacion SET Longitud = ?, Latitud = ?, WHERE IdUbicacion = ?";
+$sql = "UPDATE ubicacion SET Longitud = ?, Latitud = ? WHERE IdUbicacion = ?";
 
 $stm = $conexion->prepare($sql);
 $stm->bind_param('ddi',$Longitud,$Latitud,$IdUbicacion);

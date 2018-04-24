@@ -132,14 +132,18 @@
 
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/editText"
+            <TextView
+                android:id="@+id/editDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:hint="Fecha de nacimiento"
-                android:inputType="date" />
+                android:text="Fecha de nacimiento"
+                android:textSize="18sp" />
+
+            <DatePicker
+                android:id="@+id/datePicker4"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center" />
 
             <Button
                 android:id="@+id/btnRegistrar"

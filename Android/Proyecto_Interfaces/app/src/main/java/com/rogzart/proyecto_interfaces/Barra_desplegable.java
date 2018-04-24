@@ -1,6 +1,5 @@
 package com.rogzart.proyecto_interfaces;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -86,7 +85,7 @@ public class Barra_desplegable extends AppCompatActivity
             return true;
         }
         android.support.v4.app.FragmentManager fragmentManager=getSupportFragmentManager();
-        getFragmentManager().beginTransaction().replace(R.id.contenedor,new Editar_AdultosM()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento01()).commit();
         return super.onOptionsItemSelected(item);
 
     }
@@ -98,13 +97,12 @@ public class Barra_desplegable extends AppCompatActivity
        android.support.v4.app.FragmentManager fragmentManager=getSupportFragmentManager();
         int id = item.getItemId();
 
-
-        if (id == R.id.nav_RegistroAM) {
+        if (id == R.id.nav_Novedades) {
+            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento10()).commit();
+        } else if (id == R.id.nav_RegistroAM) {
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new AdultosMayoresAE()).commit();
         } else if (id == R.id.nav_EditarAdultos) {
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Editar_AdultosM()).commit();
-        } else  if (id == R.id.nav_Novedades) {
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento10()).commit();
         } else  if (id == R.id.nav_camera) {
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento01()).commit();
         } else if (id == R.id.nav_gallery) {

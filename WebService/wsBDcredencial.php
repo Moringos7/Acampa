@@ -1,17 +1,13 @@
 <?php
 $hostname = "localhost";
-//Local
-
-$database = "acampa_bd";
+$database = "servicioatemajac";
 $username = "root";
-$password = "";
-
-
-//Online
+//Local
 /*
-$database ="id4954887_servicioatemajacbd";
-$username ="id4954887_admin";
-$password ="roothost";
-echo "Conectado";
+$password = "";
 */
+//Online
+
+$password ="FDroothostJM";
+
 ?>
