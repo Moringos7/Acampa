@@ -8,40 +8,53 @@ import android.database.sqlite.SQLiteOpenHelper;
 import static com.rogzart.proyecto_interfaces.data.BaseDeDatosLocalTablas.*;
 
 public class BaseDeDatosLocal extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION=1;
-    public static final String DATABASE_NAME= "servicioatemajac.db";
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "servicioatemajac.db";
 
     public BaseDeDatosLocal(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-    sqLiteDatabase.execSQL("CREATE TABLE "+ Adultos.Table_Name +"("
-            + Adultos.IdAdultoMayor + "INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + Adultos.Nombre +"VARCHAR(50),"
-            + Adultos.ApellidoPaterno +"VARCHAR(50),"
-            + Adultos.ApellidoMaterno +"VARCHAR(50),"
-            + Adultos.Fotografia + "VARCHAR(100),"
-            + Adultos.Diabetico + "TINYINT(1),"
-            +
-
-            .FkDependencia + "INTEGER,"
-            + Adultos.FkDependencia + "INTEGER,"
-            + "UNIQUE(" + Adultos.IdAdultoMayor + "))");
+        sqLiteDatabase.execSQL("CREATE TABLE " + Adultos.Table_NameAM + "("
+                + Adultos.IdAdultoMayor + "INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + Adultos.Nombre + "VARCHAR(50),"
+                + Adultos.ApellidoPaterno + "VARCHAR(50),"
+                + Adultos.ApellidoMaterno + "VARCHAR(50),"
+                + Adultos.Fotografia + "VARCHAR(100),"
+                + Adultos.Diabetico + "TINYINT(1),"
+                + Adultos.FkDependencia + "INTEGER,"
+                + Adultos.FkDependencia + "INTEGER,"
+                + "UNIQUE(" + Adultos.IdAdultoMayor + "))");
+        sqLiteDatabase.execSQL("CREATE TABLE " + Asignacion.Table_NameAs + "("
+                + Asignacion.IdAsignacion + "INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + Asignacion.Status + "TINYINT(1),"
+                + Asignacion.Fecha + "DATE,"
+                + Asignacion.FkUsuario + "INTEGER,"
+                + Asignacion.FkAdultoMayor + "INTEGER,"
+                + "UNIQUE(" + Asignacion.IdAsignacion + "))");
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
-    public long SaveAdultos(BaseDeDatos baseDeDatos){
 
-        SQLiteDatabase sqLiteDatabase= getWritableDatabase();
+    public long SaveAdultos(BaseDeDatos baseDeDatos) {
+
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
         return sqLiteDatabase.insert(
-        Adultos.Table_Name, null, baseDeDatos.toContentValues());
-        }
-
+                Adultos.Table_NameAM, null, baseDeDatos.toContentValues());
     }
+
+    public long SaveAsignacion(BaseDeDatos baseDeDatos) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        return sqLiteDatabase.insert(
+                Asignacion.Table_NameAs, null, baseDeDatos.toContentValues());
+    }
+}
 

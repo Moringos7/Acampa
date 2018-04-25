@@ -73,7 +73,7 @@ public class BaseDeDatos {
                        String Hora,
                        String Lugar,
                        String Informacion,
-                       String FkTipoEvento;
+                       String FkTipoEvento
                        ) {
         this.IdAdultoMayor = UUID.randomUUID().toString();
         this.Nombre = Nombre;
@@ -261,4 +261,14 @@ public class BaseDeDatos {
         values.put(Adultos.FkDomicilio, FkDomicilio);
         return values;
     }
+    public ContentValues toContentValuesAS(){
+        ContentValues values=new ContentValues();
+        values.put(Asignacion.IdAsignacion, IdAsignacion);
+        values.put(Asignacion.Status, Status);
+        values.put(Asignacion.Fecha, Fecha);
+        values.put(Asignacion.FkUsuario, FkUsuario);
+        values.put(Asignacion.FkAdultoMayor, FkAdultoMayor);
+        return values;
+    }
+
 }
