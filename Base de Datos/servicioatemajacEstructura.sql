@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-04-2018 a las 21:34:18
+-- Tiempo de generación: 26-04-2018 a las 19:04:37
 -- Versión del servidor: 10.1.30-MariaDB
 -- Versión de PHP: 7.2.1
 
@@ -22,88 +22,6 @@ SET time_zone = "+00:00";
 -- Base de datos: `servicioatemajac`
 --
 
-DELIMITER $$
---
--- Procedimientos
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `ActualizacionComentarios` ()  bEGIN
-DECLARE vIdMax Integer;
-DECLARE vCont Integer DEFAULT 1;
-DECLARE vFecha Date;
-DECLARE vAntiguedad int;
-
-SET vIdMax = (select Idcomentarioam from comentarioam order by idcomentarioam desc limit 1);
-WHILE vCont <= vIdMax DO
-	SET vFecha = (SELECT Fecha From comentarioam where idcomentarioam = vCont);
-    SET vAntiguedad = (SELECT TIMESTAMPDIFF(YEAR,vFecha,CURDATE()));
-    IF vAntiguedad >= 1 THEN
-    	DELETE FROM comentarioam WHERE idcomentarioam = vCont;
-    END IF;
-	SET vCont = vCont + 1;
-END WHILE;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `ActualizacionScouter` ()  BEGIN
-DECLARE vIdMax Integer;
-DECLARE vCont Integer DEFAULT 1;
-DECLARE vFecha Date;
-DECLARE vFechaActual Date;
-SET vFechaActual = CURDATE();
-SET vIdMax = (select Idscouter from scouter order by idscouter desc limit 1);
-WHILE vCont <= vIdMax DO
-	SET vFecha = (SELECT FechaFinal From scouter where idscouter = vCont);
-    IF vFecha <= vFechaActual THEN
-    	DELETE FROM scouter WHERE IdScouter = vCont; 
-    END IF;
-	SET vCont = vCont + 1;
-END WHILE;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CambioSeccion` (IN `Idu` INT)  BEGIN
-DECLARE vFecha VarChar(50);
-DECLARE vEdad Integer;
-DECLARE vSeccion Integer;
-
-SET vFecha = (SELECT FechaNacimiento FROM usuario WHERE IdUsuario = Idu);
-SET vEdad = (SELECT TIMESTAMPDIFF(YEAR,vFecha,CURDATE()));
-
-IF vEdad < 11 THEN
-    	SET vSeccion = (SELECT idseccion from seccion where Nombre = 'manada');
-    ELSEIF vEdad < 15 THEN
-    	SET vSeccion = (SELECT idseccion from seccion where Nombre = 'tropa');
-    ELSEIF vEdad < 18 THEN
-    	SET vSeccion = (SELECT idseccion from seccion where Nombre = 'comunidad');
-    ElSEIF vEdad < 22 THEN
-    	SET vSeccion = (SELECT idseccion from seccion where Nombre = 'clan');
-    ELSE
-    	SET vSeccion = (SELECT idseccion from seccion where Nombre = 'dirigente');
-END IF;
-
-UPDATE Usuario SET Fkseccion = vSeccion WHERE IdUsuario = Idu;
-
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `contador` ()  BEGIN
-DECLARE vIdMax Integer;
-DECLARE vCont Integer DEFAULT 1;
-SET vIdMax = (select IdUsuario from usuario order by idusuario desc limit 1);
-WHILE vCont <= vIdMax DO
-	INSERT INTO `dependencia` (`Nombre`) VALUES ('Hola');
-	SET vCont = vCont + 1;
-END WHILE;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `listadotabla` (IN `vTabla` VARCHAR(20), IN `vId` VARCHAR(20))  BEGIN
-DECLARE vIdMax Integer;
-Set vIdMax = 0;
-WHILE vIdMax<5 DO
-INSERT INTO dependencia (IdDependencia,Nombre)VALUES(NULL,'Prueba');
-Set vIdMax = vIdMax + 1;
-END WHILE;
-END$$
-
-DELIMITER ;
-
 -- --------------------------------------------------------
 
 --
@@ -121,18 +39,6 @@ CREATE TABLE `adultomayor` (
   `FkDomicilio` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
---
--- Volcado de datos para la tabla `adultomayor`
---
-
-INSERT INTO `adultomayor` (`IdAdultoMayor`, `Nombre`, `ApellidoPaterno`, `ApellidoMaterno`, `Fotografia`, `Diabetico`, `FkDependencia`, `FkDomicilio`) VALUES
-(1, 'Patricia', 'González', 'Martinez', 'img/am/1.jpg', 0, 2, 1),
-(2, 'Manuel', 'Alvarez', 'Figueroa', 'img/am/2.jpg', 0, 1, 2),
-(3, 'Ramiro', 'Pérez', 'Chavez', 'img/am/9.jpg', 0, 2, 3),
-(4, 'Facundo', 'Cabral', 'Ramiro', 'img/am/90.jpg', 1, 1, 4),
-(5, 'Luis', 'Reyes', 'Martinez', 'img/am/50.jpg', 1, 3, 5),
-(6, 'JoseMi', 'González', 'Pérez', 'img/0001.jpg', 0, 3, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -147,15 +53,6 @@ CREATE TABLE `asignacion` (
   `FkAdultoMayor` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `asignacion`
---
-
-INSERT INTO `asignacion` (`IdAsignacion`, `Status`, `Fecha`, `FkUsuario`, `FkAdultoMayor`) VALUES
-(1, 1, '2018-03-12', 1, 1),
-(2, 1, '2018-03-12', 3, 2),
-(8, 1, '2018-10-23', 3, 4);
-
 -- --------------------------------------------------------
 
 --
@@ -169,15 +66,6 @@ CREATE TABLE `comentarioam` (
   `FkAdultoMayor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `comentarioam`
---
-
-INSERT INTO `comentarioam` (`IdComentarioAM`, `Nombre`, `Fecha`, `FkAdultoMayor`) VALUES
-(1, 'Hola me parece buena personA', '2018-03-12', 1),
-(2, 'Hola es un poco extraño, pero me agrada', '2018-03-12', 2),
-(3, 'wdwdwd', '2018-04-03', 6);
-
 -- --------------------------------------------------------
 
 --
@@ -189,14 +77,6 @@ CREATE TABLE `coordinador` (
   `FkScouter` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `coordinador`
---
-
-INSERT INTO `coordinador` (`IdCoordinador`, `FkScouter`) VALUES
-(1, 1),
-(2, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -207,15 +87,6 @@ CREATE TABLE `dependencia` (
   `IdDependencia` int(11) NOT NULL,
   `Nombre` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `dependencia`
---
-
-INSERT INTO `dependencia` (`IdDependencia`, `Nombre`) VALUES
-(1, 'Bajo'),
-(2, 'Medio'),
-(3, 'Alto');
 
 -- --------------------------------------------------------
 
@@ -232,22 +103,6 @@ CREATE TABLE `domicilio` (
   `FkUbicacion` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `domicilio`
---
-
-INSERT INTO `domicilio` (`IdDomicilio`, `Numero`, `Calle`, `Colonia`, `Foto`, `FkUbicacion`) VALUES
-(1, 23, 'Porfirio', 'Claudio', 'img/09454.jpg', 1),
-(2, 12, 'Gigantes', 'calma', 'img/03434.jpg', 2),
-(3, 35, 'guadalajara', 'Jalisco', 'img/34343.jpg', 3),
-(4, 12, 'roma', 'italia', 'img/0434.jpg', 4),
-(5, 13, 'Brasilia', 'Brasil', 'img/0434.jpg', 5),
-(6, 768, 'Hola', 'Saludo', 'img/0943.jpg', 6),
-(7, 123, 'Angel', 'Terralta', 'img/0943.jpg', 7),
-(8, 3456, 'Ciclope', 'Terralta', 'img/9434.jpg', 8),
-(9, 21, 'foca', 'hecheverria', 'img/0943.jpg', 9),
-(10, 506, 'Pollo', 'Rosticeria', 'img/9432.jpg', 10);
-
 -- --------------------------------------------------------
 
 --
@@ -263,15 +118,6 @@ CREATE TABLE `evento` (
   `FkTipoEvento` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `evento`
---
-
-INSERT INTO `evento` (`IdEvento`, `Fecha`, `Hora`, `Lugar`, `Informacion`, `FkTipoEvento`) VALUES
-(1, '2018-03-16', '12:00:00', 'Atemajac de Brizuela', '', 1),
-(2, '2018-04-15', '08:00:00', '', '', NULL),
-(3, '2018-04-15', '08:00:00', 'Parque Alcalde', 'Llevar todas las ganas de ayudar y servir a los demás', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -283,17 +129,6 @@ CREATE TABLE `fotoalrededores` (
   `Foto` varchar(100) NOT NULL,
   `FkDomicilio` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `fotoalrededores`
---
-
-INSERT INTO `fotoalrededores` (`IdFotoAlrededores`, `Foto`, `FkDomicilio`) VALUES
-(1, 'img/001.jpg', 4),
-(2, 'img/031.jpg', 5),
-(3, 'img/301.jpg', 2),
-(4, 'img/2001.jpg', 3),
-(5, 'img/031.jpg', 3);
 
 -- --------------------------------------------------------
 
@@ -307,17 +142,6 @@ CREATE TABLE `gestioninventario` (
   `FkScouter` int(11) NOT NULL,
   `FkInventario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `gestioninventario`
---
-
-INSERT INTO `gestioninventario` (`IdGestionInventario`, `Fecha`, `FkScouter`, `FkInventario`) VALUES
-(1, '2018-10-02', 1, 4),
-(2, '2018-10-07', 2, 3),
-(3, '2018-04-01', 2, 2),
-(4, '2018-04-05', 2, 1),
-(5, '2018-04-02', 1, 3);
 
 -- --------------------------------------------------------
 
@@ -336,31 +160,6 @@ CREATE TABLE `inventario` (
   `Extra` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `inventario`
---
-
-INSERT INTO `inventario` (`IdInventario`, `Producto`, `Cantidad`, `Existencia`, `Descripcion`, `Imagen`, `Comentario`, `Extra`) VALUES
-(1, 'Azucar', 1, 23, 'Kilogramo de Azuzar', 'img', '', 0),
-(2, 'Maceca', 1, 2, 'Kilogramo de Maceca', 'img', '', 0),
-(3, 'Lentejas', 0.5, 23, 'Kilogramo de Lenteja', 'img', '', 0),
-(4, 'Atun', 2, 0, 'Lata', 'img', '', 0),
-(5, 'Manteca', 1, 10, 'Paquete de Kilogramo de Maseca', 'img', 'Fueron donandas por Asc', 0),
-(6, 'Galletas', 1, 12, 'Paquete de Galletas', '', '', 0),
-(7, 'Canela', 1, 5, 'Debe ser un Raja', '', '', 0),
-(8, 'Jabón de Tocador', 1, 3, 'Jabón de Tocador', '', '', 0),
-(9, 'Jabón Zote', 1, 12, 'Jabón Zote o similar', '', '', 0),
-(10, 'Gelatina', 1, 45, 'Puede ser en sobre o caja', '', '', 0),
-(11, 'Sal', 1, 45, 'Bolsita de Sal', '', '', 0),
-(12, 'Cerrillos', 1, 23, 'Caja de Cerrillos', '', '', 0),
-(13, 'Frijol', 1, 12, 'Kilogramo de Frijol', '', '', 0),
-(14, 'Aceite', 0.5, 23, 'Litro de Aceite', '', '', 0),
-(15, 'Trigo Inflado', 0.25, 11, 'Kilogramo de Trigo Inflado', '', '', 0),
-(16, 'Tablilla de Chocolate', 1, 12, 'Tablilla de chocolate', '', 'Puede ser de cualquier marca', 0),
-(17, 'Pasta', 2, 30, 'Paquete de pasta', '', '', 0),
-(18, 'Arroz', 1, 12, 'Kilogramo de Arroz', '', '', 0),
-(19, 'Splenda', 1, 12, 'Paquetes de 20 sobres de Splenda', '', '', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -373,16 +172,6 @@ CREATE TABLE `password` (
   `Intentos` int(11) NOT NULL,
   `FkUsuario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `password`
---
-
-INSERT INTO `password` (`IdPassword`, `Password`, `Intentos`, `FkUsuario`) VALUES
-(1, '12345', 3, 1),
-(2, '123456789', 3, 5),
-(3, '3efbgr4n', 3, 5),
-(4, 'ereede', 3, 10);
 
 -- --------------------------------------------------------
 
@@ -399,14 +188,6 @@ CREATE TABLE `problematica` (
   `FkTipoProblematica` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `problematica`
---
-
-INSERT INTO `problematica` (`IdProblematica`, `Fecha`, `Nombre`, `Sugerencia`, `FkUsuario`, `FkTipoProblematica`) VALUES
-(1, '2018-03-12', 'No Funciona el boton color rojo de la primera interfaz', 'Cámbienlo a color azul', 5, 1),
-(2, '2018-01-19', 'El Viejito no vive en esa casa', 'Pongan el domicilio: Porfirio diaz 24  ', 9, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -418,15 +199,6 @@ CREATE TABLE `recoger` (
   `FkScouter` int(11) NOT NULL,
   `FkAsignacion` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `recoger`
---
-
-INSERT INTO `recoger` (`IdRecoger`, `FkScouter`, `FkAsignacion`) VALUES
-(1, 1, 1),
-(2, 1, 2),
-(3, 2, 8);
 
 -- --------------------------------------------------------
 
@@ -441,15 +213,6 @@ CREATE TABLE `scouter` (
   `FkUsuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `scouter`
---
-
-INSERT INTO `scouter` (`IdScouter`, `FechaInicio`, `FechaFinal`, `FkUsuario`) VALUES
-(1, '2018-03-12', '9999-12-30', 1),
-(2, '2018-03-12', '9999-12-30', 3),
-(3, '2018-04-10', '2018-04-28', 6);
-
 -- --------------------------------------------------------
 
 --
@@ -460,18 +223,6 @@ CREATE TABLE `seccion` (
   `IdSeccion` int(11) NOT NULL,
   `Nombre` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `seccion`
---
-
-INSERT INTO `seccion` (`IdSeccion`, `Nombre`) VALUES
-(1, 'Manada'),
-(2, 'Tropa'),
-(3, 'Comunidad'),
-(4, 'Clan'),
-(5, 'Dirigente'),
-(6, 'Civil');
 
 -- --------------------------------------------------------
 
@@ -484,14 +235,6 @@ CREATE TABLE `tipoevento` (
   `Nombre` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `tipoevento`
---
-
-INSERT INTO `tipoevento` (`IdTipoEvento`, `Nombre`) VALUES
-(1, 'Servicio'),
-(2, 'Convivio');
-
 -- --------------------------------------------------------
 
 --
@@ -502,14 +245,6 @@ CREATE TABLE `tipoproblematica` (
   `IdTipoProblematica` int(11) NOT NULL,
   `Nombre` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `tipoproblematica`
---
-
-INSERT INTO `tipoproblematica` (`IdTipoProblematica`, `Nombre`) VALUES
-(1, 'Fallo Aplicacion'),
-(2, 'Datos Incorrectos');
 
 -- --------------------------------------------------------
 
@@ -522,32 +257,6 @@ CREATE TABLE `ubicacion` (
   `Longitud` double NOT NULL,
   `Latitud` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `ubicacion`
---
-
-INSERT INTO `ubicacion` (`IdUbicacion`, `Longitud`, `Latitud`) VALUES
-(1, 103.4534335352, -20.434343434343436),
-(2, 104.333545454, -20.987554),
-(3, 0, 0),
-(4, 106.312456, 31.4702),
-(5, 106.87979, 32.78),
-(6, 106.454545, 32.5687),
-(7, 106.856, 32.5473),
-(8, 106.5934, 32.1232),
-(9, 106.5903, 32.4567),
-(10, 106.3456, 32.879),
-(11, 106.5678, 32.8904),
-(12, 103.43434, 32.6851),
-(13, 106.312456, 31.4702),
-(14, 106.87979, 32.78),
-(15, 106.454545, 32.5687),
-(16, 106.856, 32.5473),
-(17, 106.5934, 32.1232),
-(18, 106.5903, 32.4567),
-(19, 106.3456, 32.879),
-(20, 106.5678, 32.8904);
 
 -- --------------------------------------------------------
 
@@ -568,43 +277,52 @@ CREATE TABLE `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `usuario`
---
-
-INSERT INTO `usuario` (`IdUsuario`, `Nombre`, `ApellidoPaterno`, `ApellidoMaterno`, `Correo`, `Fotografia`, `FechaNacimiento`, `Scout`, `FkSeccion`) VALUES
-(1, 'Jose Miguel', '1998-10-25', 'Reconocimos 1 plm', 'moringos7@gmail.com', 'Reconocimos 1 plm', '1998-10-25', 1, 5),
-(3, 'Daniel', 'Castellanos', 'Miranda', 'fdanycast@gmail.com', 'Reconocimos 1 plm', '1998-10-11', 0, 6),
-(4, 'Patricia Lorenza', 'González', 'Quintanar', 'patty_loren26@gmail.com', 'Reconocimos 1 plm', '2018-08-26', 1, 5),
-(5, 'Martin Ricardo ', 'Del Rio', 'Grageda', 'langur@gmail.com', 'Reconocimos 1 plm', '2008-11-17', 1, 4),
-(6, 'Marcela María', 'Pérez', 'González', 'mace@hotmail.com', 'Reconocimos 1 plm', '2018-11-27', 1, 4),
-(8, 'Pancho', 'Hernandez', 'Chavez', 'pancho@gmail.com', 'Reconocimos 1 plm', '2018-07-29', 1, 5),
-(9, 'Miguel Angel', 'Pérez', 'Murillo', 'tekton.formen@gmail.com', 'Reconocimos 1 plm', '2018-09-30', 1, 6),
-(10, 'Trapos', 'Perez', 'Furto', 'ddede', 'wdwdw', '1999-10-02', 0, 6),
-(11, 'Pablo', 'hoy', 'fdf', 'fdf', 'dfdf', '1998-10-25', 1, 4);
-
---
 -- Disparadores `usuario`
 --
 DELIMITER $$
-CREATE TRIGGER `TriggerSeccion` BEFORE INSERT ON `usuario` FOR EACH ROW BEGIN 
+CREATE TRIGGER `TriggerSeccionEditar` BEFORE UPDATE ON `usuario` FOR EACH ROW BEGIN 
 declare vScout INTEGER;
-declare VEdad INTEGER;
+declare VEdad INTEGER; 
 SET vScout = new.Scout;
-IF vScout = 0 THEN
-SET NEW.FkSeccion = (SELECT idseccion from seccion where Nombre = 'civil');
-ELSE
-    SET vEdad = (SELECT 		TIMESTAMPDIFF(YEAR,NEW.FechaNacimiento,CURDATE()));
-    IF vEdad < 11 THEN
-    	SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'manada');
-    ELSEIF vEdad < 15 THEN
-    	SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'tropa');
-    ELSEIF vEdad < 18 THEN
-    	SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'comunidad');
-    ElSEIF vEdad < 22 THEN
-    	SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'clan');
-    ELSE
-    	SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'dirigente');
-    END IF;
+IF vScout = 0 THEN 
+	SET NEW.FkSeccion = (SELECT idseccion from seccion where Nombre = 'civil'); 
+ELSE 
+	SET vEdad = (SELECT TIMESTAMPDIFF(YEAR,NEW.FechaNacimiento,CURDATE()));
+	IF vEdad < 11 THEN
+		SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'manada');
+	ELSEIF vEdad < 15 THEN
+		SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'tropa');
+	ELSEIF vEdad < 18 THEN 
+		SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'comunidad'); 
+	ElSEIF vEdad < 22 THEN 
+		SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'clan');
+	ELSE 
+		SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'dirigente');
+	END IF;
+END IF; 
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `TriggerSeccionInsertar` BEFORE INSERT ON `usuario` FOR EACH ROW BEGIN 
+declare vScout INTEGER; 
+declare VEdad INTEGER; 
+SET vScout = new.Scout; 
+IF vScout = 0 THEN 
+	SET NEW.FkSeccion = (SELECT idseccion from seccion where Nombre = 'civil');
+ELSE 
+	SET vEdad = (SELECT TIMESTAMPDIFF(YEAR,NEW.FechaNacimiento,CURDATE()));
+	IF vEdad < 11 THEN 
+		SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'manada');
+	ELSEIF vEdad < 15 THEN
+		SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'tropa');
+	ELSEIF vEdad < 18 THEN
+		SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'comunidad');
+	ElSEIF vEdad < 22 THEN
+		SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'clan');
+	ELSE 
+		SET new.Fkseccion = (SELECT idseccion from seccion where Nombre = 'dirigente'); 
+	END IF; 
 END IF;
 END
 $$
@@ -621,16 +339,6 @@ CREATE TABLE `voluntariofrecuente` (
   `FkUsuario` int(11) NOT NULL,
   `FkAdultoMayor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `voluntariofrecuente`
---
-
-INSERT INTO `voluntariofrecuente` (`IdVoluntarioFrecuente`, `FkUsuario`, `FkAdultoMayor`) VALUES
-(1, 1, 3),
-(2, 1, 4),
-(3, 8, 5),
-(4, 6, 2);
 
 --
 -- Índices para tablas volcadas
@@ -784,7 +492,7 @@ ALTER TABLE `voluntariofrecuente`
 -- AUTO_INCREMENT de la tabla `adultomayor`
 --
 ALTER TABLE `adultomayor`
-  MODIFY `IdAdultoMayor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `IdAdultoMayor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `asignacion`
@@ -796,7 +504,7 @@ ALTER TABLE `asignacion`
 -- AUTO_INCREMENT de la tabla `comentarioam`
 --
 ALTER TABLE `comentarioam`
-  MODIFY `IdComentarioAM` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `IdComentarioAM` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `coordinador`
@@ -862,7 +570,7 @@ ALTER TABLE `recoger`
 -- AUTO_INCREMENT de la tabla `scouter`
 --
 ALTER TABLE `scouter`
-  MODIFY `IdScouter` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `IdScouter` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `seccion`
@@ -993,14 +701,6 @@ ALTER TABLE `usuario`
 ALTER TABLE `voluntariofrecuente`
   ADD CONSTRAINT `voluntariofrecuente_ibfk_1` FOREIGN KEY (`FkUsuario`) REFERENCES `usuario` (`IdUsuario`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `voluntariofrecuente_ibfk_2` FOREIGN KEY (`FkAdultoMayor`) REFERENCES `adultomayor` (`IdAdultoMayor`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-DELIMITER $$
---
--- Eventos
---
-CREATE DEFINER=`root`@`localhost` EVENT `ActualizacionIntentosPassword` ON SCHEDULE EVERY 5 SECOND STARTS '2018-04-18 09:28:00' ON COMPLETION NOT PRESERVE ENABLE DO Update password set Intentos = 3$$
-
-DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
