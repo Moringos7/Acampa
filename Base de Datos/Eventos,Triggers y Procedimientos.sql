@@ -3,14 +3,14 @@
 --Triggers--
 ------2-----
 --Procedimientos--
----------4--------
+---------5--------
 --Eventos--(5)
 --Evento Actualización Contraseñas--
 DELIMITER //
 CREATE EVENT ActualizacionIntentosPassword ON SCHEDULE EVERY 1 MONTH STARTS 
 '2018-00-00 00:00:00' ON COMPLETION  PRESERVE ENABLE DO 
 BEGIN
-Update password set Intentos = 3;
+CALL VerificacionIntentos();
 END //
 DELIMITER ;
 --Evento Cambio Seccion por edad--
@@ -100,7 +100,7 @@ END IF;
 END//
 DELIMITER ;
 
---Procedimientos-- (4)
+--Procedimientos-- (5)
 ---Actualizacion Comentarios---
 DELIMITER //
 CREATE PROCEDURE ActualizacionComentarios() NOT DETERMINISTIC CONTAINS SQL SQL SECURITY DEFINER 
@@ -211,4 +211,21 @@ while i <= vnInventario DO
 	SET i = i+1;
 END while;
 END //
+DELIMITER ;
+--VerificacionIntentos--
+DELIMITER //
+CREATE PROCEDURE VerificacionIntentos() NOT DETERMINISTIC CONTAINS SQL SQL SECURITY DEFINER
+BEGIN 
+declare vPass INTEGER; 
+declare vIntentos INTEGER; 
+declare i INTEGER DEFAULT 1; 
+SET vPass = (select IdPassword from password order by IdPassword desc limit 1);
+WHILE i <= vPass DO 
+	SET vIntentos = (SELECT Intentos FROM password WHERE IdPassword = i);
+	IF vIntentos > 0 THEN 
+		UPDATE password SET Intentos = 3 WHERE IdPassword = i; 
+	END IF; 
+	SET i = i + 1;
+END WHILE; 
+END//
 DELIMITER ;

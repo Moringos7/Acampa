@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-04-2018 a las 19:04:37
+-- Tiempo de generación: 27-04-2018 a las 07:09:47
 -- Versión del servidor: 10.1.30-MariaDB
 -- Versión de PHP: 7.2.1
 
@@ -168,8 +168,9 @@ CREATE TABLE `inventario` (
 
 CREATE TABLE `password` (
   `IdPassword` int(11) NOT NULL,
-  `Password` varchar(30) NOT NULL,
+  `Password` varchar(100) NOT NULL,
   `Intentos` int(11) NOT NULL,
+  `FechaLogin` date NOT NULL,
   `FkUsuario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -552,7 +553,7 @@ ALTER TABLE `inventario`
 -- AUTO_INCREMENT de la tabla `password`
 --
 ALTER TABLE `password`
-  MODIFY `IdPassword` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `IdPassword` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `problematica`

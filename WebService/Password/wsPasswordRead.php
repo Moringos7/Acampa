@@ -3,10 +3,10 @@
 require("../wsBDcredencial.php");
 
 $json = array();
-if(isset($_POST["idpassword"])){
-	$IdPassword = $_POST["idpassword"];
+if(isset($_POST["fkusuario"])){
+	$FkUsuario = $_POST["fkusuario"];
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
-	$select = "SELECT * FROM password WHERE IdPassword = '$IdPassword'";	
+	$select = "SELECT * FROM password WHERE FkUsuario = '$FkUsuario'";	
 	$resultado = mysqli_query($conexion,$select);
 	
 	if($registro = mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
@@ -19,6 +19,7 @@ if(isset($_POST["idpassword"])){
 		$registro["IdPassword"] = 0;
 		$registro["Password"] = '***';
 		$registro["Intentos"] = 0;
+		$registro["FechaLogin"]="0000-00-00";
 		$registro["FkUsuario"] = 0;
 		$json['Password'][] = $registro;
 	}

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-04-2018 a las 19:05:39
+-- Tiempo de generación: 27-04-2018 a las 07:09:08
 -- Versión del servidor: 10.1.30-MariaDB
 -- Versión de PHP: 7.2.1
 
@@ -124,6 +124,26 @@ while i <= vnInventario DO
 	UPDATE inventario SET Existencia = vExistencia WHERE IdInventario = i;
 	SET i = i+1;
 END while;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `VerificacionIntentos` ()  BEGIN
+declare vPass INTEGER;
+declare vIntentos INTEGER;
+declare i INTEGER DEFAULT 1;
+
+SET vPass = (select IdPassword from password order by IdPassword desc limit 1);
+
+WHILE i <= vPass DO
+	SET vIntentos = (SELECT Intentos FROM password WHERE IdPassword = i); 
+    IF vIntentos > 0 THEN
+    	UPDATE password SET Intentos =  3  WHERE IdPassword = i;
+    END IF;
+	SET i = i + 1;
+END WHILE;
+
+
+
+
 END$$
 
 DELIMITER ;
@@ -370,25 +390,25 @@ CREATE TABLE `inventario` (
 --
 
 INSERT INTO `inventario` (`IdInventario`, `Producto`, `Cantidad`, `Existencia`, `Descripcion`, `Imagen`, `Comentario`, `Extra`) VALUES
-(1, 'Azucar', 1, 0, 'Kilogramo de Azuzar', 'img', '', 0),
-(2, 'Maceca', 1, 0, 'Kilogramo de Maceca', 'img', '', 0),
-(3, 'Lentejas', 0.5, 0, 'Kilogramo de Lenteja', 'img', '', 0),
-(4, 'Atun', 2, 0, 'Latas', 'img', '', 0),
-(5, 'Manteca', 1, 0, 'Paquete de Kilogramo de Maseca', 'img', 'Fueron donandas por Asc', 0),
-(6, 'Galletas', 1, 0, 'Paquete de Galletas', '', '', 0),
-(7, 'Canela', 1, 0, 'Debe ser un Raja', '', '', 0),
-(8, 'Jabón de Tocador', 1, 0, 'Jabón de Tocador', '', '', 0),
-(9, 'Jabón Zote', 1, 0, 'Jabón Zote o similar', '', '', 0),
-(10, 'Gelatina', 1, 0, 'Puede ser en sobre o caja', '', '', 0),
-(11, 'Sal', 1, 0, 'Bolsita de Sal', '', '', 0),
-(12, 'Cerrillos', 1, 0, 'Caja de Cerrillos', '', '', 0),
-(13, 'Frijol', 1, 0, 'Kilogramo de Frijol', '', '', 0),
-(14, 'Aceite', 0.5, 0, 'Litro de Aceite', '', '', 0),
-(15, 'Trigo Inflado', 0.25, 0, 'Kilogramo de Trigo Inflado', '', '', 0),
-(16, 'Tablilla de Chocolate', 1, 0, 'Tablilla de chocolate', '', 'Puede ser de cualquier marca', 0),
-(17, 'Pasta', 2, 0, 'Paquetes de pasta', '', '', 0),
-(18, 'Arroz', 1, 0, 'Kilogramo de Arroz', '', '', 0),
-(19, 'Splenda', 1, 8, 'Paquetes de 20 sobres de Splenda', '', '', 0);
+(1, 'Azucar', 1, 5, 'Kilogramo de Azuzar', 'img/hola', '', 0),
+(2, 'Maceca', 1, 20, 'Kilogramo de Maceca', 'img/hola', '', 0),
+(3, 'Lentejas', 0.5, 20, 'Kilogramo de Lenteja', 'img/hola', '', 0),
+(4, 'Atun', 2, 20, 'Latas', 'img/hola', '', 0),
+(5, 'Manteca', 1, 20, 'Paquete de Kilogramo de Maseca', 'img/hola', 'Fueron donandas por Asc', 0),
+(6, 'Galletas', 1, 20, 'Paquete de Galletas', 'img/hola', '', 0),
+(7, 'Canela', 1, 20, 'Debe ser un Raja', 'img/hola', '', 0),
+(8, 'Jabón de Tocador', 1, 20, 'Jabón de Tocador', 'img/hola', '', 0),
+(9, 'Jabón Zote', 1, 20, 'Jabón Zote o similar', 'img/hola', '', 0),
+(10, 'Gelatina', 1, 20, 'Puede ser en sobre o caja', 'img/hola', '', 0),
+(11, 'Sal', 1, 20, 'Bolsita de Sal', 'img/hola', '', 0),
+(12, 'Cerrillos', 1, 20, 'Caja de Cerrillos', 'img/hola', '', 0),
+(13, 'Frijol', 1, 20, 'Kilogramo de Frijol', 'img/hola', '', 0),
+(14, 'Aceite', 0.5, 20, 'Litro de Aceite', 'img/hola', '', 0),
+(15, 'Trigo Inflado', 0.25, 20, 'Kilogramo de Trigo Inflado', 'img/hola', '', 0),
+(16, 'Tablilla de Chocolate', 1, 20, 'Tablilla de chocolate', 'img/hola', 'Puede ser de cualquier marca', 0),
+(17, 'Pasta', 2, 20, 'Paquetes de pasta', 'img/hola', '', 0),
+(18, 'Arroz', 1, 20, 'Kilogramo de Arroz', 'img/hola', '', 0),
+(19, 'Splenda', 1, 20, 'Paquetes de 20 sobres de Splenda', 'img/hola', '', 0);
 
 -- --------------------------------------------------------
 
@@ -398,8 +418,9 @@ INSERT INTO `inventario` (`IdInventario`, `Producto`, `Cantidad`, `Existencia`, 
 
 CREATE TABLE `password` (
   `IdPassword` int(11) NOT NULL,
-  `Password` varchar(30) NOT NULL,
+  `Password` varchar(100) NOT NULL,
   `Intentos` int(11) NOT NULL,
+  `FechaLogin` date NOT NULL,
   `FkUsuario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -407,11 +428,11 @@ CREATE TABLE `password` (
 -- Volcado de datos para la tabla `password`
 --
 
-INSERT INTO `password` (`IdPassword`, `Password`, `Intentos`, `FkUsuario`) VALUES
-(1, '12345', 1, 1),
-(2, '123456789', 1, 5),
-(3, '3efbgr4n', 0, 5),
-(4, 'ereede', 1, 10);
+INSERT INTO `password` (`IdPassword`, `Password`, `Intentos`, `FechaLogin`, `FkUsuario`) VALUES
+(1, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-26', 1),
+(2, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-26', 5),
+(3, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-26', 3),
+(4, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-26', 3);
 
 -- --------------------------------------------------------
 
@@ -897,7 +918,7 @@ ALTER TABLE `inventario`
 -- AUTO_INCREMENT de la tabla `password`
 --
 ALTER TABLE `password`
-  MODIFY `IdPassword` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `IdPassword` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `problematica`
@@ -1063,8 +1084,8 @@ CREATE DEFINER=`root`@`localhost` EVENT `EliminacionComentarios` ON SCHEDULE EVE
 CALL ActualizacionComentarios(); 
 END$$
 
-CREATE DEFINER=`root`@`localhost` EVENT `ActualizacionIntentosPassword` ON SCHEDULE EVERY 1 MONTH STARTS '2017-11-30 00:00:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
-Update password set Intentos = 3;
+CREATE DEFINER=`root`@`localhost` EVENT `ActualizacionIntentosPassword` ON SCHEDULE EVERY 1 MONTH STARTS '2018-04-26 10:15:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+CALL VerificacionIntentos();
 END$$
 
 CREATE DEFINER=`root`@`localhost` EVENT `CambioSeccion` ON SCHEDULE EVERY 1 DAY STARTS '2017-11-30 00:00:00' ON COMPLETION PRESERVE ENABLE DO BEGIN 
