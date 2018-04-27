@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.BaseColumns;
 
 import static com.rogzart.proyecto_interfaces.data.BaseDeDatosLocalTablas.*;
 
@@ -35,6 +36,13 @@ public class BaseDeDatosLocal extends SQLiteOpenHelper {
                 + Asignacion.FkUsuario + "INTEGER,"
                 + Asignacion.FkAdultoMayor + "INTEGER,"
                 + "UNIQUE(" + Asignacion.IdAsignacion + "))");
+        sqLiteDatabase.execSQL("CREATE TABLE " + ComentarioAM.Table_NameCAM +"("
+                +ComentarioAM.IdComentarioAM + "INTEGER PRIMARY KEY AUTOINCREMENT,"
+                +ComentarioAM.NombreC + "TEXT,"
+                +ComentarioAM.FechaC + "DATE,"
+                +ComentarioAM.FkAdultoMayor + "INTEGER,"
+                + "UNIQUE(" + ComentarioAM.IdComentarioAM + "))");
+
     }
 
 
@@ -48,13 +56,19 @@ public class BaseDeDatosLocal extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
         return sqLiteDatabase.insert(
-                Adultos.Table_NameAM, null, baseDeDatos.toContentValues());
+                Adultos.Table_NameAM, null, baseDeDatos.toContentValuesAM());
     }
 
     public long SaveAsignacion(BaseDeDatos baseDeDatos) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         return sqLiteDatabase.insert(
-                Asignacion.Table_NameAs, null, baseDeDatos.toContentValues());
+                Asignacion.Table_NameAs, null, baseDeDatos.toContentValuesAS());
+    }
+    public long SaveComentariosAM(BaseDeDatos baseDeDatos){
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        return sqLiteDatabase.insert(
+                ComentarioAM.Table_NameCAM, null, baseDeDatos.toContentValuesCAM());
+
     }
 }
 

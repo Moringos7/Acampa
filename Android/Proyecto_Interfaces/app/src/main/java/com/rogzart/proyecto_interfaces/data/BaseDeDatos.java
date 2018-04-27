@@ -41,6 +41,60 @@ public class BaseDeDatos {
     private String Lugar;
     private String Informacion;
     private String FkTipoEvento;
+    private String IdFotoAlrededores;
+    private String Foto;
+    private String IdGestionInventario;
+    private String FechaGI;
+    private String FkInventario;
+    private String IdInventario;
+    private String Producto;
+    private String Cantidad;
+    private String Existencia;
+    private String Descripcion;
+    private String Imagen;
+    private String Comentario;
+    private String Extra;
+    private String IdPassword;
+    private String Password;
+    private String Intentos;
+    private String IdProblematica;
+    private String FechaP;
+    private String NombreP;
+    private String Sugerencia;
+    private String FkTipoProblematica;
+    private String IdRecoger;
+    private String FkAsignacion;
+    private String IdScouter;
+    private String FechaInicio;
+    private String FechaFinal;
+    private String IdSeccion;
+    private String NombreS;
+    private String IdTipoEvento;
+    private String NombreTE;
+    private String IdTipoProblematico;
+    private String NombreTP;
+    private String IdUbicacion;
+    private String Longitud;
+    private String Latitud;
+    private String IdUsuario;
+    private String NombreU;
+    private String ApellidoPatenoU;
+    private String ApellidoMaternoU;
+    private String Correo;
+    private String FotografiaU;
+    private String FechaNacimiento;
+    private String Scout;
+    private String FkSeccion;
+    private String IdVoluntarioFrecuente;
+
+
+
+
+
+
+
+
+
 
 
     public BaseDeDatos(String Nombre,
@@ -73,7 +127,52 @@ public class BaseDeDatos {
                        String Hora,
                        String Lugar,
                        String Informacion,
-                       String FkTipoEvento
+                       String FkTipoEvento,
+                       String IdFotoAlrededores,
+                       String Foto,
+                       String IdGestionInventario,
+                       String FechaGI,
+                       String FkInventario,
+                       String IdInventario,
+                       String Producto,
+                       String Cantidad,
+                       String Existencia,
+                       String Descripcion,
+                       String Imagen,
+                       String Comentario,
+                       String Extra,
+                       String IdPassword,
+                       String Password,
+                       String Intentos,
+                       String IdProblematica,
+                       String FechaP,
+                       String NombreP,
+                       String Sugerencia,
+                       String FkTipoProblematica,
+                       String IdRecoger,
+                       String FkAsignacion,
+                       String IdScouter,
+                       String FechaInicio,
+                       String FechaFinal,
+                       String IdSeccion,
+                       String NombreS,
+                       String IdTipoEvento,
+                       String NombreTE,
+                       String IdTipoProblematico,
+                       String NombreTP,
+                       String IdUbicacion,
+                       String Longitud,
+                       String Latitud,
+                       String IdUsuario,
+                       String NombreU,
+                       String ApellidoPatenoU,
+                       String ApellidoMaternoU,
+                       String Correo,
+                       String FotografiaU,
+                       String FechaNacimiento,
+                       String Scout,
+                       String FkSeccion,
+                       String IdVoluntarioFrecuente
                        ) {
         this.IdAdultoMayor = UUID.randomUUID().toString();
         this.Nombre = Nombre;
@@ -108,7 +207,51 @@ public class BaseDeDatos {
         this.Lugar=Lugar;
         this.Informacion=Informacion;
         this.FkTipoEvento=FkTipoEvento;
-
+        this.IdFotoAlrededores=IdFotoAlrededores;
+        this.Foto=Foto;
+        this.IdGestionInventario=IdGestionInventario;
+        this.FechaGI=FechaGI;
+        this.FkInventario=FkInventario;
+        this.IdInventario=IdInventario;
+        this.Producto=Producto;
+        this.Cantidad=Cantidad;
+        this.Existencia=Existencia;
+        this.Descripcion=Descripcion;
+        this.Imagen=Imagen;
+        this.Comentario=Comentario;
+        this.Extra=Extra;
+        this.IdPassword=IdPassword;
+        this.Password=Password;
+        this.Intentos=Intentos;
+        this.IdProblematica=IdProblematica;
+        this.FechaP=FechaP;
+        this.NombreP=NombreP;
+        this.Sugerencia=Sugerencia;
+        this.FkTipoProblematica=FkTipoProblematica;
+        this.IdRecoger=IdRecoger;
+        this.FkAsignacion=FkAsignacion;
+        this.IdScouter=IdScouter;
+        this.FechaInicio=FechaInicio;
+        this.FechaFinal=FechaFinal;
+        this.IdSeccion=IdSeccion;
+        this.NombreS=NombreS;
+        this.IdTipoEvento=IdTipoEvento;
+        this.NombreTE=NombreTE;
+        this.IdTipoProblematico=IdTipoProblematico;
+        this.NombreTP=NombreTP;
+        this.IdUbicacion=IdUbicacion;
+        this.Longitud=Longitud;
+        this.Latitud=Latitud;
+        this.IdUsuario=IdUsuario;
+        this.NombreU=NombreU;
+        this.ApellidoPatenoU=ApellidoPatenoU;
+        this.ApellidoMaternoU=ApellidoMaternoU;
+        this.Correo=Correo;
+        this.FotografiaU=FotografiaU;
+        this.FechaNacimiento=FechaNacimiento;
+        this.Scout=Scout;
+        this.FkSeccion=FkSeccion;
+        this.IdVoluntarioFrecuente=IdVoluntarioFrecuente;
 
 
     }
@@ -249,7 +392,7 @@ public class BaseDeDatos {
 
 
 
-    public ContentValues toContentValues() {
+    public ContentValues toContentValuesAM() {
         ContentValues values= new ContentValues();
         values.put(Adultos.IdAdultoMayor, IdAdultoMayor);
         values.put(Adultos.Nombre, Nombre);
@@ -268,6 +411,14 @@ public class BaseDeDatos {
         values.put(Asignacion.Fecha, Fecha);
         values.put(Asignacion.FkUsuario, FkUsuario);
         values.put(Asignacion.FkAdultoMayor, FkAdultoMayor);
+        return values;
+    }
+    public ContentValues toContentValuesCAM(){
+        ContentValues values= new ContentValues();
+        values.put(ComentarioAM.IdComentarioAM, IdComentarioAM);
+        values.put(ComentarioAM.NombreC, NombreC );
+        values.put(ComentarioAM.FechaC, FechaC);
+        values.put(ComentarioAM.FkAdultoMayor,FkAdultoMayor);
         return values;
     }
 
