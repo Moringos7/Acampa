@@ -62,11 +62,93 @@ public class BaseDeDatosLocalTablas {
         public static String Table_NameFA="FotoAlrededores";
         public static String IdEventosAlrededores="IdEventoAlrededores";
         public static String Foto="Foto";
+        public static String FkAdultoMayor="FkAdultoMayor";
     }
     public static abstract class GestionInventario implements BaseColumns{
         public static String Table_NameGI="GestionInventario";
         public static String IdGestionInventario="IdGestionInventario";
         public static String FechaGT="FechaGT";
+        public static String FkScouter="FkScouter";
         public static String Fkinventario="FkInventario";
+
+    }
+    public static abstract class Inventario implements  BaseColumns{
+        public static String Table_NameIN ="Inventario";
+        public static String IdInventario= "IdInventario";
+        public static String Producto="Producto";
+        public static String Cantidad= "Cantidad";
+        public static String Existencia= "Existencia";
+        public static String Descripcion="Descripcion";
+        public static String Imagen="Imagen";
+        public static String Comentario="Comentario";
+        public static String Extra="Extra";
+    }
+    public static abstract class Password implements  BaseColumns{
+        public static String Table_NameP="Password";
+        public static String IdPassword="IdPassword";
+        public static String Password="Password";
+        public static String Intentos="Intentos";
+        public static String FkUsuario="FkUsuario";
+    }
+    public static abstract class Problematica implements  BaseColumns{
+        public static String Table_NamePr="Problematica";
+        public static String IdProblematica="IdProblematica";
+        public static String Fecha="Fecha";
+        public static String Nombre="Nombre";
+        public static String Sugerencia="Sugerencia";
+        public static String FkUsuario="FkUsuario";
+        public static String FkTipoProblematica="FkTipoProblematica";
+    }
+    public static abstract class Recoger implements  BaseColumns{
+        public static String Table_NameR="Recoger";
+        public static String IdRecoger="IdRecoger";
+        public static String FkScouter="FkScouter";
+        public static String FkAsignacion="FkAsignacion";
+    }
+    public static abstract class Scouter implements BaseColumns{
+        public static String Table_NameS= "Scouter";
+        public static String IdScouter="IdScouter";
+        public static String FechaInicio="FechaInicio";
+        public static String FechaFinal="FechaFinal";
+        public static String FkUsuario="FkUsuario";
+    }
+    public static abstract class Seccion implements BaseColumns{
+        public static String Table_NameSe="Seccion";
+        public static String IdSeccion="IdSeccion";
+        public static String Nombre="Nombre";
+    }
+    public static abstract class TipoEvento implements BaseColumns{
+        public static String Table_NameTE="TipoEvento";
+        public static String IdTipoEvento="IdTipoEvento";
+        public static String Nombre="Nombre";
+    }
+    public static abstract class TipoProblematica implements BaseColumns{
+        public static String Table_NameTP="TipoProblematica";
+        public static String IdTipoProblematica="IdTipoProblematica";
+        public static String Nombre="Nombre";
+    }
+    public static abstract class Ubicacion implements BaseColumns{
+        public static String Table_NameU="Ubicacion";
+        public static String IdUbicacion="IdUbicacion";
+        public static String Longitud="Longitud";
+        public static String Latitud="Latitud";
+    }
+    public static abstract class Usuario implements BaseColumns{
+        public static String Table_NameUs="Usuario";
+        public static String IdUsuario="IdUsuario";
+        public static String Nombre="Nombre";
+        public static String ApellidoPaterno="ApellidoPaterno";
+        public static String ApellidoMaterno="ApellidoMaterno";
+        public static String Correo="Correo";
+        public static String Fotografia="Fotografia";
+        public static String FechaNacimiento="FechaNacimiento";
+        public static String Scout="Scout";
+        public static String FkSeccion="FkSeccion";
+    }
+    public static abstract class VoluntarioFrecuente implements BaseColumns{
+        public static String Table_NameVF="VoluntarioFrecuente";
+        public static String IdVoluntarioFrecuente="IdVoluntarioFrecuente";
+        public static String FkUsuario="FkUsuario";
+        public static String FkAdultoMayor="FkAdultoMayor";
     }
 }

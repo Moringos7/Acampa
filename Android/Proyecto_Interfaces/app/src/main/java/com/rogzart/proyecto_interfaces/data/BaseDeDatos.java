@@ -421,5 +421,17 @@ public class BaseDeDatos {
         values.put(ComentarioAM.FkAdultoMayor,FkAdultoMayor);
         return values;
     }
+    public ContentValues toContentValuesCo(){
+        ContentValues values= new ContentValues();
+        values.put(Coordinador.IdCoordinador, IdCoordinador);
+        values.put(Coordinador.FkScouter, FkScouter);
+        return values;
+    }
+    public ContentValues toContentDependencia(){
+        ContentValues values= new ContentValues();
+        values.put(Dependencia.IdDependencia, IdDependencia);
+        values.put(Dependencia.NombreD, NombreD);
+        return values;
+    }
 
 }
