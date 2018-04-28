@@ -433,5 +433,26 @@ public class BaseDeDatos {
         values.put(Dependencia.NombreD, NombreD);
         return values;
     }
+    public ContentValues toContentDomicilio(){
+        ContentValues values= new ContentValues();
+        values.put(Domicilio.IdDomicilio,IdDomicilio);
+        values.put(Domicilio.Numero,Numero);
+        values.put(Domicilio.Calle,Calle);
+        values.put(Domicilio.Colonia,Colonia);
+        values.put(Domicilio.FotoD,FotoD);
+        values.put(Domicilio.FkUbicacion,FkUbicacion);
+        return values;
+    }
+    public ContentValues toContentEvento(){
+        ContentValues values= new ContentValues();
+        values.put(Evento.IdEvento,IdEvento);
+        values.put(Evento.FechaC,FechaC);
+        values.put(Evento.Hora,Hora);
+        values.put(Evento.Lugar,Lugar);
+        values.put(Evento.Informacion,Informacion);
+        values.put(FkTipoEvento,FkTipoEvento);
+        return values;
+
+    }
 
 }
