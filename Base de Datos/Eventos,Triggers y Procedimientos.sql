@@ -1,10 +1,10 @@
 --Eventos--
------5-----
+-----6-----
 --Triggers--
 ------2-----
 --Procedimientos--
----------5--------
---Eventos--(5)
+---------6--------
+--Eventos--(6)
 --Evento Actualización Contraseñas--
 DELIMITER //
 CREATE EVENT ActualizacionIntentosPassword ON SCHEDULE EVERY 1 MONTH STARTS 
@@ -27,6 +27,14 @@ CREATE EVENT EliminacionComentarios ON SCHEDULE EVERY 1 YEAR STARTS
 '2018-00-00 00:00:00' ON COMPLETION  PRESERVE ENABLE DO
 BEGIN 
 CALL ActualizacionComentarios(); 
+END//
+DELIMITER ;
+--Eliminacion de Usuarios--
+DELIMITER //
+CREATE EVENT EliminacionUsuarios ON SCHEDULE EVERY 1 MONTH STARTS 
+'2018-04-27 19:20:00' ON COMPLETION PRESERVE ENABLE DO 
+BEGIN 
+CALL VerificarLogin(); 
 END//
 DELIMITER ;
 --Evento Actualización Inventario Posterior a un Servicio---
@@ -226,6 +234,29 @@ WHILE i <= vPass DO
 		UPDATE password SET Intentos = 3 WHERE IdPassword = i; 
 	END IF; 
 	SET i = i + 1;
+END WHILE; 
+END//
+DELIMITER ;
+
+--VerificarLogin---
+DELIMITER //
+CREATE PROCEDURE VerificarLogin() NOT DETERMINISTIC CONTAINS SQL SQL SECURITY DEFINER
+BEGIN 
+DECLARE vIdMax Integer; 
+DECLARE vCont Integer DEFAULT 1; 
+DECLARE vFecha Date;
+DECLARE vMeses Integer;
+DECLARE vUsuario Integer;
+SET vIdMax = (select IdPassword from password order by idpassword desc limit 1);
+WHILE vCont <= vIdMax DO 
+	SET vFecha = (SELECT FechaLogin From password where idpassword = vCont);
+	SET vMeses = (SELECT TIMESTAMPDIFF(MONTH,vFecha,CURDATE()));
+	IF vMeses >= 6 THEN 
+		SET vUsuario = (SELECT FkUsuario FROM password WHERE Idpassword = vCont); 
+		DELETE FROM password WHERE IdPassword = vCont;
+		DELETE FROM usuario WHERE IdUsuario = vUsuario; 
+	END IF; 
+	SET vCont = vCont + 1; 
 END WHILE; 
 END//
 DELIMITER ;

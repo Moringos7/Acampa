@@ -13,21 +13,31 @@ if(isset($_POST["password"])){
 		if($registro = mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
 			//echo $registro['Password'];
 			$Estado = strcmp ($registro['Password'],$Password);	
-			Validacion($Estado);
+			Validacion($Estado,$FkUsuario);
 		}else{
-			Validacion(1);
+			Validacion(1,0);
 		}
 	}else{
-		Validacion(1);
+		Validacion(1,0);
 	}
 	
 }else{
-	Validacion(1);
+	Validacion(1,0);
 }
 
-function Validacion($estado){
+function Validacion($estado,$FkUsuario){
+	require("../wsBDcredencial.php");
+	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	if($estado == 0){
-		$registro["Validacion"] = true;
+		$Fecha = date('Y/m/d');
+		$query = "UPDATE password SET FechaLogin = ? WHERE FkUsuario = ?";
+		$stm = $conexion->prepare($query);
+		$stm->bind_param('si',$Fecha,$FkUsuario);
+		if($stm->execute()){
+			$registro["Validacion"] = true;
+		}else{
+			$registro["Validacion"] = false;	
+		}
 	}else{
 		$registro["Validacion"] = false;
 	}

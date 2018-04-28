@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-04-2018 a las 07:09:08
+-- Tiempo de generación: 28-04-2018 a las 02:23:15
 -- Versión del servidor: 10.1.30-MariaDB
 -- Versión de PHP: 7.2.1
 
@@ -146,6 +146,32 @@ END WHILE;
 
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `VerificarLogin` ()  BEGIN
+DECLARE vIdMax Integer;
+DECLARE vCont Integer DEFAULT 1; 
+DECLARE vFecha Date;
+DECLARE vMeses Integer;
+DECLARE vUsuario Integer;
+SET vIdMax = (select IdPassword from password order by idpassword desc limit 1);
+WHILE vCont <= vIdMax DO 
+	SET vFecha = (SELECT FechaLogin From password where idpassword = vCont);    
+    SET vMeses = (SELECT TIMESTAMPDIFF(MONTH,vFecha,CURDATE()));
+	IF vMeses >= 6 THEN 
+    	SET vUsuario = (SELECT FkUsuario FROM password WHERE Idpassword = vCont);
+		DELETE FROM password WHERE IdPassword = vCont; 
+        DELETE FROM usuario WHERE IdUsuario = vUsuario;
+	END IF;
+	SET vCont = vCont + 1;
+END WHILE; 
+
+
+
+
+
+
+
+END$$
+
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -202,7 +228,9 @@ CREATE TABLE `asignacion` (
 INSERT INTO `asignacion` (`IdAsignacion`, `Status`, `Fecha`, `FkUsuario`, `FkAdultoMayor`) VALUES
 (1, 1, '2018-03-12', 1, 1),
 (2, 1, '2018-03-12', 3, 2),
-(8, 1, '2018-10-23', 3, 4);
+(8, 1, '2018-10-23', 3, 4),
+(11, 0, '2018-04-18', NULL, 7),
+(12, 1, '2018-04-18', NULL, 7);
 
 -- --------------------------------------------------------
 
@@ -421,6 +449,7 @@ CREATE TABLE `password` (
   `Password` varchar(100) NOT NULL,
   `Intentos` int(11) NOT NULL,
   `FechaLogin` date NOT NULL,
+  `Status` tinyint(1) NOT NULL DEFAULT '1',
   `FkUsuario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -428,11 +457,11 @@ CREATE TABLE `password` (
 -- Volcado de datos para la tabla `password`
 --
 
-INSERT INTO `password` (`IdPassword`, `Password`, `Intentos`, `FechaLogin`, `FkUsuario`) VALUES
-(1, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-26', 1),
-(2, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-26', 5),
-(3, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-26', 3),
-(4, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-26', 3);
+INSERT INTO `password` (`IdPassword`, `Password`, `Intentos`, `FechaLogin`, `Status`, `FkUsuario`) VALUES
+(1, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-28', 1, 1),
+(2, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-28', 1, 5),
+(3, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-28', 1, 3),
+(4, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-28', 1, 3);
 
 -- --------------------------------------------------------
 
@@ -445,8 +474,8 @@ CREATE TABLE `problematica` (
   `Fecha` date NOT NULL,
   `Nombre` text NOT NULL,
   `Sugerencia` text NOT NULL,
-  `FkUsuario` int(11) NOT NULL,
-  `FkTipoProblematica` int(11) NOT NULL
+  `FkUsuario` int(11) DEFAULT NULL,
+  `FkTipoProblematica` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -455,7 +484,8 @@ CREATE TABLE `problematica` (
 
 INSERT INTO `problematica` (`IdProblematica`, `Fecha`, `Nombre`, `Sugerencia`, `FkUsuario`, `FkTipoProblematica`) VALUES
 (1, '2018-03-12', 'No Funciona el boton color rojo de la primera interfaz', 'Cámbienlo a color azul', 5, 1),
-(2, '2018-01-19', 'El Viejito no vive en esa casa', 'Pongan el domicilio: Porfirio diaz 24  ', 9, 2);
+(2, '2018-01-19', 'El Viejito no vive en esa casa', 'Pongan el domicilio: Porfirio diaz 24  ', 9, 2),
+(4, '2018-04-26', 'jojojojoj', 'ojojojojoj', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -465,8 +495,8 @@ INSERT INTO `problematica` (`IdProblematica`, `Fecha`, `Nombre`, `Sugerencia`, `
 
 CREATE TABLE `recoger` (
   `IdRecoger` int(11) NOT NULL,
-  `FkScouter` int(11) NOT NULL,
-  `FkAsignacion` int(11) NOT NULL
+  `FkScouter` int(11) DEFAULT NULL,
+  `FkAsignacion` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -624,13 +654,11 @@ CREATE TABLE `usuario` (
 INSERT INTO `usuario` (`IdUsuario`, `Nombre`, `ApellidoPaterno`, `ApellidoMaterno`, `Correo`, `Fotografia`, `FechaNacimiento`, `Scout`, `FkSeccion`) VALUES
 (1, 'Jose Miguel', '1998-10-25', 'Reconocimos 1 plm', 'moringos7@gmail.com', 'Reconocimos 1 plm', '2001-10-25', 1, 3),
 (3, 'Daniel', 'Castellanos', 'Miranda', 'fdanycast@gmail.com', 'Reconocimos 1 plm', '1998-10-11', 1, 4),
-(4, 'Patricia Lorenza', 'González', 'Quintanar', 'patty_loren26@gmail.com', 'Reconocimos 1 plm', '2018-08-26', 1, 1),
 (5, 'Martin Ricardo ', 'Del Rio', 'Grageda', 'langur@gmail.com', 'Reconocimos 1 plm', '1999-11-17', 1, 4),
 (6, 'Marcela María', 'Pérez', 'González', 'mace@hotmail.com', 'Reconocimos 1 plm', '1999-11-27', 1, 4),
 (8, 'Pancho', 'Hernandez', 'Chavez', 'pancho@gmail.com', 'Reconocimos 1 plm', '1980-07-29', 1, 5),
 (9, 'Miguel Angel', 'Pérez', 'Murillo', 'tekton.formen@gmail.com', 'Reconocimos 1 plm', '1968-09-30', 1, 5),
-(10, 'Trapos', 'Perez', 'Furto', 'ddede', 'wdwdw', '1999-10-02', 0, 6),
-(11, 'Pablo', 'hoy', 'fdf', 'fdf', 'dfdf', '2010-10-25', 1, 1);
+(10, 'Trapos', 'Perez', 'Furto', 'ddede', 'wdwdw', '1999-10-02', 0, 6);
 
 --
 -- Disparadores `usuario`
@@ -864,7 +892,7 @@ ALTER TABLE `adultomayor`
 -- AUTO_INCREMENT de la tabla `asignacion`
 --
 ALTER TABLE `asignacion`
-  MODIFY `IdAsignacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `IdAsignacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `comentarioam`
@@ -906,7 +934,7 @@ ALTER TABLE `fotoalrededores`
 -- AUTO_INCREMENT de la tabla `gestioninventario`
 --
 ALTER TABLE `gestioninventario`
-  MODIFY `IdGestionInventario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `IdGestionInventario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario`
@@ -918,25 +946,25 @@ ALTER TABLE `inventario`
 -- AUTO_INCREMENT de la tabla `password`
 --
 ALTER TABLE `password`
-  MODIFY `IdPassword` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `IdPassword` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `problematica`
 --
 ALTER TABLE `problematica`
-  MODIFY `IdProblematica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `IdProblematica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `recoger`
 --
 ALTER TABLE `recoger`
-  MODIFY `IdRecoger` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `IdRecoger` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT de la tabla `scouter`
 --
 ALTER TABLE `scouter`
-  MODIFY `IdScouter` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `IdScouter` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `seccion`
@@ -966,13 +994,13 @@ ALTER TABLE `ubicacion`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `IdUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `IdUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `voluntariofrecuente`
 --
 ALTER TABLE `voluntariofrecuente`
-  MODIFY `IdVoluntarioFrecuente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `IdVoluntarioFrecuente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Restricciones para tablas volcadas
@@ -982,15 +1010,15 @@ ALTER TABLE `voluntariofrecuente`
 -- Filtros para la tabla `adultomayor`
 --
 ALTER TABLE `adultomayor`
-  ADD CONSTRAINT `adultomayor_ibfk_1` FOREIGN KEY (`FkDependencia`) REFERENCES `dependencia` (`IdDependencia`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `adultomayor_ibfk_2` FOREIGN KEY (`FkDomicilio`) REFERENCES `domicilio` (`IdDomicilio`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `adultomayor_ibfk_1` FOREIGN KEY (`FkDependencia`) REFERENCES `dependencia` (`IdDependencia`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `adultomayor_ibfk_2` FOREIGN KEY (`FkDomicilio`) REFERENCES `domicilio` (`IdDomicilio`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `asignacion`
 --
 ALTER TABLE `asignacion`
-  ADD CONSTRAINT `asignacion_ibfk_1` FOREIGN KEY (`FkAdultoMayor`) REFERENCES `adultomayor` (`IdAdultoMayor`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `asignacion_ibfk_2` FOREIGN KEY (`FkUsuario`) REFERENCES `usuario` (`IdUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `asignacion_ibfk_1` FOREIGN KEY (`FkAdultoMayor`) REFERENCES `adultomayor` (`IdAdultoMayor`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `asignacion_ibfk_2` FOREIGN KEY (`FkUsuario`) REFERENCES `usuario` (`IdUsuario`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `comentarioam`
@@ -1008,13 +1036,13 @@ ALTER TABLE `coordinador`
 -- Filtros para la tabla `domicilio`
 --
 ALTER TABLE `domicilio`
-  ADD CONSTRAINT `domicilio_ibfk_1` FOREIGN KEY (`FkUbicacion`) REFERENCES `ubicacion` (`IdUbicacion`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `domicilio_ibfk_1` FOREIGN KEY (`FkUbicacion`) REFERENCES `ubicacion` (`IdUbicacion`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `evento`
 --
 ALTER TABLE `evento`
-  ADD CONSTRAINT `evento_ibfk_1` FOREIGN KEY (`FkTipoEvento`) REFERENCES `tipoevento` (`IdTipoEvento`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `evento_ibfk_1` FOREIGN KEY (`FkTipoEvento`) REFERENCES `tipoevento` (`IdTipoEvento`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `fotoalrededores`
@@ -1039,15 +1067,15 @@ ALTER TABLE `password`
 -- Filtros para la tabla `problematica`
 --
 ALTER TABLE `problematica`
-  ADD CONSTRAINT `problematica_ibfk_1` FOREIGN KEY (`FkUsuario`) REFERENCES `usuario` (`IdUsuario`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `problematica_ibfk_2` FOREIGN KEY (`FkTipoProblematica`) REFERENCES `tipoproblematica` (`IdTipoProblematica`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `problematica_ibfk_1` FOREIGN KEY (`FkTipoProblematica`) REFERENCES `tipoproblematica` (`IdTipoProblematica`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `problematica_ibfk_2` FOREIGN KEY (`FkUsuario`) REFERENCES `usuario` (`IdUsuario`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `recoger`
 --
 ALTER TABLE `recoger`
-  ADD CONSTRAINT `recoger_ibfk_1` FOREIGN KEY (`FkScouter`) REFERENCES `scouter` (`IdScouter`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `recoger_ibfk_2` FOREIGN KEY (`FkAsignacion`) REFERENCES `asignacion` (`IdAsignacion`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `recoger_ibfk_2` FOREIGN KEY (`FkAsignacion`) REFERENCES `asignacion` (`IdAsignacion`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `recoger_ibfk_3` FOREIGN KEY (`FkScouter`) REFERENCES `scouter` (`IdScouter`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `scouter`
@@ -1059,7 +1087,7 @@ ALTER TABLE `scouter`
 -- Filtros para la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`FkSeccion`) REFERENCES `seccion` (`IdSeccion`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`FkSeccion`) REFERENCES `seccion` (`IdSeccion`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `voluntariofrecuente`
@@ -1090,6 +1118,10 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` EVENT `CambioSeccion` ON SCHEDULE EVERY 1 DAY STARTS '2017-11-30 00:00:00' ON COMPLETION PRESERVE ENABLE DO BEGIN 
 CALL ActualizacionSeccion(); 
+END$$
+
+CREATE DEFINER=`root`@`localhost` EVENT `EliminacionUsuarios` ON SCHEDULE EVERY 1 MINUTE STARTS '2018-04-27 19:20:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+CALL VerificarLogin();
 END$$
 
 DELIMITER ;
