@@ -1,20 +1,14 @@
 <?php
-$x = "manuel.perez.24.06.01@gmail.com";
-$y = "Compañia";
-$z = "Este codigo es lo mejor <b>in bold!</b>";
-envioCorreo($x,$y,$z);
-
-function envioCorreo($Correo,$Asunto,$Body){
+    
     // Import PHPMailer classes into the global namespace
-// These must be at the top of your script, not inside a function
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-//Load Composer's autoloader
-require 'vendor/autoload.php';
-
-$mail = new PHPMailer(true);                              // Passing `true` enables exceptions
-try {
+    // These must be at the top of your script, not inside a function
+    
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+    require 'vendor/autoload.php';
+    include 'wsValidadorCorreos.php';
+    $mail = new PHPMailer(true);  // Passing `true` enables exceptions
+    try {
     //Server settings
     $mail->SMTPDebug = 0;                                 // Enable verbose debug output
     $mail->isSMTP();                                      // Set mailer to use SMTP
@@ -27,8 +21,8 @@ try {
 
     //Recipients
     $mail->setFrom("servicioatemajac@gmail.com",'Aplicacion Acampa');
-    $mail->addAddress("'$Correo'", /*'Manuel'*/);     // Add a recipient
-    $mail->addAddress("servicioatemajac@gmail.com");              
+    $mail->addAddress($Correo);     // Add a recipient
+    $mail->addAddress('servicioatemajac@gmail.com');
     //$mail->addReplyTo('info@example.com', 'Information');
     //$mail->addCC('cc@example.com');
     //$mail->addBCC('bcc@example.com');
@@ -39,14 +33,15 @@ try {
 
     //Content
     $mail->isHTML(true);                                  // Set email format to HTML
-    $mail->Subject = "'$Asunto'";
-    $mail->Body    = "'$Body'";
+    $mail->Subject = $Asunto;
+    $mail->Body    = $Body;
+    //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
     $mail->send();
     echo 'Enviado';
-} catch (Exception $e) {
-    echo 'NoEnviado', $mail->ErrorInfo;
-}
-}
+    } catch (Exception $e) {
+    echo 'NoEnviado: ', $mail->ErrorInfo;
+    }
+
 
 ?>
