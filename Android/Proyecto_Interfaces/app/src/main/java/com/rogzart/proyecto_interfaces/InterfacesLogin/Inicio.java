@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.inputmethodservice.Keyboard;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +28,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -57,7 +60,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>,Response.Listener<JSONObject>,Response.ErrorListener {
+public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>{
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -68,6 +71,7 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
     private TextView Pass;
     private ProgressDialog Progreso;
     private Usuario usuario = null;
+    private Boolean Validacion;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
 
@@ -100,15 +104,28 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
                 Pass = (TextView) findViewById(R.id.password);
                 request = Volley.newRequestQueue(getApplicationContext());
 
-
                 if(!isEmailValid(Correo.getText().toString())){
-                    Toast Error = Toast.makeText(getApplicationContext(),"Ingresa Correo Valido",Toast.LENGTH_SHORT);
-                    Error.show();
+                    Toast.makeText(getApplicationContext(),"Ingresa Correo Valido",Toast.LENGTH_SHORT).show();
                 }else if(!isPasswordValid(Pass.getText().toString())){
-                    Toast Error = Toast.makeText(getApplicationContext(),"Ingresa una Contraseña valida",Toast.LENGTH_LONG);
-                    Error.show();
+                    Toast.makeText(getApplicationContext(),"Ingresa una Contraseña valida",Toast.LENGTH_LONG).show();
                 }else{
-                    cargarWebService("usuario");
+                    Intent intent = new Intent (view.getContext(), Barra_desplegable.class);
+                    startActivityForResult(intent, 0);
+                    //cargarWebServiceUsuario();
+                    //Toast.makeText(Inicio.this, ""+usuario.getIdUsuario(), Toast.LENGTH_SHORT).show();
+                    //VerificacionPassword();
+                   /*if(){
+                        Toast.makeText(Inicio.this, "Cuenta de Usuario Inexistente", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(Inicio.this, "Cuenta Validada", Toast.LENGTH_SHORT).show();
+                    }*/
+
+                    /*
+                    if(){
+
+                    }else{
+                        Toast.makeText(Inicio.this, "Contraseña no Valida", Toast.LENGTH_SHORT).show();
+                    }*/
 
                }
                 /*
@@ -129,55 +146,76 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
-    private void cargarWebService(String dif){
+
+    private void VerificacionPassword() {
         Conexion x = new Conexion();
-        switch (dif){
-            case "usuario":
-                x.setRuta("WebService/Usuario/wsUsuarioReadTable.php");
-                jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,this,this);
-                request.add(jsonObjectRequest);
-            break;
-            case "password":
-                x.setRuta("WebService/Password/wsVerificacionPassword.php");
-                jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,x.getRuta(),null,this,this);
-                request.add(jsonObjectRequest);
-            break;
-            default:
-            break;
-        }
-    }
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        //Progreso.hide();
-        Toast.makeText(getApplicationContext(),"Error: "+ error.toString(),Toast.LENGTH_LONG).show();
-        Log.i("Error",error.toString());
-    }
+        x.setRuta("WebService/Password/wsVerificacionPassword");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,x.getRuta(),null,new Response.Listener<JSONObject> (){
+            @Override
+            public void onResponse(JSONObject response) {
+                JSONArray json = response.optJSONArray("Password");
 
-    @Override
-    public void onResponse(JSONObject response) {
-        //Progreso.hide();
-        //Toast.makeText(getApplicationContext(),"We have the packet",Toast.LENGTH_LONG).show();
-        String CorreoUsuario;
-        JSONArray json = response.optJSONArray("Usuario");
+                try {
+                        JSONObject jsonObject = json.getJSONObject(0);
+                        Validacion = jsonObject.getBoolean("Validacion");
 
-        try {
-            for (int i = 0; i < json.length(); i++) {
-                JSONObject jsonObject = null;
-                jsonObject = json.getJSONObject(i);
-                CorreoUsuario = jsonObject.optString("Correo");
-                if(CorreoUsuario.compareTo(Correo.getText().toString()) == 0){
-                    usuario = new Usuario();
-                    usuario.setIdUsuario(jsonObject.optInt("IdUsuario"));
-                    usuario.setNombre(jsonObject.optString("Nombre"));
-                    usuario.setCorreo(jsonObject.optString("Correo"));
+                }catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "Error Conexion servidor", Toast.LENGTH_SHORT).show();
                 }
             }
-        }catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), "Error Conexion servidor", Toast.LENGTH_SHORT).show();
-        }
+        },new Response.ErrorListener(){
 
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error Conexion servidor", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(jsonObjectRequest);
     }
 
+    /***
+     * x.setRuta("WebService/Password/wsVerificacionPassword.php");
+     jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,x.getRuta(),null,this,this);
+     request.add(jsonObjectRequest);
+
+     * */
+    private void cargarWebServiceUsuario(){
+        Conexion x = new Conexion();
+        x.setRuta("WebService/Usuario/wsUsuarioReadTable.php");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,new Response.Listener<JSONObject> (){
+            @Override
+            public void onResponse(JSONObject response) {
+                //Progreso.hide();
+                //Toast.makeText(getApplicationContext(),"We have the packet",Toast.LENGTH_LONG).show();
+                String CorreoUsuario;
+                JSONArray json = response.optJSONArray("Usuario");
+
+                try {
+                    usuario = new Usuario();
+                    usuario.setIdUsuario(0);
+                    for (int i = 0; i < json.length(); i++) {
+                        JSONObject jsonObject = json.getJSONObject(i);
+                        CorreoUsuario = jsonObject.optString("Correo");
+                        if(CorreoUsuario.compareTo(Correo.getText().toString()) == 0){
+                            usuario.setIdUsuario(jsonObject.optInt("IdUsuario"));
+                            usuario.setNombre(jsonObject.optString("Nombre"));
+                            usuario.setCorreo(jsonObject.optString("Correo"));
+                            //Toast.makeText(getApplicationContext(), "Dentro de ciclo" , Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "Error Conexion servidor", Toast.LENGTH_SHORT).show();
+                }
+            }
+        },new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error Conexion servidor", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(jsonObjectRequest);
+    }
     private boolean isEmailValid(String email) {
         boolean message = false;
         if(email.compareTo("") == 0){
@@ -278,9 +316,10 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            //InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            //inputMethodManager.hideSoftInputFromWindow(Pass.getWindowToken(), 0);
+            Toast.makeText(this, "Hola", Toast.LENGTH_SHORT).show();
+
         }
     }
     /**

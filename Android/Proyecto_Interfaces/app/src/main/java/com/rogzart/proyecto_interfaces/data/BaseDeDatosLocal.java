@@ -44,10 +44,10 @@ public class BaseDeDatosLocal extends SQLiteOpenHelper {
                 +ComentarioAM.FechaC + "DATE,"
                 +ComentarioAM.FkAdultoMayor + "INTEGER,"
                 + "UNIQUE(" + ComentarioAM.IdComentarioAM + "))");
-        sqLiteDatabase.execSQL("CREATE TABLE " + Coordinador.Table_NameCo +"("
+        /**sqLiteDatabase.execSQL("CREATE TABLE " + Coordinador.Table_NameCo +"("
                 +Coordinador.IdCoordinador + "INTEGER PRIMARY KEY AUTOINCREMENT,"
                 +Coordinador.FkScouter + "INTEGER,"
-                + "UNIQUE("+ Coordinador.IdCoordinador+ "))" );
+                + "UNIQUE("+ Coordinador.IdCoordinador+ "))" );**/
         sqLiteDatabase.execSQL("CREATE TABLE " + Dependencia.Table_NameD+"("
                 +Dependencia.IdDependencia + "INTEGER PRIMARY KEY AUTOINCREMENT,"
                 +Dependencia.NombreD + "VARCHAR(30),"
@@ -89,12 +89,13 @@ public class BaseDeDatosLocal extends SQLiteOpenHelper {
                 +Inventario.Comentario + "TEXT,"
                 +Inventario.Extra + "TINYINT,"
                 + "UNIQUE(" + Inventario.IdInventario+ "))");
-        sqLiteDatabase.execSQL("CREATE TABLE " +Password.Table_NameP+"("
+        /**sqLiteDatabase.execSQL("CREATE TABLE " +Password.Table_NameP+"("
                 +Password.IdPassword + "INTEGER PRIMARY KEY AUTOINCREMENT,"
                 +Password.Password + "VARCHAR(30),"
                 +Password.Intentos + "INT,"
+         //Falta fecha CUIDADO
                 +Password.FkUsuario + "INT,"
-                + "UNIQUE(" + Password.IdPassword+ "))");
+                + "UNIQUE(" + Password.IdPassword+ "))");**/
         sqLiteDatabase.execSQL("CREATE TABLE " +Problematica.Table_NamePr + "("
                 +Problematica.IdProblematica + "INTEGER PRIMARY KEY AUTOINCREMENT,"
                 +Problematica.Fecha + "DATE,"
