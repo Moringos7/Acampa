@@ -1,6 +1,7 @@
 package com.rogzart.proyecto_interfaces.data;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.icu.text.IDNA;
 import android.net.UrlQuerySanitizer;
 
@@ -254,6 +255,9 @@ public class BaseDeDatos {
         this.IdVoluntarioFrecuente=IdVoluntarioFrecuente;
 
 
+    }
+
+    public BaseDeDatos(Context applicationContext) {
     }
 
     public String getIdAdultoMayor() {

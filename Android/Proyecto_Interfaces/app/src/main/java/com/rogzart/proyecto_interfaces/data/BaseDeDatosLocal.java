@@ -8,14 +8,51 @@ import android.graphics.DashPathEffect;
 import android.provider.BaseColumns;
 import android.util.EventLog;
 
+import com.rogzart.proyecto_interfaces.Barra_desplegable;
+import com.rogzart.proyecto_interfaces.Splash.SplashActivity;
+
+
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
 import static com.rogzart.proyecto_interfaces.data.BaseDeDatosLocalTablas.*;
 
 public class BaseDeDatosLocal extends SQLiteOpenHelper {
+    private static String  DB_PATH = "/data/data/com.rogzart/proyecto_interfaces/data";
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "servicioatemajac.db";
+    public static final String DB_NAME = "servicioatemajac.db";
 
-    public BaseDeDatosLocal(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    public BaseDeDatosLocal(Context context) {
+        super(context, DB_NAME, null, DATABASE_VERSION);
+
+
+
+    createDatabase();
+
+    }
+
+    public  void createDatabase() {
+        boolean dbExist = checkDatabase();
+        SQLiteDatabase db_Read = null;
+        if (dbExist){
+            //la base de datos ya existe
+        }
+        else{
+            db_Read= this.getReadableDatabase();
+            db_Read.close();
+        }
+
+    }
+
+    private  boolean checkDatabase() {
+        File dbfile= new File(DB_PATH + DB_NAME);
+        return dbfile.exists();
+    }
+
+    interface Tablas{
+        String Adultos="Adultos";
 
     }
 
