@@ -1,4 +1,4 @@
-package com.rogzart.proyecto_interfaces.Modelos;
+package com.rogzart.proyecto_interfaces.Modelo;
 
 public class Usuario {
     private int IdUsuario;
