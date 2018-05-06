@@ -4,11 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.inputmethodservice.Keyboard;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -23,12 +20,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -39,14 +34,14 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.ResponseDelivery;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.rogzart.proyecto_interfaces.Barra_desplegable;
-import com.rogzart.proyecto_interfaces.Modelos.Conexion;
-import com.rogzart.proyecto_interfaces.Modelos.Usuario;
+import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
+import com.rogzart.proyecto_interfaces.Modelo.Conexion;
+import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.R;
+import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,16 +65,22 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
     private TextView Correo;
     private TextView Pass;
     private ProgressDialog Progreso;
-    private Usuario usuario = null;
+    private Usuario usuario;
     private Boolean Validacion;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
 
+    //Insersciones
+    OperacionesBaseDatos operador;
+    AdultoMayor abuelo;
+    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
+        operador = OperacionesBaseDatos.obtenerInstancia(getApplicationContext());
+        abuelo = new AdultoMayor();
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.IdNombre);
         populateAutoComplete();
@@ -95,43 +96,29 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
             }
         });
         //Action Inicio sesion
+        usuario = new Usuario();
         final Button mEmailSignInButton = (Button) findViewById(R.id.btnInicio);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                //attemptLogin();
-                Correo =  (TextView) findViewById(R.id.IdNombre);
-                Pass = (TextView) findViewById(R.id.password);
-                request = Volley.newRequestQueue(getApplicationContext());
+                abuelo.setIdAdultoMayor(2);
+                abuelo.setNombre("Pancho");
+                abuelo.setApellidoPaterno("González");
+                abuelo.setApellidoMaterno("Padilla");
+                abuelo.setFotografia("img/123.jpg");
+                abuelo.setDiabetico(0);
+                abuelo.setFkDependencia(null);
+                abuelo.setFkDomicilio(null);
+                Toast.makeText(Inicio.this, "**"+abuelo.getIdAdultoMayor()+""+
+                abuelo.getNombre()+"**"+
+                abuelo.getApellidoMaterno()+"**"+
+                abuelo.getDiabetico()+"**"+
+                abuelo.getFkDependencia(), Toast.LENGTH_LONG).show();
+               operador.InsertarAdultoMayor(abuelo);
+                Toast.makeText(Inicio.this, "Enviado", Toast.LENGTH_LONG).show();
 
-                if(!isEmailValid(Correo.getText().toString())){
-                    Toast.makeText(getApplicationContext(),"Ingresa Correo Valido",Toast.LENGTH_SHORT).show();
-                }else if(!isPasswordValid(Pass.getText().toString())){
-                    Toast.makeText(getApplicationContext(),"Ingresa una Contraseña valida",Toast.LENGTH_LONG).show();
-                }else{
-                    Intent intent = new Intent (view.getContext(), Barra_desplegable.class);
-                    startActivityForResult(intent, 0);
-                    //cargarWebServiceUsuario();
-                    //Toast.makeText(Inicio.this, ""+usuario.getIdUsuario(), Toast.LENGTH_SHORT).show();
-                    //VerificacionPassword();
-                   /*if(){
-                        Toast.makeText(Inicio.this, "Cuenta de Usuario Inexistente", Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(Inicio.this, "Cuenta Validada", Toast.LENGTH_SHORT).show();
-                    }*/
-
-                    /*
-                    if(){
-
-                    }else{
-                        Toast.makeText(Inicio.this, "Contraseña no Valida", Toast.LENGTH_SHORT).show();
-                    }*/
-
-               }
-                /*
-                Intent intent = new Intent (view.getContext(), Barra_desplegable.class);
-                startActivityForResult(intent, 0);*/
             }
+
         });
 
         ///Action registrarte
@@ -139,8 +126,29 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
         Registro.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent (view.getContext(), LoginActivity.class);
+                Cursor c = operador.LeerAdultoMayor();
+                AdultoMayor tito = new AdultoMayor();
+                if(c.moveToFirst()) {
+                    do {
+                        tito.setIdAdultoMayor(c.getInt(1));
+                        tito.setNombre(c.getString(2));
+                        tito.setApellidoPaterno(c.getString(3));
+                        tito.setApellidoMaterno(c.getString(4));
+                        tito.setFotografia(c.getString(5));
+                        tito.setDiabetico(c.getInt(6));
+                        tito.setFkDependencia(c.getInt(7));
+                        tito.setFkDomicilio(c.getInt(8));
+                        Toast.makeText(Inicio.this,
+                                "" + tito.getIdAdultoMayor() +
+                                        "-"+ tito.getNombre() +
+                                        "-"+ tito.getFkDependencia() +
+                                        "-"+ tito.getFkDomicilio()
+                                , Toast.LENGTH_LONG).show();
+                    } while (c.moveToNext());
+                }
+                /*Intent intent = new Intent (view.getContext(), LoginActivity.class);
                 startActivityForResult(intent, 0);
+                */
             }
         });
         mLoginFormView = findViewById(R.id.login_form);
@@ -148,7 +156,7 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
     }
 
     private void VerificacionPassword() {
-        Conexion x = new Conexion();
+        Conexion x = new Conexion(getApplicationContext());
         x.setRuta("WebService/Password/wsVerificacionPassword");
         jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,x.getRuta(),null,new Response.Listener<JSONObject> (){
             @Override
@@ -180,7 +188,7 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
 
      * */
     private void cargarWebServiceUsuario(){
-        Conexion x = new Conexion();
+        Conexion x = new Conexion(getApplicationContext());
         x.setRuta("WebService/Usuario/wsUsuarioReadTable.php");
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,new Response.Listener<JSONObject> (){
             @Override
@@ -189,13 +197,14 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
                 //Toast.makeText(getApplicationContext(),"We have the packet",Toast.LENGTH_LONG).show();
                 String CorreoUsuario;
                 JSONArray json = response.optJSONArray("Usuario");
-
+                //Toast.makeText(Inicio.this, "Jose-Miguel", Toast.LENGTH_SHORT).show();
                 try {
-                    usuario = new Usuario();
-                    usuario.setIdUsuario(0);
+                    usuario.setIdUsuario(344);
+                    Toast.makeText(Inicio.this, "Jose-Miguel", Toast.LENGTH_SHORT).show();
                     for (int i = 0; i < json.length(); i++) {
                         JSONObject jsonObject = json.getJSONObject(i);
                         CorreoUsuario = jsonObject.optString("Correo");
+
                         if(CorreoUsuario.compareTo(Correo.getText().toString()) == 0){
                             usuario.setIdUsuario(jsonObject.optInt("IdUsuario"));
                             usuario.setNombre(jsonObject.optString("Nombre"));
@@ -318,7 +327,7 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
             // perform the user login attempt.
             //InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             //inputMethodManager.hideSoftInputFromWindow(Pass.getWindowToken(), 0);
-            Toast.makeText(this, "Hola", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Holac", Toast.LENGTH_SHORT).show();
 
         }
     }
