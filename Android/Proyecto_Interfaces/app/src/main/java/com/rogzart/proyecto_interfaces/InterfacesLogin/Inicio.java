@@ -28,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,8 +40,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
+import com.rogzart.proyecto_interfaces.Modelo.Dependencia;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.R;
+import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import org.json.JSONArray;
@@ -72,15 +75,24 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
 
     //Insersciones
     OperacionesBaseDatos operador;
-    AdultoMayor abuelo;
+    ActualizacionBaseDatos Act;
     //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
+        //Manejo Base de Datos
         operador = OperacionesBaseDatos.obtenerInstancia(getApplicationContext());
-        abuelo = new AdultoMayor();
+        //Actualizacion
+        /**Poner estos comandos en donde se desee generar una actualizacion*/
+        Act = new ActualizacionBaseDatos(getApplicationContext());
+        Act.VolcarBasedeDatos();
+        //Actualizacion Base de Datos
+        Act.ActualizarBasedeDatos(Inicio.this);
+        /*********************/
+        //Act.VolcarBasedeDatos();
+        //
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.IdNombre);
         populateAutoComplete();
@@ -101,24 +113,27 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                abuelo.setIdAdultoMayor(2);
-                abuelo.setNombre("Pancho");
-                abuelo.setApellidoPaterno("González");
-                abuelo.setApellidoMaterno("Padilla");
-                abuelo.setFotografia("img/123.jpg");
-                abuelo.setDiabetico(0);
-                abuelo.setFkDependencia(null);
-                abuelo.setFkDomicilio(null);
-                Toast.makeText(Inicio.this, "**"+abuelo.getIdAdultoMayor()+""+
-                abuelo.getNombre()+"**"+
-                abuelo.getApellidoMaterno()+"**"+
-                abuelo.getDiabetico()+"**"+
-                abuelo.getFkDependencia(), Toast.LENGTH_LONG).show();
-               operador.InsertarAdultoMayor(abuelo);
-                Toast.makeText(Inicio.this, "Enviado", Toast.LENGTH_LONG).show();
-
+                //operador.LeerTablaDependendencia(Inicio.this);
+                //operador.LeerTablaSeccion(Inicio.this);
+                //operador.LeerTablaUbicacion(Inicio.this);
+                //operador.LeerTablaTipoEvento(Inicio.this);
+                //operador.LeerTablaTipoProblematica(Inicio.this);
+                //operador.LeerTablaInventario(Inicio.this);
+                //operador.LeerTablaUsuario(Inicio.this);
+                //operador.LeerTablaEvento(Inicio.this);
+                /**Retomar**/
+                /**Poner if en Fk ver Evento**/
+                //operador.LeerTablaDomicilio(Inicio.this);
+                //operador.LeerTablaScouter(Inicio.this);
+                //operador.LeerTablaFotoAlrededores(Inicio.this);
+                //operador.LeerTablaProblematica(Inicio.this);
+                //operador.LeerTablaAdultoMayor(Inicio.this);
+                //operador.LeerTablaAsignacion(Inicio.this);
+                //operador.LeerTablaComentarioAM(Inicio.this);
+                //operador.LeerTablaGestionInventario(Inicio.this);
+                //operador.LeerTablaRecoger(Inicio.this);
+                //operador.LeerTablaVoluntarioFrecuente(Inicio.this);
             }
-
         });
 
         ///Action registrarte
@@ -126,26 +141,7 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
         Registro.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Cursor c = operador.LeerAdultoMayor();
-                AdultoMayor tito = new AdultoMayor();
-                if(c.moveToFirst()) {
-                    do {
-                        tito.setIdAdultoMayor(c.getInt(1));
-                        tito.setNombre(c.getString(2));
-                        tito.setApellidoPaterno(c.getString(3));
-                        tito.setApellidoMaterno(c.getString(4));
-                        tito.setFotografia(c.getString(5));
-                        tito.setDiabetico(c.getInt(6));
-                        tito.setFkDependencia(c.getInt(7));
-                        tito.setFkDomicilio(c.getInt(8));
-                        Toast.makeText(Inicio.this,
-                                "" + tito.getIdAdultoMayor() +
-                                        "-"+ tito.getNombre() +
-                                        "-"+ tito.getFkDependencia() +
-                                        "-"+ tito.getFkDomicilio()
-                                , Toast.LENGTH_LONG).show();
-                    } while (c.moveToNext());
-                }
+                Act.VolcarBasedeDatos();
                 /*Intent intent = new Intent (view.getContext(), LoginActivity.class);
                 startActivityForResult(intent, 0);
                 */
@@ -164,8 +160,8 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
                 JSONArray json = response.optJSONArray("Password");
 
                 try {
-                        JSONObject jsonObject = json.getJSONObject(0);
-                        Validacion = jsonObject.getBoolean("Validacion");
+                    JSONObject jsonObject = json.getJSONObject(0);
+                    Validacion = jsonObject.getBoolean("Validacion");
 
                 }catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "Error Conexion servidor", Toast.LENGTH_SHORT).show();

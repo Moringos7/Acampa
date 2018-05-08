@@ -9,6 +9,9 @@ public class Conexion {
     private Context context;
     private String IpServer;
     private String Ruta;
+    public Conexion(){
+        IpServer =  "http://35.196.37.188/";
+    }
     public Conexion(Context context) {
         this.context = context;
         IpServer =  "http://35.196.37.188/";

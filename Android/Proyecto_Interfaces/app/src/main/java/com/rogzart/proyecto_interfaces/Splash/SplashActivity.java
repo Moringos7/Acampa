@@ -7,11 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
 
-
-
 import com.rogzart.proyecto_interfaces.InterfacesLogin.Inicio;
 import com.rogzart.proyecto_interfaces.R;
-
 
 public class SplashActivity extends Activity{
     private final int DURACION_SPLASH = 2000;
@@ -32,5 +29,4 @@ public class SplashActivity extends Activity{
                 finish();
             };
         },  DURACION_SPLASH); }
-
 }
