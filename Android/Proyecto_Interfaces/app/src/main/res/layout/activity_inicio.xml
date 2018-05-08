@@ -44,6 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="81dp"
                 android:visibility="visible"
+                android:src="@drawable/logo"
                 app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
 
             <android.support.design.widget.TextInputLayout

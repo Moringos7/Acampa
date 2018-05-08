@@ -4,6 +4,8 @@ import android.app.Fragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,14 @@ public class Inventario extends Fragment {
         ArrayAdapter<String> adaptador;
         super.onActivityCreated(state);
         ListaInventario=(ListView) getView().findViewById(R.id.ListaG);
+        FloatingActionButton FnuevoP = (FloatingActionButton)getView().findViewById(R.id.fab);
+        FnuevoP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Correo enviado", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
        // base=new ConexionSQLiteHelper(getApplicationContext(),"bd_Acampa",null,1);
         consultarListaInventario();
