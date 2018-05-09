@@ -15,14 +15,15 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trazado de ruta"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="Rutas"
             android:textSize="24sp" />
 
         <Button
             android:id="@+id/BMapa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Muestrame" />
+            android:text="Mostrar" />
     </LinearLayout>
 
 </RelativeLayout>
