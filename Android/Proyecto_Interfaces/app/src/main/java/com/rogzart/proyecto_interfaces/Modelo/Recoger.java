@@ -21,6 +21,9 @@ public class Recoger {
     }
 
     public void setFkScouter(Integer fkScouter) {
+        if(fkScouter == 0){
+            fkScouter = null;
+        }
         FkScouter = fkScouter;
     }
 
@@ -29,6 +32,9 @@ public class Recoger {
     }
 
     public void setFkAsignacion(Integer fkAsignacion) {
+        if(fkAsignacion == 0){
+            fkAsignacion = null;
+        }
         FkAsignacion = fkAsignacion;
     }
 }

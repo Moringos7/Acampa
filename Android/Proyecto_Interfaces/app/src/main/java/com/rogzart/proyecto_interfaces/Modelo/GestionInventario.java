@@ -30,6 +30,9 @@ public class GestionInventario {
     }
 
     public void setFkScouter(Integer fkScouter) {
+        if(fkScouter == 0){
+            fkScouter = null;
+        }
         FkScouter = fkScouter;
     }
 
@@ -38,6 +41,9 @@ public class GestionInventario {
     }
 
     public void setFkInventario(Integer fkInventario) {
+        if(fkInventario == 0){
+            fkInventario = null;
+        }
         FkInventario = fkInventario;
     }
 }

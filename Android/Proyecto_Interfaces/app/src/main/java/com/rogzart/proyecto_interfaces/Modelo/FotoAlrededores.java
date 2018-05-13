@@ -29,6 +29,9 @@ public class FotoAlrededores {
     }
 
     public void setFkDomicilio(Integer fkDomicilio) {
+        if(fkDomicilio == 0){
+            fkDomicilio = null;
+        }
         FkDomicilio = fkDomicilio;
     }
 }

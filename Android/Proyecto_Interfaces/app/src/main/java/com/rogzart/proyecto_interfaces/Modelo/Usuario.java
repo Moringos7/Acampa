@@ -9,7 +9,7 @@ public class Usuario {
     private String Fotografia;
     private String FechaNacimiento;
     private int Scout;
-    private int FkSeccion;
+    private Integer FkSeccion;
     public Usuario(){
 
     }
@@ -78,11 +78,14 @@ public class Usuario {
         Scout = scout;
     }
 
-    public int getFkSeccion() {
+    public Integer getFkSeccion() {
         return FkSeccion;
     }
 
-    public void setFkSeccion(int fkSeccion) {
+    public void setFkSeccion(Integer fkSeccion) {
+        if(fkSeccion == 0){
+            fkSeccion = null;
+        }
         FkSeccion = fkSeccion;
     }
 }

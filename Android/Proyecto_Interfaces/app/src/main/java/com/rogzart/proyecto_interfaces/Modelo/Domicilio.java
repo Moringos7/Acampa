@@ -56,6 +56,9 @@ public class Domicilio {
     }
 
     public void setFkUbicacion(Integer fkUbicacion) {
+        if(fkUbicacion == 0){
+            fkUbicacion = null;
+        }
         FkUbicacion = fkUbicacion;
     }
 }

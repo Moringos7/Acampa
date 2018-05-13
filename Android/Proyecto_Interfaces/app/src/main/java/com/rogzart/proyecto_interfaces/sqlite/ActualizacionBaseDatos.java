@@ -10,15 +10,24 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
+import com.rogzart.proyecto_interfaces.Modelo.Asignacion;
+import com.rogzart.proyecto_interfaces.Modelo.ComentarioAM;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Dependencia;
+import com.rogzart.proyecto_interfaces.Modelo.Domicilio;
 import com.rogzart.proyecto_interfaces.Modelo.Evento;
+import com.rogzart.proyecto_interfaces.Modelo.FotoAlrededores;
+import com.rogzart.proyecto_interfaces.Modelo.GestionInventario;
 import com.rogzart.proyecto_interfaces.Modelo.Inventario;
+import com.rogzart.proyecto_interfaces.Modelo.Problematica;
+import com.rogzart.proyecto_interfaces.Modelo.Recoger;
+import com.rogzart.proyecto_interfaces.Modelo.Scouter;
 import com.rogzart.proyecto_interfaces.Modelo.Seccion;
 import com.rogzart.proyecto_interfaces.Modelo.TipoEvento;
 import com.rogzart.proyecto_interfaces.Modelo.TipoProblematica;
 import com.rogzart.proyecto_interfaces.Modelo.Ubicacion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
+import com.rogzart.proyecto_interfaces.Modelo.VoluntarioFrecuente;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,7 +62,16 @@ public class ActualizacionBaseDatos {
         ActualizacionInventario(context);
         ActualizacionUsuario(context);
         ActualizacionEvento(context);
-
+        ActualizacionDomicilio(context);
+        ActualizacionScouter(context);
+        ActualizacionFotoAlrededores(context);
+        ActualizacionProblematica(context);
+        ActualizacionAdultoMayor(context);
+        ActualizacionAsignacion(context);
+        ActualizacionComentarioAM(context);
+        ActualizacionGestionInventario(context);
+        ActualizacionRecoger(context);
+        ActualizacionVoluntarioFrecuente(context);
     }
 
     public void VolcarBasedeDatos() {
@@ -306,7 +324,6 @@ public class ActualizacionBaseDatos {
                         mEvento.setLugar(jsonObject.optString("Lugar"));
                         mEvento.setInformacion(jsonObject.optString("Informacion"));
                         mEvento.setFkTipoEvento(jsonObject.optInt("FkTipoEvento"));
-                        Toast.makeText(context, ""+ mEvento.getFkTipoEvento(), Toast.LENGTH_SHORT).show();
                         Insert.InsertarEvento(mEvento);
                     }
                 } catch (JSONException e) {
@@ -321,7 +338,310 @@ public class ActualizacionBaseDatos {
         });
         request.add(jsonObjectRequest);
     }
-    public void ActualizacionAdultoMayor(final Context contexto){
-
+    private void ActualizacionDomicilio(final Context context) {
+        Conexion x = new Conexion();
+        final Domicilio mDomicilio = new Domicilio();
+        final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
+        x.setRuta("WebService/Domicilio/wsDomicilioReadTable.php");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray json = response.optJSONArray("Domicilio");
+                    for (int i = 0; i < json.length(); i++) {
+                        JSONObject jsonObject = json.getJSONObject(i);
+                        mDomicilio.setIdDomicilio(jsonObject.optInt("IdDomicilio"));
+                        mDomicilio.setNumero(jsonObject.optInt("Numero"));
+                        mDomicilio.setCalle(jsonObject.optString("Calle"));
+                        mDomicilio.setColonia(jsonObject.optString("Colonia"));
+                        mDomicilio.setFoto(jsonObject.optString("Foto"));
+                        mDomicilio.setFkUbicacion(jsonObject.optInt("FkUbicacion"));
+                        Insert.InsertarDomicilio(mDomicilio);
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "Fallo Sincroniacion: " +e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(jsonObjectRequest);
+    }
+    private void ActualizacionScouter(final Context context) {
+        Conexion x = new Conexion();
+        final Scouter mScouter = new Scouter();
+        final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
+        x.setRuta("WebService/Scouter/wsScouterReadTable.php");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray json = response.optJSONArray("Scouter");
+                    for (int i = 0; i < json.length(); i++) {
+                        JSONObject jsonObject = json.getJSONObject(i);
+                        mScouter.setIdScouter(jsonObject.optInt("IdScouter"));
+                        mScouter.setFechaInicio(jsonObject.optString("FechaInicio"));
+                        mScouter.setFechaFinal(jsonObject.optString("FechaFinal"));
+                        mScouter.setFkUsuario(jsonObject.optInt("FkUsuario"));
+                        Insert.InsertarScouter(mScouter);
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "Fallo Sincroniacion: " +e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(jsonObjectRequest);
+    }
+    private void ActualizacionFotoAlrededores(final Context context) {
+        Conexion x = new Conexion();
+        final FotoAlrededores mFotoAlrededores = new FotoAlrededores();
+        final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
+        x.setRuta("WebService/FotoAlrededores/wsFotoAlrededoresReadTable.php");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray json = response.optJSONArray("FotoAlrededores");
+                    for (int i = 0; i < json.length(); i++) {
+                        JSONObject jsonObject = json.getJSONObject(i);
+                        mFotoAlrededores.setIdFotoAlrededores(jsonObject.optInt("IdFotoAlrededores"));
+                        mFotoAlrededores.setFoto(jsonObject.optString("Foto"));
+                        mFotoAlrededores.setFkDomicilio(jsonObject.optInt("FkDomicilio"));
+                        Insert.InsertarFotosAlrededores(mFotoAlrededores);
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "Fallo Sincroniacion: " +e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(jsonObjectRequest);
+    }
+    private void ActualizacionProblematica(final Context context) {
+        Conexion x = new Conexion();
+        final Problematica mProblematica = new Problematica();
+        final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
+        x.setRuta("WebService/Problematica/wsProblematicaReadTable.php");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray json = response.optJSONArray("Problematica");
+                    for (int i = 0; i < json.length(); i++) {
+                        JSONObject jsonObject = json.getJSONObject(i);
+                        mProblematica.setIdProblematica(jsonObject.optInt("IdProblematica"));
+                        mProblematica.setFecha(jsonObject.optString("Fecha"));
+                        mProblematica.setNombre(jsonObject.optString("Nombre"));
+                        mProblematica.setSugerencia(jsonObject.optString("Sugerencia"));
+                        mProblematica.setFkUsuario(jsonObject.optInt("FkUsuario"));
+                        mProblematica.setFkTipoProblematica(jsonObject.optInt("FkTipoProblematica"));
+                        Insert.InsertarProblematica(mProblematica);
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "Fallo Sincroniacion: " +e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(jsonObjectRequest);
+    }
+    private void ActualizacionAdultoMayor(final Context context) {
+        Conexion x = new Conexion();
+        final AdultoMayor mAdultoMayor = new AdultoMayor();
+        final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
+        x.setRuta("WebService/AdultoMayor/wsAdultoMayorReadTable.php");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray json = response.optJSONArray("AdultoMayor");
+                    for (int i = 0; i < json.length(); i++) {
+                        JSONObject jsonObject = json.getJSONObject(i);
+                        mAdultoMayor.setIdAdultoMayor(jsonObject.optInt("IdAdultoMayor"));
+                        mAdultoMayor.setNombre(jsonObject.optString("Nombre"));
+                        mAdultoMayor.setApellidoPaterno(jsonObject.optString("ApellidoPaterno"));
+                        mAdultoMayor.setApellidoMaterno(jsonObject.optString("ApellidoMaterno"));
+                        mAdultoMayor.setFotografia(jsonObject.optString("Fotografia"));
+                        mAdultoMayor.setDiabetico(jsonObject.optInt("Diabetico"));
+                        mAdultoMayor.setFkDependencia(jsonObject.optInt("FkDependencia"));
+                        mAdultoMayor.setFkDomicilio(jsonObject.optInt("FkDomicilio"));
+                        Insert.InsertarAdultoMayor(mAdultoMayor);
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "Fallo Sincroniacion: " +e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(jsonObjectRequest);
+    }
+    private void ActualizacionAsignacion(final Context context) {
+        Conexion x = new Conexion();
+        final Asignacion mAsignacion = new Asignacion();
+        final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
+        x.setRuta("WebService/Asignacion/wsAsignacionReadTable.php");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray json = response.optJSONArray("Asignacion");
+                    for (int i = 0; i < json.length(); i++) {
+                        JSONObject jsonObject = json.getJSONObject(i);
+                        mAsignacion.setIdAsignacion(jsonObject.optInt("IdAsignacion"));
+                        mAsignacion.setStatus(jsonObject.optInt("Status"));
+                        mAsignacion.setFecha(jsonObject.optString("Fecha"));
+                        mAsignacion.setFkUsuario(jsonObject.optInt("FkUsuario"));
+                        mAsignacion.setFkAdultoMayor(jsonObject.optInt("FkAdultoMayor"));
+                        Insert.InsertarAsignacion(mAsignacion);
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "Fallo Sincroniacion: " +e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(jsonObjectRequest);
+    }
+    private void ActualizacionComentarioAM(final Context context) {
+        Conexion x = new Conexion();
+        final ComentarioAM mComentario = new ComentarioAM();
+        final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
+        x.setRuta("WebService/ComentarioAM/wsComentarioAMReadTable.php");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray json = response.optJSONArray("ComentarioAM");
+                    for (int i = 0; i < json.length(); i++) {
+                        JSONObject jsonObject = json.getJSONObject(i);
+                        mComentario.setIdComentarioAM(jsonObject.optInt("IdComentarioAM"));
+                        mComentario.setNombre(jsonObject.optString("Nombre"));
+                        mComentario.setFecha(jsonObject.optString("Fecha"));
+                        mComentario.setFkAdultoMayor(jsonObject.optInt("FkAdultoMayor"));
+                        Insert.InsertarComentarioAM(mComentario);
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "Fallo Sincroniacion: " +e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(jsonObjectRequest);
+    }
+    private void ActualizacionGestionInventario(final Context context) {
+        Conexion x = new Conexion();
+        final GestionInventario mGestionInventario = new GestionInventario();
+        final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
+        x.setRuta("WebService/GestionInventario/wsGestionInventarioReadTable.php");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray json = response.optJSONArray("GestionInventario");
+                    for (int i = 0; i < json.length(); i++) {
+                        JSONObject jsonObject = json.getJSONObject(i);
+                        mGestionInventario.setIdGestionInventario(jsonObject.optInt("IdGestionInventario"));
+                        mGestionInventario.setFecha(jsonObject.optString("Fecha"));
+                        mGestionInventario.setFkScouter(jsonObject.optInt("FkScouter"));
+                        mGestionInventario.setFkInventario(jsonObject.optInt("FkInventario"));
+                        Insert.InsertarGestionInventario(mGestionInventario);
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "Fallo Sincroniacion: " +e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(jsonObjectRequest);
+    }
+    private void ActualizacionRecoger(final Context context) {
+        Conexion x = new Conexion();
+        final Recoger mRecoger = new Recoger();
+        final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
+        x.setRuta("WebService/Recoger/wsRecogerReadTable.php");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray json = response.optJSONArray("Recoger");
+                    for (int i = 0; i < json.length(); i++) {
+                        JSONObject jsonObject = json.getJSONObject(i);
+                        mRecoger.setIdRecoger(jsonObject.optInt("IdRecoger"));
+                        mRecoger.setFkScouter(jsonObject.optInt("FkScouter"));
+                        mRecoger.setFkAsignacion(jsonObject.optInt("FkAsignacion"));
+                        Insert.InsertarRecoger(mRecoger);
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "Fallo Sincroniacion: " +e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(jsonObjectRequest);
+    }
+    private void ActualizacionVoluntarioFrecuente(final Context context) {
+        Conexion x = new Conexion();
+        final VoluntarioFrecuente mVoluntarioFrecuente = new VoluntarioFrecuente();
+        final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
+        x.setRuta("WebService/VoluntarioFrecuente/wsVoluntarioFrecuenteReadTable.php");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray json = response.optJSONArray("VoluntarioFrecuente");
+                    for (int i = 0; i < json.length(); i++) {
+                        JSONObject jsonObject = json.getJSONObject(i);
+                        mVoluntarioFrecuente.setIdVoluntarioFrecuente(jsonObject.optInt("IdVoluntarioFrecuente"));
+                        mVoluntarioFrecuente.setFkUsuario(jsonObject.optInt("FkUsuario"));
+                        mVoluntarioFrecuente.setFkAdultoMayor(jsonObject.optInt("FkAdultoMayor"));
+                        Insert.InsertarVoluntarioFrecuente(mVoluntarioFrecuente);
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(context, "Fallo Sincroniacion: " +e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(jsonObjectRequest);
     }
 }

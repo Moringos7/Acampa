@@ -21,6 +21,9 @@ public class VoluntarioFrecuente {
     }
 
     public void setFkUsuario(Integer fkUsuario) {
+        if(fkUsuario == 0){
+            fkUsuario = null;
+        }
         FkUsuario = fkUsuario;
     }
 
@@ -29,6 +32,9 @@ public class VoluntarioFrecuente {
     }
 
     public void setFkAdultoMayor(Integer fkAdultoMayor) {
+        if(fkAdultoMayor == 0){
+            fkAdultoMayor = null;
+        }
         FkAdultoMayor = fkAdultoMayor;
     }
 }

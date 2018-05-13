@@ -38,6 +38,9 @@ public class Scouter {
     }
 
     public void setFkUsuario(Integer fkUsuario) {
+        if(fkUsuario == 0){
+            fkUsuario = null;
+        }
         FkUsuario = fkUsuario;
     }
 }

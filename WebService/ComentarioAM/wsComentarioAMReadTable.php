@@ -8,7 +8,7 @@ $json = array();
 	while($registro = mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
 	
 		$registro['Nombre'] = utf8_encode($registro['Nombre']);
-		$json['AdultoMayor'][] = $registro;
+		$json['ComentarioAM'][] = $registro;
 	}
 	//var_dump($json);
 	mysqli_close($conexion);

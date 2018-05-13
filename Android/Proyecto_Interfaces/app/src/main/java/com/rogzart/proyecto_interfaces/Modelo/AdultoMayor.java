@@ -68,6 +68,9 @@ public class AdultoMayor {
     }
 
     public void setFkDependencia(Integer fkDependencia) {
+        if(fkDependencia == 0){
+            fkDependencia = null;
+        }
         FkDependencia = fkDependencia;
     }
     public Integer getFkDomicilio() {
@@ -75,6 +78,9 @@ public class AdultoMayor {
     }
 
     public void setFkDomicilio(Integer fkDomicilio) {
+        if(fkDomicilio == 0){
+            fkDomicilio = null;
+        }
         FkDomicilio = fkDomicilio;
     }
 }

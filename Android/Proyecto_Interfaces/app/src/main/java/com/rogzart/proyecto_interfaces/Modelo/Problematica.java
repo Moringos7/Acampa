@@ -48,6 +48,9 @@ public class Problematica {
     }
 
     public void setFkUsuario(Integer fkUsuario) {
+        if(fkUsuario == 0){
+            fkUsuario = null;
+        }
         FkUsuario = fkUsuario;
     }
 
@@ -56,6 +59,9 @@ public class Problematica {
     }
 
     public void setFkTipoProblematica(Integer fkTipoProblematica) {
+        if(fkTipoProblematica == 0){
+            fkTipoProblematica = null;
+        }
         FkTipoProblematica = fkTipoProblematica;
     }
 }

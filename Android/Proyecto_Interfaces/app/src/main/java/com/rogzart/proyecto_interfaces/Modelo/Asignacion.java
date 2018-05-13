@@ -39,6 +39,9 @@ public class Asignacion {
     }
 
     public void setFkUsuario(Integer fkUsuario) {
+        if(fkUsuario == 0){
+            fkUsuario = null;
+        }
         FkUsuario = fkUsuario;
     }
 
@@ -47,6 +50,9 @@ public class Asignacion {
     }
 
     public void setFkAdultoMayor(Integer fkAdultoMayor) {
+        if(fkAdultoMayor == 0){
+            fkAdultoMayor = null;
+        }
         FkAdultoMayor = fkAdultoMayor;
     }
 }

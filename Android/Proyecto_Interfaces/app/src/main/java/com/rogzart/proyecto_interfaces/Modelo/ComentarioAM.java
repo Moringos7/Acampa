@@ -38,6 +38,9 @@ public class ComentarioAM {
     }
 
     public void setFkAdultoMayor(Integer fkAdultoMayor) {
+        if(fkAdultoMayor == 0){
+            fkAdultoMayor = null;
+        }
         FkAdultoMayor = fkAdultoMayor;
     }
 }

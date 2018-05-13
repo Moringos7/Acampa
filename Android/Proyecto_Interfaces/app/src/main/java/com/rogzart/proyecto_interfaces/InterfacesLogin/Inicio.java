@@ -38,6 +38,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.rogzart.proyecto_interfaces.Barra_desplegable;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Dependencia;
@@ -113,26 +114,8 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                //operador.LeerTablaDependendencia(Inicio.this);
-                //operador.LeerTablaSeccion(Inicio.this);
-                //operador.LeerTablaUbicacion(Inicio.this);
-                //operador.LeerTablaTipoEvento(Inicio.this);
-                //operador.LeerTablaTipoProblematica(Inicio.this);
-                //operador.LeerTablaInventario(Inicio.this);
-                //operador.LeerTablaUsuario(Inicio.this);
-                //operador.LeerTablaEvento(Inicio.this);
-                /**Retomar**/
-                /**Poner if en Fk ver Evento**/
-                //operador.LeerTablaDomicilio(Inicio.this);
-                //operador.LeerTablaScouter(Inicio.this);
-                //operador.LeerTablaFotoAlrededores(Inicio.this);
-                //operador.LeerTablaProblematica(Inicio.this);
-                //operador.LeerTablaAdultoMayor(Inicio.this);
-                //operador.LeerTablaAsignacion(Inicio.this);
-                //operador.LeerTablaComentarioAM(Inicio.this);
-                //operador.LeerTablaGestionInventario(Inicio.this);
-                //operador.LeerTablaRecoger(Inicio.this);
-                //operador.LeerTablaVoluntarioFrecuente(Inicio.this);
+                Intent intent = new Intent (view.getContext(), Barra_desplegable.class);
+                startActivityForResult(intent, 0);
             }
         });
 

@@ -8,14 +8,23 @@ import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.rogzart.proyecto_interfaces.InterfacesLogin.Inicio;
+import com.rogzart.proyecto_interfaces.Modelo.Asignacion;
+import com.rogzart.proyecto_interfaces.Modelo.ComentarioAM;
 import com.rogzart.proyecto_interfaces.Modelo.Dependencia;
+import com.rogzart.proyecto_interfaces.Modelo.Domicilio;
 import com.rogzart.proyecto_interfaces.Modelo.Evento;
+import com.rogzart.proyecto_interfaces.Modelo.FotoAlrededores;
+import com.rogzart.proyecto_interfaces.Modelo.GestionInventario;
 import com.rogzart.proyecto_interfaces.Modelo.Inventario;
+import com.rogzart.proyecto_interfaces.Modelo.Problematica;
+import com.rogzart.proyecto_interfaces.Modelo.Recoger;
+import com.rogzart.proyecto_interfaces.Modelo.Scouter;
 import com.rogzart.proyecto_interfaces.Modelo.Seccion;
 import com.rogzart.proyecto_interfaces.Modelo.TipoEvento;
 import com.rogzart.proyecto_interfaces.Modelo.TipoProblematica;
 import com.rogzart.proyecto_interfaces.Modelo.Ubicacion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
+import com.rogzart.proyecto_interfaces.Modelo.VoluntarioFrecuente;
 import com.rogzart.proyecto_interfaces.sqlite.EstructuraBaseDatos.adultomayor;
 import com.rogzart.proyecto_interfaces.sqlite.EstructuraBaseDatos.dependencia;
 import com.rogzart.proyecto_interfaces.sqlite.EstructuraBaseDatos.usuario;
@@ -36,6 +45,7 @@ import com.rogzart.proyecto_interfaces.sqlite.EstructuraBaseDatos.comentarioam;
 import com.rogzart.proyecto_interfaces.sqlite.EstructuraBaseDatos.asignacion;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -66,18 +76,15 @@ public final class OperacionesBaseDatos {
         valores.put(dependencia.Nombre,x.getNombre());
         query.insert("dependencia",null,valores);
     }
-    public void LeerTablaDependendencia(Context contex){
+    public void LeerTablaDependendencia(){
         //List<Dependencia> list;
         Dependencia x = new Dependencia();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
         Cursor c = query.rawQuery("SELECT * FROM dependencia",null);
-            Toast.makeText(contex,"Leyendo",Toast.LENGTH_SHORT);
         if(c.moveToFirst()) {
-            Toast.makeText(contex,"Entró",Toast.LENGTH_SHORT);
             do {
                 x.setIdDependencia(c.getInt(1));
                 x.setNombre(c.getString(2));
-                Toast.makeText(contex, "Leer:" + x.getIdDependencia() + "---" + x.getNombre(), Toast.LENGTH_LONG).show();
                 //list.add(x);
             } while (c.moveToNext());
         }
@@ -91,7 +98,7 @@ public final class OperacionesBaseDatos {
         valores.put(seccion.Nombre,x.getNombre());
         query.insert("seccion",null,valores);
     }
-    public void LeerTablaSeccion(Context contex){
+    public void LeerTablaSeccion(){
         //List<Seccion> list;
         Seccion x = new Seccion();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
@@ -100,13 +107,12 @@ public final class OperacionesBaseDatos {
             do {
                 x.setIdSeccion(c.getInt(1));
                 x.setNombre(c.getString(2));
-                Toast.makeText(contex, "Leer:" + x.getIdSeccion() + "---" + x.getNombre(), Toast.LENGTH_LONG).show();
                 //list.add(x);
             } while (c.moveToNext());
         }
         //return list;
     }
-    /**Uicacion**/
+    /**Ubicacion**/
     public void InsertarUbcacion(Ubicacion x){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
@@ -115,7 +121,7 @@ public final class OperacionesBaseDatos {
         valores.put(ubicacion.Latitud,x.getLatitud());
         query.insert("ubicacion",null,valores);
     }
-    public void LeerTablaUbicacion(Context contex){
+    public void LeerTablaUbicacion(){
         //List<Seccion> list;
         Ubicacion x = new Ubicacion();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
@@ -125,7 +131,6 @@ public final class OperacionesBaseDatos {
                 x.setIdUbicacion(c.getInt(1));
                 x.setLongitud(c.getDouble(2));
                 x.setLatitud(c.getDouble(3));
-                Toast.makeText(contex, "Leer:" + x.getIdUbicacion() + "---" + x.getLongitud()+"---"+x.getLatitud(), Toast.LENGTH_LONG).show();
                 //list.add(x);
             } while (c.moveToNext());
         }
@@ -139,7 +144,7 @@ public final class OperacionesBaseDatos {
         valores.put(tipoevento.Nombre,x.getNombre());
         query.insert("tipoevento",null,valores);
     }
-    public void LeerTablaTipoEvento(Context contex){
+    public void LeerTablaTipoEvento(){
         //List<Seccion> list;
         TipoEvento x = new TipoEvento();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
@@ -148,7 +153,6 @@ public final class OperacionesBaseDatos {
             do {
                 x.setIdTipoEvento(c.getInt(1));
                 x.setNombre(c.getString(2));
-                Toast.makeText(contex, "Leer:" + x.getIdTipoEvento() + "---" + x.getNombre(), Toast.LENGTH_LONG).show();
                 //list.add(x);
             } while (c.moveToNext());
         }
@@ -162,7 +166,7 @@ public final class OperacionesBaseDatos {
         valores.put(tipoproblematica.Nombre,x.getNombre());
         query.insert("tipoproblematica",null,valores);
     }
-    public void LeerTablaTipoProblematica(Context contex){
+    public void LeerTablaTipoProblematica(){
         //List<Seccion> list;
         TipoProblematica x = new TipoProblematica();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
@@ -171,7 +175,6 @@ public final class OperacionesBaseDatos {
             do {
                 x.setIdTipoProblematica(c.getInt(1));
                 x.setNombre(c.getString(2));
-                Toast.makeText(contex, "Leer:" + x.getIdTipoProblematica() + "---" + x.getNombre(), Toast.LENGTH_LONG).show();
                 //list.add(x);
             } while (c.moveToNext());
         }
@@ -191,7 +194,7 @@ public final class OperacionesBaseDatos {
         valores.put(inventario.Extra,x.getExtra());
         query.insert("inventario",null,valores);
     }
-    public void LeerTablaInventario(Context contex){
+    public void LeerTablaInventario(){
         //List<Seccion> list;
         Inventario x = new Inventario();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
@@ -206,7 +209,6 @@ public final class OperacionesBaseDatos {
                 x.setImagen(c.getString(6));
                 x.setComentario(c.getString(7));
                 x.setExtra(c.getInt(8));
-                Toast.makeText(contex, "Leer:" + x.getIdInventario() + "---" + x.getProducto()+ "---" + x.getCantidad()+ "---" + x.getExistencia()+ "---" + x.getDescripcion()+ "---" + x.getImagen()+ "---" + x.getComentario()+ "---" + x.getExtra(), Toast.LENGTH_LONG).show();
                 //list.add(x);
             } while (c.moveToNext());
         }
@@ -227,7 +229,7 @@ public final class OperacionesBaseDatos {
         valores.put(usuario.FkSeccion,x.getFkSeccion());
         query.insert("usuario",null,valores);
     }
-    public void LeerTablaUsuario(Context contex){
+    public void LeerTablaUsuario(){
         //List<Seccion> list;
         Usuario x = new Usuario();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
@@ -243,7 +245,6 @@ public final class OperacionesBaseDatos {
                 x.setFechaNacimiento(c.getString(7));
                 x.setScout(c.getInt(8));
                 x.setFkSeccion(c.getInt(9));
-                Toast.makeText(contex, "Leer:" + x.getIdUsuario() + "---" + x.getNombre()+ "---" + x.getApellidoPaterno()+ "---" + x.getApellidoMaterno()+ "---" + x.getCorreo()+ "---" + x.getFotografia()+ "---" + x.getFechaNacimiento()+ "---" + x.getScout()+ "---" + x.getFkSeccion(), Toast.LENGTH_LONG).show();
                 //list.add(x);
             } while (c.moveToNext());
         }
@@ -261,7 +262,7 @@ public final class OperacionesBaseDatos {
         valores.put(evento.FkTipoEveto,x.getFkTipoEvento());
         query.insert("evento",null,valores);
     }
-    public void LeerTablaEvento(Context contex){
+    public void LeerTablaEvento(){
         //List<Seccion> list;
         Evento x = new Evento();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
@@ -274,13 +275,122 @@ public final class OperacionesBaseDatos {
                 x.setLugar(c.getString(4));
                 x.setInformacion(c.getString(5));
                 x.setFkTipoEvento(c.getInt(6));
-                Toast.makeText(contex, "Leer:" + x.getIdEvento() + "---" + x.getHora()+ "---" + x.getFecha()+ "---" + x.getLugar()+ "---" + x.getInformacion()+ "---" + x.getFkTipoEvento(), Toast.LENGTH_LONG).show();
                 //list.add(x);
             } while (c.moveToNext());
         }
         //return list;
     }
-    /***/
+    /**Domicilio**/
+    public void InsertarDomicilio(Domicilio x){
+        SQLiteDatabase query = baseDatos.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put(domicilio.Id,x.getIdDomicilio());
+        valores.put(domicilio.Numero,x.getNumero());
+        valores.put(domicilio.Calle,x.getCalle());
+        valores.put(domicilio.Colonia,x.getColonia());
+        valores.put(domicilio.Foto,x.getFoto());
+        valores.put(domicilio.FkUbicacion,x.getFkUbicacion());
+        query.insert("domicilio",null,valores);
+    }
+    public void LeerTablaDomicilio(){
+        //List<Seccion> list;
+        Domicilio x = new Domicilio();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM domicilio",null);
+        if(c.moveToFirst()) {
+            do {
+                x.setIdDomicilio(c.getInt(1));
+                x.setNumero(c.getInt(2));
+                x.setCalle(c.getString(3));
+                x.setColonia(c.getString(4));
+                x.setFoto(c.getString(5));
+                x.setFkUbicacion(c.getInt(6));
+                //list.add(x);
+            } while (c.moveToNext());
+        }
+        //return list;
+    }
+    /**Scouter**/
+    public void InsertarScouter(Scouter x){
+        SQLiteDatabase query = baseDatos.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put(scouter.Id,x.getIdScouter());
+        valores.put(scouter.FechaInicio,x.getFechaInicio());
+        valores.put(scouter.FechaFinal,x.getFechaFinal());
+        valores.put(scouter.FkUsuario,x.getFkUsuario());
+        query.insert("scouter",null,valores);
+    }
+    public void LeerTablaScouter(){
+        //List<Scouter> list = new ArrayList<Scouter>();
+        Scouter x = new Scouter();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM scouter",null);
+        if(c.moveToFirst()) {
+            do {
+                x.setIdScouter(c.getInt(1));
+                x.setFechaInicio(c.getString(2));
+                x.setFechaFinal(c.getString(3));
+                x.setFkUsuario(c.getInt(4));
+                //list.add(x);
+            } while (c.moveToNext());
+        }
+        //return list;
+    }
+    /**FotoAlrededores**/
+    public void InsertarFotosAlrededores(FotoAlrededores x){
+        SQLiteDatabase query = baseDatos.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put(fotoalrededores.Id,x.getIdFotoAlrededores());
+        valores.put(fotoalrededores.Foto,x.getFoto());
+        valores.put(fotoalrededores.FkDomiilio,x.getFkDomicilio());
+        query.insert("fotoalrededores",null,valores);
+    }
+    public void LeerTablaFotoAlrededores(){
+        //List<Scouter> list = new ArrayList<Scouter>();
+        FotoAlrededores x = new FotoAlrededores();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM fotoalrededores",null);
+        if(c.moveToFirst()) {
+            do {
+                x.setIdFotoAlrededores(c.getInt(1));
+                x.setFoto(c.getString(2));
+                x.setFkDomicilio(c.getInt(3));
+                //list.add(x);
+            } while (c.moveToNext());
+        }
+        //return list;
+    }
+    /**Problematica**/
+    public void InsertarProblematica(Problematica x){
+        SQLiteDatabase query = baseDatos.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put(problematica.Id,x.getIdProblematica());
+        valores.put(problematica.Fecha,x.getFecha());
+        valores.put(problematica.Nombre,x.getNombre());
+        valores.put(problematica.Sugerencia,x.getSugerencia());
+        valores.put(problematica.FkUsuario,x.getFkUsuario());
+        valores.put(problematica.FkTipoProblematica,x.getFkTipoProblematica());
+        query.insert("problematica",null,valores);
+    }
+    public void LeerTablaProblematica(){
+        //List<Seccion> list;
+        Problematica x = new Problematica();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM problematica",null);
+        if(c.moveToFirst()) {
+            do {
+                x.setIdProblematica(c.getInt(1));
+                x.setFecha(c.getString(2));
+                x.setNombre(c.getString(3));
+                x.setSugerencia(c.getString(4));
+                x.setFkUsuario(c.getInt(5));
+                x.setFkTipoProblematica(c.getInt(6));
+                //list.add(x);
+            } while (c.moveToNext());
+        }
+        //return list;
+    }
+    /**AdultoMayor**/
     public void InsertarAdultoMayor(AdultoMayor x){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
@@ -294,8 +404,8 @@ public final class OperacionesBaseDatos {
         valores.put(adultomayor.FkDomicilio,x.getFkDomicilio());
         query.insert("adultomayor",null,valores);
     }
-    public List<AdultoMayor> LeerTablaAdultoMayor(){
-        List<AdultoMayor> list = null;
+    public void LeerTablaAdultoMayor(){
+        //List<AdultoMayor> list = new Array List<AdultoMayor>();
         AdultoMayor x = new AdultoMayor();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
         Cursor c = query.rawQuery("SELECT * FROM adultomayor",null);
@@ -309,11 +419,137 @@ public final class OperacionesBaseDatos {
                 x.setDiabetico(c.getInt(6));
                 x.setFkDependencia(c.getInt(7));
                 x.setFkDomicilio(c.getInt(8));
-                list.add(x);
+                //list.add(x);
             } while (c.moveToNext());
         }
-        return list;
+        //return list;
     }
-
-
+    /**Asignacion**/
+    public void InsertarAsignacion(Asignacion x){
+        SQLiteDatabase query = baseDatos.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put(asignacion.Id,x.getIdAsignacion());
+        valores.put(asignacion.Status,x.getStatus());
+        valores.put(asignacion.Fecha,x.getFecha());
+        valores.put(asignacion.FkUsuario,x.getFkUsuario());
+        valores.put(asignacion.FkAdultoMayor,x.getFkAdultoMayor());
+        query.insert("asignacion",null,valores);
+    }
+    public void LeerTablaAsignacion(){
+        //List<AdultoMayor> list = new Array List<AdultoMayor>();
+        Asignacion x = new Asignacion();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM asignacion",null);
+        if(c.moveToFirst()) {
+            do {
+                x.setIdAsignacion(c.getInt(1));
+                x.setStatus(c.getInt(2));
+                x.setFecha(c.getString(3));
+                x.setFkUsuario(c.getInt(4));
+                x.setFkAdultoMayor(c.getInt(5));
+                //list.add(x);
+            } while (c.moveToNext());
+        }
+        //return list;
+    }
+    /**ComentarioAM**/
+    public void InsertarComentarioAM(ComentarioAM x){
+        SQLiteDatabase query = baseDatos.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put(comentarioam.Id,x.getIdComentarioAM());
+        valores.put(comentarioam.Nombre,x.getNombre());
+        valores.put(comentarioam.Fecha,x.getFecha());
+        valores.put(comentarioam.FkAdultoMayor,x.getFkAdultoMayor());
+        query.insert("comentarioam",null,valores);
+    }
+    public void LeerTablaComentarioAM(){
+        //List<AdultoMayor> list = new Array List<AdultoMayor>();
+        ComentarioAM x = new ComentarioAM();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM comentarioam",null);
+        if(c.moveToFirst()) {
+            do {
+                x.setIdComentarioAM(c.getInt(1));
+                x.setNombre(c.getString(2));
+                x.setFecha(c.getString(3));
+                x.setFkAdultoMayor(c.getInt(4));
+                //list.add(x);
+            } while (c.moveToNext());
+        }
+        //return list;
+    }
+    /**GestionInventario**/
+    public void InsertarGestionInventario(GestionInventario x){
+        SQLiteDatabase query = baseDatos.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put(gestioninventario.Id,x.getIdGestionInventario());
+        valores.put(gestioninventario.Fecha,x.getFecha());
+        valores.put(gestioninventario.FkScouter,x.getFkScouter());
+        valores.put(gestioninventario.FkInventario,x.getFkInventario());
+        query.insert("gestioninventario",null,valores);
+    }
+    public void LeerTablaGestionInventario(){
+        //List<AdultoMayor> list = new Array List<AdultoMayor>();
+        GestionInventario x = new GestionInventario();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM gestioninventario",null);
+        if(c.moveToFirst()) {
+            do {
+                x.setIdGestionInventario(c.getInt(1));
+                x.setFecha(c.getString(2));
+                x.setFkScouter(c.getInt(3));
+                x.setFkInventario(c.getInt(4));
+                //list.add(x);
+            } while (c.moveToNext());
+        }
+        //return list;
+    }
+    /**Recoger**/
+    public void InsertarRecoger(Recoger x){
+        SQLiteDatabase query = baseDatos.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put(recoger.Id,x.getIdRecoger());
+        valores.put(recoger.FkRScouter,x.getFkScouter());
+        valores.put(recoger.FkAsignacion,x.getFkAsignacion());
+        query.insert("recoger",null,valores);
+    }
+    public void LeerTablaRecoger(){
+        //List<AdultoMayor> list = new Array List<AdultoMayor>();
+        Recoger x = new Recoger();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM recoger",null);
+        if(c.moveToFirst()) {
+            do {
+                x.setIdRecoger(c.getInt(1));
+                x.setFkScouter(c.getInt(2));
+                x.setFkAsignacion(c.getInt(3));
+                //list.add(x);
+            } while (c.moveToNext());
+        }
+        //return list;
+    }
+    /**VoluntarioFrecuente**/
+    public void InsertarVoluntarioFrecuente(VoluntarioFrecuente x){
+        SQLiteDatabase query = baseDatos.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put(voluntariofrecuente.Id,x.getIdVoluntarioFrecuente());
+        valores.put(voluntariofrecuente.FkUsuario,x.getFkUsuario());
+        valores.put(voluntariofrecuente.FkAdultoMayor,x.getFkAdultoMayor());
+        query.insert("voluntariofrecuente",null,valores);
+    }
+    public void LeerTablaVoluntarioFrecuente(){
+        //List<AdultoMayor> list = new Array List<AdultoMayor>();
+        VoluntarioFrecuente x = new VoluntarioFrecuente();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM voluntariofrecuente",null);
+        if(c.moveToFirst()) {
+            do {
+                x.setIdVoluntarioFrecuente(c.getInt(1));
+                x.setFkUsuario(c.getInt(2));
+                x.setFkAdultoMayor(c.getInt(3));
+                //list.add(x);
+            } while (c.moveToNext());
+        }
+        //return list;
+    }
 }
