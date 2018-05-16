@@ -84,10 +84,10 @@ public class Inicio extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ActualizacionBaseDatos.CreacionBaseDatos(getApplicationContext());
-        if(LogUser.obtenerInstancia().getUser().getNombre() == null){
+        /*if(LogUser.obtenerInstancia().getUser().getNombre() == null){
             Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
             startActivityForResult(intent, 0);
-        }
+        }*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
 
