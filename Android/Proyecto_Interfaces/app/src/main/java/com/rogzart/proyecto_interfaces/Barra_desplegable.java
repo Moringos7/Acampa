@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.rogzart.proyecto_interfaces.FragmentosBarra.AdultosMayoresAE;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Editar_AdultosM;
@@ -26,23 +25,18 @@ import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento07;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento08;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento09;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento10;
-import com.rogzart.proyecto_interfaces.Modelo.Usuario;
-import com.rogzart.proyecto_interfaces.Singleton.LogUser;
 
 
 public class Barra_desplegable extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    boolean EventoConvivio=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barra_desplegable);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        LogUser Usuario = LogUser.obtenerInstancia();
-        Usuario myUsuario = new Usuario();
-        myUsuario = Usuario.getUser();
-        Toast.makeText(this, "Bienvenido " + myUsuario.getNombre(), Toast.LENGTH_SHORT).show();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,8 +96,9 @@ public class Barra_desplegable extends AppCompatActivity
         // Handle navigation view item clicks here.
        android.support.v4.app.FragmentManager fragmentManager=getSupportFragmentManager();
         int id = item.getItemId();
-
-        if (id == R.id.nav_Novedades) {
+        if (id == R.id.nav_Convivio && EventoConvivio==true) {
+            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento06()).commit();
+        } else if (id == R.id.nav_Novedades) {
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento10()).commit();
         } else if (id == R.id.nav_RegistroAM) {
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new AdultosMayoresAE()).commit();
@@ -119,19 +114,13 @@ public class Barra_desplegable extends AppCompatActivity
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento04()).commit();
         } else if (id == R.id.nav_Inventario) {
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Inventario()).commit();
-        } else if (id == R.id.nav_Convivio) {
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento06()).commit();
-        } else if (id == R.id.nav_Scouters) {
+        } else  if (id == R.id.nav_Scouters) {
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento07()).commit();
         } else if (id == R.id.nav_Estadisticas) {
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento08()).commit();
         } else if (id == R.id.nav_Eventos) {
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento09()).commit();
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
+            }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/BregresarIG"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            android:drawableBottom="@android:drawable/ic_menu_revert" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:srcCompat="@drawable/googleg_standard_color_18" />
+        <TextView
+            android:id="@+id/Tnombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre"
+            android:textSize="42sp" />
+        <TextView
+            android:id="@+id/TExistenciaIG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Existencia"
+            android:textSize="42sp" />
+    </LinearLayout>
+</RelativeLayout>

@@ -3,18 +3,13 @@ package com.rogzart.proyecto_interfaces.FragmentosBarra.TrazadoRuta;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.rogzart.proyecto_interfaces.InterfacesLogin.LoginActivity;
 import com.rogzart.proyecto_interfaces.MapsActivity;
 import com.rogzart.proyecto_interfaces.R;
-
-import java.util.zip.Inflater;
 
 
 public class Fragmento03 extends Fragment {

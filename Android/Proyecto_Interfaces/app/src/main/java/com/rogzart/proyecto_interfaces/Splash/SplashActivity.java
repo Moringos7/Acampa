@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.rogzart.proyecto_interfaces.InterfacesLogin.Inicio;
 import com.rogzart.proyecto_interfaces.R;
-import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
 
 import org.w3c.dom.Text;
 
@@ -22,20 +21,14 @@ import static java.lang.Thread.sleep;
 public class SplashActivity extends Activity {
     private TextView ivSplash;
     private ImageView IS;
-    private ActualizacionBaseDatos Act;
-        /* Volcar y Actualizar
-        Act.VolcarBasedeDatos();
-        Act.ActualizarBasedeDatos(Inicio.this);
-        */
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        ///Creaación BD
-        Act = new ActualizacionBaseDatos(getApplicationContext());
-        ///Creación BD
+
         setContentView(R.layout.activity_splash);
 
         ivSplash = (TextView) findViewById(R.id.TS);

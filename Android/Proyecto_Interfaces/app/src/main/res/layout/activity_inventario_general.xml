@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView15"
+            android:id="@+id/textView20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content" />
 
         <ListView
-            android:id="@+id/ListaR"
+            android:id="@+id/ListaG"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -38,6 +38,18 @@
             android:layout_height="match_parent"
             android:text="Button" />
     </LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/Fnuevo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="28dp"
+        android:layout_marginEnd="26dp"
+        android:clickable="true"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="?attr/colorBackgroundFloating" />
+
 
 
 </RelativeLayout>

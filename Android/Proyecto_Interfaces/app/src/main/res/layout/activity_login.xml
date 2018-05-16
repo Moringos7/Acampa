@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.rogzart.proyecto_interfaces.InterfacesLogin.LoginActivity">
+    tools:context="com.rogzart.proyecto_interfaces.InterfacesLogin.Signup">
 
     <!-- Login progress -->
     <ProgressBar
@@ -138,21 +138,24 @@
                 android:layout_height="wrap_content"
                 android:text="Fecha de nacimiento"
                 android:textSize="18sp" />
+            <EditText
+                android:id="@+id/TFecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="date" />
 
-            <DatePicker
-                android:id="@+id/datePicker4"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_gravity="center" />
 
             <Button
                 android:id="@+id/btnRegistrar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/holo_blue_light"
+                android:background="@color/colorAccent"
+                android:stateListAnimator="@color/colorPrimaryDark"
                 android:text="Registrar"
                 tools:layout_editor_absoluteX="57dp"
                 tools:layout_editor_absoluteY="385dp" />
+
 
 
         </LinearLayout>
