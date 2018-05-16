@@ -1,12 +1,17 @@
 <?php  
 require("wsBDcredencial.php");
 // ValidacionPassword,ValidacionCorreo,Nombre,ApellidoPaterno,ApellidoMaterno,Scouter,Coordinador,FkSeccion
-if(isset($_POST["password"])){
-	if(isset($_POST["correo"])){
+$json = file_get_contents('php://input');
+$data = json_decode($json); 
+$Password = $data->password;
+$Correo = $data->correo;
+
+if($Password != ""){
+	if($Correo != ""){
 		$conexion = mysqli_connect($hostname,$username,$password,$database);
-		$Password = $_POST["password"];
+		//$Password = $_POST["password"];
 		////
-		$Correo = $_POST["correo"];
+		//$Correo = $_POST["correo"];
 		$queryFk = "SELECT IdUsuario FROM usuario WHERE Correo ='$Correo'";
 		$result = mysqli_query($conexion,$queryFk);
 		if(!($registro = mysqli_fetch_array($result,MYSQLI_ASSOC))){

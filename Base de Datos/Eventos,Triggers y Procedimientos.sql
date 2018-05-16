@@ -151,13 +151,13 @@ DELIMITER //
 CREATE PROCEDURE ActualizacionSeccion() NOT DETERMINISTIC CONTAINS SQL SQL SECURITY DEFINER 
 BEGIN
 declare vEdad INTEGER; 
-declare vFecha DATE;
+--declare vFecha DATE;
 declare vUsuario INTEGER;
 declare vFechaNacimiento DATE;
 declare vSeccion INTEGER;
 DECLARE vScout INTEGER;
 declare i INTEGER DEFAULT 1;
-SET vFecha = CURDATE();
+--SET vFecha = CURDATE();
 SET vUsuario = (select IdUsuario from usuario order by IdUsuario desc limit 1);
 WHILE i <= vUsuario DO
 

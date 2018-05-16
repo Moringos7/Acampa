@@ -38,7 +38,7 @@ public class ActualizacionBaseDatos {
     private static ActualizacionBaseDatos instancia = new ActualizacionBaseDatos();
     private static RequestQueue request;
     private JsonObjectRequest jsonObjectRequest;
-
+    private boolean ErrorActualizacion;
     public ActualizacionBaseDatos(){
 
     }
@@ -54,24 +54,46 @@ public class ActualizacionBaseDatos {
         return instancia;
     }
     public void ActualizarBasedeDatos(Context context){
-        ActualizacionDependencia(context);
-        ActualizacionSeccion(context);
-        ActualizacionUbicacion(context);
-        ActualizacionTipoEvento(context);
-        ActualizacionTipoProblematica(context);
-        ActualizacionInventario(context);
-        ActualizacionUsuario(context);
-        ActualizacionEvento(context);
-        ActualizacionDomicilio(context);
-        ActualizacionScouter(context);
-        ActualizacionFotoAlrededores(context);
-        ActualizacionProblematica(context);
-        ActualizacionAdultoMayor(context);
-        ActualizacionAsignacion(context);
-        ActualizacionComentarioAM(context);
-        ActualizacionGestionInventario(context);
-        ActualizacionRecoger(context);
-        ActualizacionVoluntarioFrecuente(context);
+        ErrorActualizacion = false;
+        if(ActualizacionDependencia(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionSeccion(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionUbicacion(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionTipoEvento(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionTipoProblematica(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionInventario(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionUsuario(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionEvento(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionDomicilio(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionScouter(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionFotoAlrededores(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionProblematica(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionAdultoMayor(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionAsignacion(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionComentarioAM(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if( ActualizacionGestionInventario(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionRecoger(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else if(ActualizacionVoluntarioFrecuente(context))
+        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
+        else{
+            Toast.makeText(context, "Actualización Completada", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void VolcarBasedeDatos() {
@@ -95,7 +117,7 @@ public class ActualizacionBaseDatos {
         Delete.EliminarDatosTabla("seccion");
         Delete.EliminarDatosTabla("dependencia");
     }
-    public void ActualizacionDependencia(final Context context){
+    public boolean ActualizacionDependencia(final Context context){
         Conexion x = new Conexion();
         final Dependencia mDependencia = new Dependencia();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -119,12 +141,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    public void ActualizacionSeccion(final Context context){
+    public boolean ActualizacionSeccion(final Context context){
         Conexion x = new Conexion();
         final Seccion mSeccion = new Seccion();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -147,12 +170,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    public void ActualizacionUbicacion(final Context context){
+    public boolean ActualizacionUbicacion(final Context context){
         Conexion x = new Conexion();
         final Ubicacion mUbicacion = new Ubicacion();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -176,12 +200,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionTipoEvento(final Context context) {
+    private boolean ActualizacionTipoEvento(final Context context) {
         Conexion x = new Conexion();
         final TipoEvento mTipoEvento = new TipoEvento();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -204,12 +229,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionTipoProblematica(final Context context) {
+    private boolean ActualizacionTipoProblematica(final Context context) {
         Conexion x = new Conexion();
         final TipoProblematica mTipoProblematica = new TipoProblematica();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -232,12 +258,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionInventario(final Context context) {
+    private boolean ActualizacionInventario(final Context context) {
         Conexion x = new Conexion();
         final Inventario mInventario = new Inventario();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -266,12 +293,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionUsuario(final Context context) {
+    private boolean ActualizacionUsuario(final Context context) {
         Conexion x = new Conexion();
         final Usuario mUsuario = new Usuario();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -301,12 +329,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionEvento(final Context context) {
+    private boolean ActualizacionEvento(final Context context) {
         Conexion x = new Conexion();
         final Evento mEvento = new Evento();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -333,12 +362,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionDomicilio(final Context context) {
+    private boolean ActualizacionDomicilio(final Context context) {
         Conexion x = new Conexion();
         final Domicilio mDomicilio = new Domicilio();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -365,12 +395,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionScouter(final Context context) {
+    private boolean ActualizacionScouter(final Context context) {
         Conexion x = new Conexion();
         final Scouter mScouter = new Scouter();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -395,12 +426,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionFotoAlrededores(final Context context) {
+    private boolean ActualizacionFotoAlrededores(final Context context) {
         Conexion x = new Conexion();
         final FotoAlrededores mFotoAlrededores = new FotoAlrededores();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -424,12 +456,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionProblematica(final Context context) {
+    private boolean ActualizacionProblematica(final Context context) {
         Conexion x = new Conexion();
         final Problematica mProblematica = new Problematica();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -456,12 +489,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionAdultoMayor(final Context context) {
+    private boolean ActualizacionAdultoMayor(final Context context) {
         Conexion x = new Conexion();
         final AdultoMayor mAdultoMayor = new AdultoMayor();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -490,12 +524,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionAsignacion(final Context context) {
+    private boolean ActualizacionAsignacion(final Context context) {
         Conexion x = new Conexion();
         final Asignacion mAsignacion = new Asignacion();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -521,12 +556,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionComentarioAM(final Context context) {
+    private boolean ActualizacionComentarioAM(final Context context) {
         Conexion x = new Conexion();
         final ComentarioAM mComentario = new ComentarioAM();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -551,12 +587,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionGestionInventario(final Context context) {
+    private boolean ActualizacionGestionInventario(final Context context) {
         Conexion x = new Conexion();
         final GestionInventario mGestionInventario = new GestionInventario();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -581,12 +618,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionRecoger(final Context context) {
+    private boolean ActualizacionRecoger(final Context context) {
         Conexion x = new Conexion();
         final Recoger mRecoger = new Recoger();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -610,12 +648,13 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
-    private void ActualizacionVoluntarioFrecuente(final Context context) {
+    private boolean ActualizacionVoluntarioFrecuente(final Context context) {
         Conexion x = new Conexion();
         final VoluntarioFrecuente mVoluntarioFrecuente = new VoluntarioFrecuente();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -639,9 +678,10 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Fallo Conexion Servidor", Toast.LENGTH_SHORT).show();
+                ErrorActualizacion = true;
             }
         });
         request.add(jsonObjectRequest);
+        return ErrorActualizacion;
     }
 }

@@ -4,9 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Paint;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -24,6 +27,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -32,12 +36,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.rogzart.proyecto_interfaces.ActivitysConexion.Conexion_Exitosa;
+import com.rogzart.proyecto_interfaces.ActivitysConexion.ErrorPeticion;
+import com.rogzart.proyecto_interfaces.Alertas.DialogoAlerta;
 import com.rogzart.proyecto_interfaces.Barra_desplegable;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
@@ -52,158 +61,158 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static java.lang.Thread.sleep;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>{
+public class Inicio extends AppCompatActivity{
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
     /*------*/
-    private TextView Correo;
-    private TextView Pass;
-    private ProgressDialog Progreso;
-    private Usuario usuario;
-    private Boolean Validacion;
-    RequestQueue request;
-    JsonObjectRequest jsonObjectRequest;
-
-    //Insersciones
-    OperacionesBaseDatos operador;
-    ActualizacionBaseDatos Act;
-    //
+    private Conexion conexion;
+    private RequestQueue request;
+    private Usuario User;
+    private String Correo;
+    private String Pass;
+    private Boolean UserCheck;
+    private Boolean PassCheck;
+    private Boolean Verificador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
-        //Manejo Base de Datos
-        operador = OperacionesBaseDatos.obtenerInstancia(getApplicationContext());
-        //Actualizacion
-        /**Poner estos comandos en donde se desee generar una actualizacion*/
-        Act = new ActualizacionBaseDatos(getApplicationContext());
-        Act.VolcarBasedeDatos();
-        //Actualizacion Base de Datos
-        Act.ActualizarBasedeDatos(Inicio.this);
-        /*********************/
-        //Act.VolcarBasedeDatos();
-        //
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.IdNombre);
-        populateAutoComplete();
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
-        //Action Inicio sesion
-        usuario = new Usuario();
+        request = Volley.newRequestQueue(getApplicationContext());
+        conexion = new Conexion(getApplicationContext());
+        User = new Usuario();
+        UserCheck = false;
+        PassCheck = false;
+        Verificador = false;
+
+        //Boton LogIn
         final Button mEmailSignInButton = (Button) findViewById(R.id.btnInicio);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent (view.getContext(), Barra_desplegable.class);
-                startActivityForResult(intent, 0);
+                Correo = mEmailView.getText().toString();
+                Pass = mPasswordView.getText().toString();
+
+                if (!isEmailValid(Correo)) {
+                    Toast.makeText(Inicio.this, "Ingrese Formato Correcto de Correo", Toast.LENGTH_SHORT).show();
+                } else if (!true/*isPasswordValid(Pass)*/) {
+                    Toast.makeText(Inicio.this, "Contraseña muy corta", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (!conexion.isConnected()) {
+                        Toast.makeText(Inicio.this, "Fallo Conexion, por favor conecte su dispositivo a Internet", Toast.LENGTH_SHORT).show();
+                    } else {
+                        conexion.setRuta("WebService/wsLogin.php");
+
+                        Map<String, String> params = new HashMap();
+                        params.put("correo", Correo);
+                        params.put("password", Pass);
+                        JSONObject obj = new JSONObject(params);
+
+                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, conexion.getRuta(), obj , new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                JSONArray json = response.optJSONArray("Password");
+                                try {
+                                    JSONObject jsonObject = json.getJSONObject(0);
+                                    if(!(jsonObject.optBoolean("ValidacionCorreo"))){
+                                        Toast.makeText(Inicio.this, "Correo No registrado", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        if(!(jsonObject.optBoolean("ValidacionPassword"))){
+                                            Toast.makeText(Inicio.this, "Contraseña Incorrecta", Toast.LENGTH_SHORT).show();
+                                        }else{
+                                            Usuario user = new Usuario();
+                                            user.setNombre(jsonObject.optString("Nombre"));
+                                            user.setApellidoPaterno(jsonObject.optString("ApellidoPaterno"));
+                                            user.setApellidoMaterno(jsonObject.optString("ApellidoMaterno"));
+                                            user.setFkSeccion(jsonObject.optInt("FkSeccion"));
+                                            Toast.makeText(Inicio.this, "-"+user.getNombre()+"-"+user.getApellidoPaterno()+"-"+user.getApellidoMaterno()+"-"+user.getFkSeccion(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(Inicio.this, "" + error, Toast.LENGTH_SHORT).show();
+                            }
+                        }) {
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String, String> parametros = new HashMap<String, String>();
+                                parametros.put("correo", Correo);
+                                parametros.put("password", Pass);
+                                return parametros;
+                            }
+                        };
+                        request.add(jsonObjectRequest);
+
+                        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(), new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(Inicio.this, "-"+response, Toast.LENGTH_SHORT).show();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(Inicio.this, "->"+error, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        ){
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String,String> parametros = new HashMap<String,String>();
+                                String Nombre = Correo;
+                                String Dato = Pass;
+                                parametros.put("NOMBRE",Nombre);
+                                parametros.put("DATO",Dato);
+                                return parametros;
+                            }
+                        };*/
+                    }
+                    /*Intent intent = new Intent (view.getContext(), Barra_desplegable.class);
+                    startActivityForResult(intent, 0);*/
+                }
             }
         });
 
-        ///Action registrarte
-        Button Registro =  (Button) findViewById(R.id.email_sign_in_button2);
+        ///Boton Registrarse
+        final Button Registro =  (Button) findViewById(R.id.btnLR);
         Registro.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Act.VolcarBasedeDatos();
                 /*Intent intent = new Intent (view.getContext(), LoginActivity.class);
-                startActivityForResult(intent, 0);
-                */
+                startActivityForResult(intent, 0);*/
             }
         });
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-    }
-
-    private void VerificacionPassword() {
-        Conexion x = new Conexion(getApplicationContext());
-        x.setRuta("WebService/Password/wsVerificacionPassword");
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,x.getRuta(),null,new Response.Listener<JSONObject> (){
+        ///Boton
+        final Button Recuperar =  (Button) findViewById(R.id.btnRecuperar);
+        Recuperar.setOnClickListener(new OnClickListener() {
             @Override
-            public void onResponse(JSONObject response) {
-                JSONArray json = response.optJSONArray("Password");
-
-                try {
-                    JSONObject jsonObject = json.getJSONObject(0);
-                    Validacion = jsonObject.getBoolean("Validacion");
-
-                }catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), "Error Conexion servidor", Toast.LENGTH_SHORT).show();
-                }
-            }
-        },new Response.ErrorListener(){
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Error Conexion servidor", Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                Intent go = new Intent (view.getContext(), Conexion_Exitosa.class);
+                startActivityForResult(go, 0);
             }
         });
-        request.add(jsonObjectRequest);
     }
 
-    /***
-     * x.setRuta("WebService/Password/wsVerificacionPassword.php");
-     jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,x.getRuta(),null,this,this);
-     request.add(jsonObjectRequest);
 
-     * */
-    private void cargarWebServiceUsuario(){
-        Conexion x = new Conexion(getApplicationContext());
-        x.setRuta("WebService/Usuario/wsUsuarioReadTable.php");
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,x.getRuta(),null,new Response.Listener<JSONObject> (){
-            @Override
-            public void onResponse(JSONObject response) {
-                //Progreso.hide();
-                //Toast.makeText(getApplicationContext(),"We have the packet",Toast.LENGTH_LONG).show();
-                String CorreoUsuario;
-                JSONArray json = response.optJSONArray("Usuario");
-                //Toast.makeText(Inicio.this, "Jose-Miguel", Toast.LENGTH_SHORT).show();
-                try {
-                    usuario.setIdUsuario(344);
-                    Toast.makeText(Inicio.this, "Jose-Miguel", Toast.LENGTH_SHORT).show();
-                    for (int i = 0; i < json.length(); i++) {
-                        JSONObject jsonObject = json.getJSONObject(i);
-                        CorreoUsuario = jsonObject.optString("Correo");
-
-                        if(CorreoUsuario.compareTo(Correo.getText().toString()) == 0){
-                            usuario.setIdUsuario(jsonObject.optInt("IdUsuario"));
-                            usuario.setNombre(jsonObject.optString("Nombre"));
-                            usuario.setCorreo(jsonObject.optString("Correo"));
-                            //Toast.makeText(getApplicationContext(), "Dentro de ciclo" , Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), "Error Conexion servidor", Toast.LENGTH_SHORT).show();
-                }
-            }
-        },new Response.ErrorListener(){
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Error Conexion servidor", Toast.LENGTH_SHORT).show();
-            }
-        });
-        request.add(jsonObjectRequest);
-    }
     private boolean isEmailValid(String email) {
         boolean message = false;
         if(email.compareTo("") == 0){
@@ -227,222 +236,5 @@ public class Inicio extends AppCompatActivity implements LoaderCallbacks<Cursor>
         }
         return message;
     }
-
-    /*Stranger Code*/
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
-
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-    private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
-        // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            //InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            //inputMethodManager.hideSoftInputFromWindow(Pass.getWindowToken(), 0);
-            Toast.makeText(this, "Holac", Toast.LENGTH_SHORT).show();
-
-        }
-    }
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
-
-        addEmailsToAutoComplete(emails);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(Inicio.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
-
-
-
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-    }
-    private static final int REQUEST_READ_CONTACTS = 0;
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    private UserLoginTask mAuthTask = null;
 }
 
