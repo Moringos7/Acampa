@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.rogzart.proyecto_interfaces.FragmentosBarra.AdultosMayoresAE;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Editar_AdultosM;
@@ -25,6 +26,8 @@ import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento07;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento08;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento09;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento10;
+import com.rogzart.proyecto_interfaces.Modelo.Usuario;
+import com.rogzart.proyecto_interfaces.Singleton.LogUser;
 
 
 public class Barra_desplegable extends AppCompatActivity
@@ -36,7 +39,10 @@ public class Barra_desplegable extends AppCompatActivity
         setContentView(R.layout.activity_barra_desplegable);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        LogUser Usuario = LogUser.obtenerInstancia();
+        Usuario myUsuario = new Usuario();
+        myUsuario = Usuario.getUser();
+        Toast.makeText(this, "Bienvenido " + myUsuario.getNombre(), Toast.LENGTH_SHORT).show();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

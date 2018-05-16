@@ -46,13 +46,14 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.rogzart.proyecto_interfaces.ActivitysConexion.Conexion_Exitosa;
 import com.rogzart.proyecto_interfaces.ActivitysConexion.ErrorPeticion;
-import com.rogzart.proyecto_interfaces.Alertas.DialogoAlerta;
 import com.rogzart.proyecto_interfaces.Barra_desplegable;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Dependencia;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.R;
+import com.rogzart.proyecto_interfaces.Singleton.LogUser;
+import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
 import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
@@ -77,29 +78,23 @@ public class Inicio extends AppCompatActivity{
     private EditText mPasswordView;
     /*------*/
     private Conexion conexion;
-    private RequestQueue request;
-    private Usuario User;
     private String Correo;
     private String Pass;
-    private Boolean UserCheck;
-    private Boolean PassCheck;
-    private Boolean Verificador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ActualizacionBaseDatos.CreacionBaseDatos(getApplicationContext());
+        if(LogUser.obtenerInstancia().getUser().getNombre() == null){
+            Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
+            startActivityForResult(intent, 0);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
 
-        // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.IdNombre);
         mPasswordView = (EditText) findViewById(R.id.password);
-        request = Volley.newRequestQueue(getApplicationContext());
         conexion = new Conexion(getApplicationContext());
-        User = new Usuario();
-        UserCheck = false;
-        PassCheck = false;
-        Verificador = false;
-
+        final LogUser ControlUser = LogUser.obtenerInstancia();
         //Boton LogIn
         final Button mEmailSignInButton = (Button) findViewById(R.id.btnInicio);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -107,7 +102,6 @@ public class Inicio extends AppCompatActivity{
             public void onClick(View view) {
                 Correo = mEmailView.getText().toString();
                 Pass = mPasswordView.getText().toString();
-
                 if (!isEmailValid(Correo)) {
                     Toast.makeText(Inicio.this, "Ingrese Formato Correcto de Correo", Toast.LENGTH_SHORT).show();
                 } else if (!true/*isPasswordValid(Pass)*/) {
@@ -140,54 +134,26 @@ public class Inicio extends AppCompatActivity{
                                             user.setApellidoPaterno(jsonObject.optString("ApellidoPaterno"));
                                             user.setApellidoMaterno(jsonObject.optString("ApellidoMaterno"));
                                             user.setFkSeccion(jsonObject.optInt("FkSeccion"));
-                                            Toast.makeText(Inicio.this, "-"+user.getNombre()+"-"+user.getApellidoPaterno()+"-"+user.getApellidoMaterno()+"-"+user.getFkSeccion(), Toast.LENGTH_SHORT).show();
+                                            ControlUser.setUser(user);
+                                            ControlUser.setFkScouter(jsonObject.optInt("FkScouter"));
+                                            ControlUser.setFkCoordinador(jsonObject.optInt("FkCoordinador"));
+                                            Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
+                                            startActivityForResult(intent, 0);
                                         }
                                     }
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
+                                    Toast.makeText(Inicio.this, "Fallo Verificación", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(Inicio.this, "" + error, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Inicio.this, "Fallo Conexion al Servidor", Toast.LENGTH_SHORT).show();
                             }
-                        }) {
-                            @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
-                                Map<String, String> parametros = new HashMap<String, String>();
-                                parametros.put("correo", Correo);
-                                parametros.put("password", Pass);
-                                return parametros;
-                            }
-                        };
-                        request.add(jsonObjectRequest);
-
-                        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(), new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Toast.makeText(Inicio.this, "-"+response, Toast.LENGTH_SHORT).show();
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(Inicio.this, "->"+error, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        ){
-                            @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
-                                Map<String,String> parametros = new HashMap<String,String>();
-                                String Nombre = Correo;
-                                String Dato = Pass;
-                                parametros.put("NOMBRE",Nombre);
-                                parametros.put("DATO",Dato);
-                                return parametros;
-                            }
-                        };*/
+                        });
+                        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
                     }
-                    /*Intent intent = new Intent (view.getContext(), Barra_desplegable.class);
-                    startActivityForResult(intent, 0);*/
+
                 }
             }
         });
@@ -197,8 +163,8 @@ public class Inicio extends AppCompatActivity{
         Registro.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent intent = new Intent (view.getContext(), LoginActivity.class);
-                startActivityForResult(intent, 0);*/
+                Intent intent = new Intent (view.getContext(), LoginActivity.class);
+                startActivityForResult(intent, 0);
             }
         });
         ///Boton

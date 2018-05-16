@@ -28,6 +28,7 @@ import com.rogzart.proyecto_interfaces.Modelo.TipoProblematica;
 import com.rogzart.proyecto_interfaces.Modelo.Ubicacion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.Modelo.VoluntarioFrecuente;
+import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,21 +37,21 @@ import org.json.JSONObject;
 public class ActualizacionBaseDatos {
     private static BaseDatosAcampa baseDatos;
     private static ActualizacionBaseDatos instancia = new ActualizacionBaseDatos();
-    private static RequestQueue request;
+    private static Context GeneralContext;
     private JsonObjectRequest jsonObjectRequest;
     private boolean ErrorActualizacion;
     public ActualizacionBaseDatos(){
 
     }
     public ActualizacionBaseDatos(Context contexto) {
-        request = Volley.newRequestQueue(contexto);
     }
 
     public static ActualizacionBaseDatos CreacionBaseDatos(Context contexto) {
         if (baseDatos == null) {
             baseDatos = new BaseDatosAcampa(contexto);
+            GeneralContext = contexto;
         }
-        request = Volley.newRequestQueue(contexto);
+
         return instancia;
     }
     public void ActualizarBasedeDatos(Context context){
@@ -144,7 +145,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     public boolean ActualizacionSeccion(final Context context){
@@ -173,7 +175,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     public boolean ActualizacionUbicacion(final Context context){
@@ -203,7 +206,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionTipoEvento(final Context context) {
@@ -232,7 +236,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionTipoProblematica(final Context context) {
@@ -261,7 +266,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionInventario(final Context context) {
@@ -296,7 +302,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionUsuario(final Context context) {
@@ -332,7 +339,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionEvento(final Context context) {
@@ -365,7 +373,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionDomicilio(final Context context) {
@@ -398,7 +407,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionScouter(final Context context) {
@@ -429,7 +439,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionFotoAlrededores(final Context context) {
@@ -459,7 +470,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionProblematica(final Context context) {
@@ -492,7 +504,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionAdultoMayor(final Context context) {
@@ -527,7 +540,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionAsignacion(final Context context) {
@@ -559,7 +573,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionComentarioAM(final Context context) {
@@ -590,7 +605,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionGestionInventario(final Context context) {
@@ -621,7 +637,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionRecoger(final Context context) {
@@ -651,7 +668,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
     private boolean ActualizacionVoluntarioFrecuente(final Context context) {
@@ -681,7 +699,8 @@ public class ActualizacionBaseDatos {
                 ErrorActualizacion = true;
             }
         });
-        request.add(jsonObjectRequest);
+        //request.add(jsonObjectRequest);
+        VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
 }
