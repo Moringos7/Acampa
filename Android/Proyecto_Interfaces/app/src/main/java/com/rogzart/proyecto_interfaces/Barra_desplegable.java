@@ -1,6 +1,7 @@
 package com.rogzart.proyecto_interfaces;
 
 import android.os.Bundle;
+import android.support.constraint.solver.widgets.WidgetContainer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -34,13 +35,12 @@ import com.rogzart.proyecto_interfaces.Singleton.LogUser;
 
 public class Barra_desplegable extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    boolean EventoConvivio=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LogUser ControlUser = LogUser.obtenerInstancia(getApplicationContext());
         Usuario mUsuario = ControlUser.getUser();
-
         setContentView(R.layout.activity_barra_desplegable);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -51,10 +51,21 @@ public class Barra_desplegable extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
+        ////
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.getMenu().setGroupVisible(R.id.menu1, false);
+        View hView = navigationView.getHeaderView(0);
+        TextView UsuarioBarra = (TextView) hView.findViewById(R.id.NombreUsuarioBarra);
+        UsuarioBarra.setText(""+mUsuario.getNombre() +" "+mUsuario.getApellidoPaterno()+ " " + mUsuario.getApellidoMaterno());
+        TextView CorreoBarra = (TextView) hView.findViewById(R.id.CorreoUsuarioBarra);
+        CorreoBarra.setText(mUsuario.getCorreo());
+        navigationView.getMenu().setGroupVisible(R.id.menuVoluntario, true);
+        if(ControlUser.getScouter() > 0) {
+            navigationView.getMenu().setGroupVisible(R.id.menuScouter, true);
+        }
+        if(ControlUser.getCoordinador() > 0) {
+            navigationView.getMenu().setGroupVisible(R.id.menuCoordinador, true);
+        }
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -96,31 +107,34 @@ public class Barra_desplegable extends AppCompatActivity
         // Handle navigation view item clicks here.
        android.support.v4.app.FragmentManager fragmentManager=getSupportFragmentManager();
         int id = item.getItemId();
-        if (id == R.id.nav_Convivio && EventoConvivio==true) {
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento06()).commit();
-        } else if (id == R.id.nav_Novedades) {
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento10()).commit();
-        } else if (id == R.id.nav_RegistroAM) {
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new AdultosMayoresAE()).commit();
-        } else if (id == R.id.nav_EditarAdultos) {
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Editar_AdultosM()).commit();
-        } else  if (id == R.id.nav_camera) {
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento01()).commit();
-        } else if (id == R.id.nav_gallery) {
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento02()).commit();
-        } else if (id == R.id.nav_slideshow) {
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento03()).commit();
-        } else if (id == R.id.nav_Asignacion) {
+        if(id == R.id.nav_Asignacion){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento04()).commit();
-        } else if (id == R.id.nav_Inventario) {
+        }else if(id == R.id.nav_Lugares){
+            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento02()).commit();
+        }else if(id == R.id.nav_Ruta){
+            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento03()).commit();
+        }else if(id == R.id.nav_Info){
+            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento01()).commit();
+        }else if(id == R.id.nav_Sugerencias){
+
+        }else if(id == R.id.nav_Convivio){
+            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento06()).commit();
+        }else if(id == R.id.nav_Inventario){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Inventario()).commit();
-        } else  if (id == R.id.nav_Scouters) {
+        }else if(id == R.id.nav_Scouters){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento07()).commit();
-        } else if (id == R.id.nav_Estadisticas) {
+        }else if(id == R.id.nav_Estadisticas){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento08()).commit();
-        } else if (id == R.id.nav_Eventos) {
+        }else if(id == R.id.nav_Eventos){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento09()).commit();
-            }
+        }else if(id == R.id.nav_Administrar){
+
+        }else if(id == R.id.nav_Salir) {
+            LogUser.obtenerInstancia(getApplicationContext()).logout();
+        }
+
+            //getFragmentManager().beginTransaction().replace(R.id.contenedor,new Editar_AdultosM()).commit();
+        //getFragmentManager().beginTransaction().replace(R.id.contenedor,new AdultosMayoresAE()).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

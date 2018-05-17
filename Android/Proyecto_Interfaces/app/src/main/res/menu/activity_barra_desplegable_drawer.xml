@@ -2,48 +2,58 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-
     <group android:checkableBehavior="single"
-        android:id="@+id/menu1"
+        android:id="@+id/menuVoluntario"
         android:visible="false">
-
-        <item
-            android:id="@+id/nav_Convivio"
-            android:title="Convivio" />
-        <item
-            android:id="@+id/nav_RegistroAM"
-            android:title="Registro Adultos Mayores" />
-        <item
-            android:id="@+id/nav_EditarAdultos"
-            android:title="Editar Adultos Mayores" />
-        <item
-            android:id="@+id/nav_Novedades"
-            android:title="Novedades" />
-        <item
-            android:id="@+id/nav_camera"
-            android:title="Informacion Adultos Mayores" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:title="Localizaciòn de lugares" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:title="trazado de ruta" />
         <item
             android:id="@+id/nav_Asignacion"
             android:title="Asignación Adultos Mayores" />
         <item
+            android:id="@+id/nav_Lugares"
+            android:title="Localización de Lugares" />
+        <item
+            android:id="@+id/nav_Ruta"
+            android:title="Trazado de Ruta" />
+        <item
+            android:id="@+id/nav_Info"
+            android:title="Informacion Adultos Mayores" />
+        <item
+            android:id="@+id/nav_Sugerencias"
+            android:title="Sugerencias" />
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/menuScouter"
+        android:visible="false"
+        >
+        <item
+            android:id="@+id/nav_Convivio"
+            android:title="Convivio"
+            />
+        <item
             android:id="@+id/nav_Inventario"
             android:title="Inventario" />
-
         <item
             android:id="@+id/nav_Scouters"
             android:title="Scouters" />
         <item
             android:id="@+id/nav_Estadisticas"
             android:title="Estadisticas" />
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/menuCoordinador"
+        android:visible="false">
         <item
             android:id="@+id/nav_Eventos"
-            android:title="Eventos de Actualización" />
+            android:title="Eventos" />
+        <item
+            android:id="@+id/nav_Administrar"
+            android:title="Administrar" />
 
+    </group>
+    <group
+        android:visible="true">
+        <item
+            android:id="@+id/nav_Salir"
+            android:title="Salir" />
     </group>
 </menu>
