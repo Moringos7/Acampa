@@ -168,7 +168,7 @@ public class Inicio extends AppCompatActivity{
         Registro.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent (Inicio.this, Signup.class);
+                Intent intent = new Intent (Inicio.this, Barra_desplegable.class);
                 startActivityForResult(intent, 0);
             }
         });

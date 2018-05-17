@@ -55,6 +55,7 @@ public class Barra_desplegable extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hView = navigationView.getHeaderView(0);
+
         TextView UsuarioBarra = (TextView) hView.findViewById(R.id.NombreUsuarioBarra);
         UsuarioBarra.setText(""+mUsuario.getNombre() +" "+mUsuario.getApellidoPaterno()+ " " + mUsuario.getApellidoMaterno());
         TextView CorreoBarra = (TextView) hView.findViewById(R.id.CorreoUsuarioBarra);
@@ -92,7 +93,9 @@ public class Barra_desplegable extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.BarraMiPerfil) {
+            return true;
+        }else if(id == R.id.BarraCerrarSesion){
             return true;
         }
         android.support.v4.app.FragmentManager fragmentManager=getSupportFragmentManager();

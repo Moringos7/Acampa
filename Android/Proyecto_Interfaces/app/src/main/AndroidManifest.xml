@@ -30,9 +30,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".InterfacesLogin.Signup"
-            android:label="Acampa"></activity>
-        <activity
             android:name=".Barra_desplegable"
             android:label="Acampa"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -60,7 +57,8 @@
                 android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version" />
         </activity>
-        <activity android:name=".FragmentosBarra.InventarioGeneral"></activity>
+        <activity android:name=".FragmentosBarra.InventarioGeneral" />
+        <activity android:name=".InterfacesLogin.SignUp"></activity>
     </application>
 
 </manifest>
