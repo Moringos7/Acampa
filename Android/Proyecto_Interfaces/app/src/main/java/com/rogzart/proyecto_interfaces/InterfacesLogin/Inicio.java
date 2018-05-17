@@ -84,17 +84,18 @@ public class Inicio extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ActualizacionBaseDatos.CreacionBaseDatos(getApplicationContext());
-        /*if(LogUser.obtenerInstancia().getUser().getNombre() == null){
+        if(LogUser.obtenerInstancia(getApplicationContext()).isLoggedIn()){
+            finish();
             Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
             startActivityForResult(intent, 0);
-        }*/
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.IdNombre);
         mPasswordView = (EditText) findViewById(R.id.password);
         conexion = new Conexion(getApplicationContext());
-        final LogUser ControlUser = LogUser.obtenerInstancia();
+        final LogUser ControlUser = LogUser.obtenerInstancia(getApplicationContext());
         //Boton LogIn
         final Button mEmailSignInButton = (Button) findViewById(R.id.btnInicio);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -130,13 +131,17 @@ public class Inicio extends AppCompatActivity{
                                             Toast.makeText(Inicio.this, "Contraseña Incorrecta", Toast.LENGTH_SHORT).show();
                                         }else{
                                             Usuario user = new Usuario();
+                                            user.setIdUsuario(jsonObject.optInt("IdUsuario"));
                                             user.setNombre(jsonObject.optString("Nombre"));
                                             user.setApellidoPaterno(jsonObject.optString("ApellidoPaterno"));
                                             user.setApellidoMaterno(jsonObject.optString("ApellidoMaterno"));
+                                            user.setFotografia(jsonObject.optString("Fotografia"));
                                             user.setFkSeccion(jsonObject.optInt("FkSeccion"));
-                                            ControlUser.setUser(user);
-                                            ControlUser.setFkScouter(jsonObject.optInt("FkScouter"));
-                                            ControlUser.setFkCoordinador(jsonObject.optInt("FkCoordinador"));
+                                            user.setCorreo(Correo);
+                                            Integer x =(jsonObject.optInt("Scouter"));
+                                            Integer y =(jsonObject.optInt("Coordinador"));
+                                            ControlUser.userLogin(user,x,y);
+                                            finish();
                                             Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
                                             startActivityForResult(intent, 0);
                                         }
@@ -163,7 +168,7 @@ public class Inicio extends AppCompatActivity{
         Registro.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent (view.getContext(), Signup.class);
+                Intent intent = new Intent (Inicio.this, Signup.class);
                 startActivityForResult(intent, 0);
             }
         });
@@ -172,8 +177,10 @@ public class Inicio extends AppCompatActivity{
         Recuperar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Toast.makeText(Inicio.this, ""+LogUser.obtenerInstancia(getApplicationContext()).isLoggedIn(), Toast.LENGTH_SHORT).show();
+                /*
                 Intent go = new Intent (view.getContext(), Conexion_Exitosa.class);
-                startActivityForResult(go, 0);
+                startActivityForResult(go, 0);*/
             }
         });
     }

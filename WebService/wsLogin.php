@@ -5,7 +5,6 @@ $json = file_get_contents('php://input');
 $data = json_decode($json); 
 $Password = $data->password;
 $Correo = $data->correo;
-
 if($Password != ""){
 	if($Correo != ""){
 		$conexion = mysqli_connect($hostname,$username,$password,$database);
@@ -35,7 +34,6 @@ if($Password != ""){
 }else{
 	Validacion(false,1,0);
 }
-
 function Validacion($ValidacionCorreo,$estadoPassword,$FkUsuario){
 	require("wsBDcredencial.php");
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
@@ -82,13 +80,7 @@ function Validacion($ValidacionCorreo,$estadoPassword,$FkUsuario){
 	}else{
 		$registro["ValidacionPassword"] = false;
 	}
-
-
-
-
-
 	$json['Password'][] = $registro;
 	echo json_encode($json);
 }
-
 ?>

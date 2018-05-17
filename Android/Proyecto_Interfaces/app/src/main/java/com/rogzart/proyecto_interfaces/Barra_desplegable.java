@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rogzart.proyecto_interfaces.FragmentosBarra.AdultosMayoresAE;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Editar_AdultosM;
@@ -25,6 +27,9 @@ import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento07;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento08;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento09;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento10;
+import com.rogzart.proyecto_interfaces.InterfacesLogin.Inicio;
+import com.rogzart.proyecto_interfaces.Modelo.Usuario;
+import com.rogzart.proyecto_interfaces.Singleton.LogUser;
 
 
 public class Barra_desplegable extends AppCompatActivity
@@ -33,26 +38,23 @@ public class Barra_desplegable extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LogUser ControlUser = LogUser.obtenerInstancia(getApplicationContext());
+        Usuario mUsuario = ControlUser.getUser();
+
         setContentView(R.layout.activity_barra_desplegable);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Correo enviado", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
+        ///Este código genera la Hamburguesa///
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.getMenu().setGroupVisible(R.id.menu1, false);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -75,9 +77,7 @@ public class Barra_desplegable extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
