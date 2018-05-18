@@ -59,6 +59,8 @@
         </activity>
         <activity android:name=".FragmentosBarra.InventarioGeneral" />
         <activity android:name=".InterfacesLogin.SignUp"></activity>
-    </application>
+	<activity android:name=".InterfacesLogin.RecuperacionPassword">   
+	</activity>     
+</application>
 
 </manifest>

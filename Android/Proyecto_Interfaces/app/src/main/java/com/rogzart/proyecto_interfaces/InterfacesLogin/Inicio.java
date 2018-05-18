@@ -55,6 +55,7 @@ import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.LogUser;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
 import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
+import com.rogzart.proyecto_interfaces.sqlite.BaseDatosAcampa;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import org.json.JSONArray;
@@ -80,10 +81,10 @@ public class Inicio extends AppCompatActivity{
     private Conexion conexion;
     private String Correo;
     private String Pass;
-
+    public Conexion CONECT;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ActualizacionBaseDatos.CreacionBaseDatos(getApplicationContext());
+        CONECT = new Conexion(getApplicationContext());
         if(LogUser.obtenerInstancia(getApplicationContext()).isLoggedIn()){
             finish();
             Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
@@ -177,10 +178,9 @@ public class Inicio extends AppCompatActivity{
         Recuperar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(Inicio.this, ""+LogUser.obtenerInstancia(getApplicationContext()).isLoggedIn(), Toast.LENGTH_SHORT).show();
-                /*
-                Intent go = new Intent (view.getContext(), Conexion_Exitosa.class);
-                startActivityForResult(go, 0);*/
+                //operador.LeerTablaVoluntarioFrecuente(getApplicationContext());
+                Intent go = new Intent (view.getContext(), RecuperacionPassword.class);
+                startActivityForResult(go, 0);
             }
         });
     }

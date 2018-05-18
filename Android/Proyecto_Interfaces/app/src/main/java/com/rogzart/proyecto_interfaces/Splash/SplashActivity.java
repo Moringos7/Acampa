@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.rogzart.proyecto_interfaces.InterfacesLogin.Inicio;
 import com.rogzart.proyecto_interfaces.R;
+import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
+import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import org.w3c.dom.Text;
 
@@ -30,7 +32,10 @@ public class SplashActivity extends Activity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_splash);
-
+        /**Creacion Estructura BD*/
+        /*******************************************************************/
+        OperacionesBaseDatos.obtenerInstancia(getApplicationContext());
+        /*******************************************************************/
         ivSplash = (TextView) findViewById(R.id.TS);
         IS = (ImageView) findViewById(R.id.ivSplash);
         Animation myanim = AnimationUtils.loadAnimation(this, R.anim.splash_transicion);

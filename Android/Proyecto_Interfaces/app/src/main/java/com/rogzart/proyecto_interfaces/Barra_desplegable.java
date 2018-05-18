@@ -29,18 +29,24 @@ import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento08;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento09;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento10;
 import com.rogzart.proyecto_interfaces.InterfacesLogin.Inicio;
+import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.Singleton.LogUser;
+import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
+import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 
 public class Barra_desplegable extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private Conexion CONECT;
+    private ActualizacionBaseDatos Act;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LogUser ControlUser = LogUser.obtenerInstancia(getApplicationContext());
         Usuario mUsuario = ControlUser.getUser();
+        CONECT = new Conexion(getApplicationContext());
+
         setContentView(R.layout.activity_barra_desplegable);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -119,7 +125,11 @@ public class Barra_desplegable extends AppCompatActivity
         }else if(id == R.id.nav_Info){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento01()).commit();
         }else if(id == R.id.nav_Sugerencias){
-
+            if(CONECT.isConnected()) {
+                Act = new ActualizacionBaseDatos(getApplicationContext());
+                Act.VolcarBasedeDatos();
+                Act.ActualizarBasedeDatos(getApplicationContext());
+            }
         }else if(id == R.id.nav_Convivio){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento06()).commit();
         }else if(id == R.id.nav_Inventario){
@@ -131,8 +141,12 @@ public class Barra_desplegable extends AppCompatActivity
         }else if(id == R.id.nav_Eventos){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento09()).commit();
         }else if(id == R.id.nav_Administrar){
-
+            //Toast.makeText(this, "Hola", Toast.LENGTH_SHORT).show();
+            OperacionesBaseDatos operador = OperacionesBaseDatos.obtenerInstancia(getApplicationContext());
+            operador.LeerTablaVoluntarioFrecuente(getApplicationContext());
+            operador.LeerTablaUsuario(getApplicationContext());
         }else if(id == R.id.nav_Salir) {
+            finish();
             LogUser.obtenerInstancia(getApplicationContext()).logout();
         }
 

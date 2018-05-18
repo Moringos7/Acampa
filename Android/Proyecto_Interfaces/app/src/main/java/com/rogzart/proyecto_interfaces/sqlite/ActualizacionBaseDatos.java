@@ -142,6 +142,7 @@ public class ActualizacionBaseDatos {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.toString();
                 ErrorActualizacion = true;
             }
         });
@@ -688,6 +689,7 @@ public class ActualizacionBaseDatos {
                         mVoluntarioFrecuente.setFkUsuario(jsonObject.optInt("FkUsuario"));
                         mVoluntarioFrecuente.setFkAdultoMayor(jsonObject.optInt("FkAdultoMayor"));
                         Insert.InsertarVoluntarioFrecuente(mVoluntarioFrecuente);
+
                     }
                 } catch (JSONException e) {
                     Toast.makeText(context, "Fallo Sincroniacion: " +e.getMessage(), Toast.LENGTH_LONG).show();

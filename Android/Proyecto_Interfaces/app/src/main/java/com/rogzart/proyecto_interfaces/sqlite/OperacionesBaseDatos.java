@@ -229,7 +229,7 @@ public final class OperacionesBaseDatos {
         valores.put(usuario.FkSeccion,x.getFkSeccion());
         query.insert("usuario",null,valores);
     }
-    public void LeerTablaUsuario(){
+    public void LeerTablaUsuario(Context contexto){
         //List<Seccion> list;
         Usuario x = new Usuario();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
@@ -246,6 +246,7 @@ public final class OperacionesBaseDatos {
                 x.setScout(c.getInt(8));
                 x.setFkSeccion(c.getInt(9));
                 //list.add(x);
+                Toast.makeText(contexto, ""+x.getNombre(), Toast.LENGTH_SHORT).show();
             } while (c.moveToNext());
         }
         //return list;
@@ -537,7 +538,7 @@ public final class OperacionesBaseDatos {
         valores.put(voluntariofrecuente.FkAdultoMayor,x.getFkAdultoMayor());
         query.insert("voluntariofrecuente",null,valores);
     }
-    public void LeerTablaVoluntarioFrecuente(){
+    public void LeerTablaVoluntarioFrecuente(Context context){
         //List<AdultoMayor> list = new Array List<AdultoMayor>();
         VoluntarioFrecuente x = new VoluntarioFrecuente();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
@@ -547,6 +548,7 @@ public final class OperacionesBaseDatos {
                 x.setIdVoluntarioFrecuente(c.getInt(1));
                 x.setFkUsuario(c.getInt(2));
                 x.setFkAdultoMayor(c.getInt(3));
+                Toast.makeText(context, "(1)-"+x.getIdVoluntarioFrecuente()+"(2)-"+x.getFkUsuario()+"(3)-"+x.getFkAdultoMayor(), Toast.LENGTH_SHORT).show();
                 //list.add(x);
             } while (c.moveToNext());
         }

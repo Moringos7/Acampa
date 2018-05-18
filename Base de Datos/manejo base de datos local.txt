@@ -1,0 +1,10 @@
+¿Como declarar operador para ser usado en Base de Datos?
+
+OperacionesBaseDatos operador = OperacionesBaseDatos.obtenerInstancia(getApplicationContext());
+¿Como Actualizar Bd?
+if(CONECT.isConnected()) {
+                Act = new ActualizacionBaseDatos(getApplicationContext());
+                Act.VolcarBasedeDatos();
+                Act.ActualizarBasedeDatos(getApplicationContext());
+            }
+
