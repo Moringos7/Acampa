@@ -149,7 +149,7 @@ public class Barra_desplegable extends AppCompatActivity
         }else if(id == R.id.nav_Eventos){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento09()).commit();
         }else if(id == R.id.nav_Administrar) {
-            //getFragmentManager().beginTransaction().replace(R.id.contenedor,new MenuAdministrar()).commit();
+            getFragmentManager().beginTransaction().replace(R.id.contenedor,new MenuAdministrar()).commit();
         }
 
         //getFragmentManager().beginTransaction().replace(R.id.contenedor,new Editar_AdultosM()).commit();
