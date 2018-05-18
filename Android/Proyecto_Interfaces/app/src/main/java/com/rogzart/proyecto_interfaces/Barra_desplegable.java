@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.MenuAdministrar;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.AdultosMayoresAE;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Editar_AdultosM;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento01;
@@ -34,6 +35,8 @@ import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.Singleton.LogUser;
 import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
+
+import static android.os.Build.VERSION_CODES.M;
 
 
 public class Barra_desplegable extends AppCompatActivity
@@ -100,9 +103,18 @@ public class Barra_desplegable extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.BarraMiPerfil) {
-            return true;
-        }else if(id == R.id.BarraCerrarSesion){
-            return true;
+            
+        }else if(id == R.id.BarraActualizar){
+            if(CONECT.isConnected()) {
+                Act = new ActualizacionBaseDatos(getApplicationContext());
+                Act.VolcarBasedeDatos();
+                Act.ActualizarBasedeDatos(getApplicationContext());
+            }else{
+                Toast.makeText(this, "Error: Actualización, Verifique su conexión", Toast.LENGTH_SHORT).show();
+            }
+        } else if(id == R.id.BarraCerrarSesion){
+            finish();
+            LogUser.obtenerInstancia(getApplicationContext()).logout();
         }
         android.support.v4.app.FragmentManager fragmentManager=getSupportFragmentManager();
         getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento01()).commit();
@@ -125,11 +137,7 @@ public class Barra_desplegable extends AppCompatActivity
         }else if(id == R.id.nav_Info){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento01()).commit();
         }else if(id == R.id.nav_Sugerencias){
-            if(CONECT.isConnected()) {
-                Act = new ActualizacionBaseDatos(getApplicationContext());
-                Act.VolcarBasedeDatos();
-                Act.ActualizarBasedeDatos(getApplicationContext());
-            }
+            
         }else if(id == R.id.nav_Convivio){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento06()).commit();
         }else if(id == R.id.nav_Inventario){
@@ -140,17 +148,11 @@ public class Barra_desplegable extends AppCompatActivity
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento08()).commit();
         }else if(id == R.id.nav_Eventos){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento09()).commit();
-        }else if(id == R.id.nav_Administrar){
-            //Toast.makeText(this, "Hola", Toast.LENGTH_SHORT).show();
-            OperacionesBaseDatos operador = OperacionesBaseDatos.obtenerInstancia(getApplicationContext());
-            operador.LeerTablaVoluntarioFrecuente(getApplicationContext());
-            operador.LeerTablaUsuario(getApplicationContext());
-        }else if(id == R.id.nav_Salir) {
-            finish();
-            LogUser.obtenerInstancia(getApplicationContext()).logout();
+        }else if(id == R.id.nav_Administrar) {
+            getFragmentManager().beginTransaction().replace(R.id.contenedor,new MenuAdministrar()).commit();
         }
 
-            //getFragmentManager().beginTransaction().replace(R.id.contenedor,new Editar_AdultosM()).commit();
+        //getFragmentManager().beginTransaction().replace(R.id.contenedor,new Editar_AdultosM()).commit();
         //getFragmentManager().beginTransaction().replace(R.id.contenedor,new AdultosMayoresAE()).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

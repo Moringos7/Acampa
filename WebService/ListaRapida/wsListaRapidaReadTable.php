@@ -1,8 +1,8 @@
 <?php 
 
 /*
-*------------*--------*--------*--------*-----------*------*
-|IdInventario|Producto|Cantidad|Faltante|Descripcion|Imagen|
+*------------*--------*--------*--------*---------*----------*------*
+|IdInventario|Producto|Cantidad|Faltante|Requerido|Descripcion|Imagen|
 */
 require("../wsBDcredencial.php");
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
@@ -29,12 +29,15 @@ require("../wsBDcredencial.php");
 
 		if($registro['Producto'] == "Splenda"){
 			$Faltante = $nAdultoMayorDiabetico - $registro['Existencia'];
+			$Requerido = $nAdultoMayorDiabetico;
 		}else if($registro['Cantidad'] == 2){
 			//echo "2";
 			$Faltante = ($nAdultoMayor * 2) - $registro['Existencia'];
+			$Requerido = $nAdultoMayor * 2;
 		}else {
 			//echo "1 o menos"
 			$Faltante = ($nAdultoMayor * 1) - $registro['Existencia'];
+			$Requerido = $nAdultoMayor;
 		}
 		if($Faltante < 0){
 			$Faltante = 0;
@@ -44,6 +47,7 @@ require("../wsBDcredencial.php");
 		$Lista['Producto'] = $registro['Producto'];
 		$Lista['Cantidad'] = $registro['Cantidad'];
 		$Lista['Faltante'] = $Faltante;
+		$Lista['Requerido'] = $Requerido;
 		$Lista['Descripcion'] = $registro['Descripcion'];
 		$Lista['Imagen'] = $registro['Imagen'];
 
