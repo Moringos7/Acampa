@@ -13,12 +13,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.rogzart.proyecto_interfaces.R;
+import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Inventario extends Fragment {
     ArrayList<String> listainventario;
+    OperacionesBaseDatos operador;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -26,41 +29,13 @@ public class Inventario extends Fragment {
         return inflater.inflate(R.layout.f_inventario, container, false);
     }
     public void onActivityCreated(Bundle state) {
-        ListView ListaInventario;
-        ArrayAdapter<String> adaptador;
+        ListView ListaInventario = (ListView) getView().findViewById(R.id.ListaG);
+        operador = OperacionesBaseDatos.obtenerInstancia(getContext());
+        List<com.rogzart.proyecto_interfaces.Modelo.Inventario> list =  operador.LeerTablaInventario();
+        ArrayAdapter<String> adaptador; //Bugle
+        //Bundle c;
         super.onActivityCreated(state);
-        ListaInventario=(ListView) getView().findViewById(R.id.ListaG);
-        /*FloatingActionButton FnuevoP = (FloatingActionButton)getView().findViewById(R.id.fab);
-        FnuevoP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Correo enviado", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 
-       // base=new ConexionSQLiteHelper(getApplicationContext(),"bd_Acampa",null,1);
-        consultarListaInventario();
-
-     //   ArrayAdapter arrayAdapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1,listainventario);
-      //  ListaInventario.setAdapter(adaptador);
-
-
-}
-
-    private void consultarListaInventario() {
-       // listainventario= new ArrayList<String>();
-       /* SQLiteDatabase db=base.getReadableDatabase();
-       Inventario inventario=null;
-
-
-
-        Cursor cursor=db.rawquery("SELECT * FROM "+inventario.Tabla_Inventario,null);
-
-
-        */
-      // while (cursor.moveToNext()){
-
-       }
     }
+ }
 

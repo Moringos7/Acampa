@@ -194,8 +194,8 @@ public final class OperacionesBaseDatos {
         valores.put(inventario.Extra,x.getExtra());
         query.insert("inventario",null,valores);
     }
-    public void LeerTablaInventario(){
-        //List<Seccion> list;
+    public List<Inventario> LeerTablaInventario(){
+        List<Inventario> list = new ArrayList<Inventario>();
         Inventario x = new Inventario();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
         Cursor c = query.rawQuery("SELECT * FROM inventario",null);
@@ -209,10 +209,10 @@ public final class OperacionesBaseDatos {
                 x.setImagen(c.getString(6));
                 x.setComentario(c.getString(7));
                 x.setExtra(c.getInt(8));
-                //list.add(x);
+                list.add(x);
             } while (c.moveToNext());
         }
-        //return list;
+        return list;
     }
     /**Usuario**/
     public void InsertarUsuario(Usuario x){

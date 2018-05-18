@@ -125,6 +125,7 @@ public class Inicio extends AppCompatActivity{
                                 JSONArray json = response.optJSONArray("Password");
                                 try {
                                     JSONObject jsonObject = json.getJSONObject(0);
+                                    json.length();
                                     if(!(jsonObject.optBoolean("ValidacionCorreo"))){
                                         Toast.makeText(Inicio.this, "Correo No registrado", Toast.LENGTH_SHORT).show();
                                     }else{

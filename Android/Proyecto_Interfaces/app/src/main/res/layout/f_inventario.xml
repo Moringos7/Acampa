@@ -28,8 +28,6 @@
             android:id="@+id/ListaR"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-
         </ListView>
 
         <Button
