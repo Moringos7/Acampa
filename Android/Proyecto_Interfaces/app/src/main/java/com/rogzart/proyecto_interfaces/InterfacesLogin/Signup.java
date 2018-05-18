@@ -32,7 +32,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_signup);
         etFecha = (EditText) findViewById(R.id.et_mostrar_fecha_picker);
         //Widget ImageButton del cual usaremos el evento clic para obtener la fecha
         ibObtenerFecha = (ImageButton) findViewById(R.id.ib_obtener_fecha);
