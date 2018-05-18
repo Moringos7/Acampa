@@ -16,109 +16,115 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:id="@+id/email_login_form"
+        <ScrollView
+            android:id="@+id/login_form"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView9"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/email_login_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal|center"
-                android:text="Servicio Atemajac"
-                android:textSize="30sp" />
+                android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:src="@drawable/logo"
-                android:visibility="visible"
-                app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <AutoCompleteTextView
-                    android:id="@+id/IdNombre"
+                <TextView
+                    android:id="@+id/textView9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:visibility="visible" />
+                    android:gravity="center_horizontal|center"
+                    android:text="Servicio Atemajac"
+                    android:textSize="30sp" />
 
-            </android.support.design.widget.TextInputLayout>
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:src="@drawable/logo"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/password"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
-                    android:imeActionId="6"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    app:hintTextAppearance="@style/AppTheme.FloatingLabel">
 
-            </android.support.design.widget.TextInputLayout>
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:visibility="gone">
-            </ProgressBar>
-            <Button
-                android:id="@+id/btnInicio"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@android:color/holo_blue_light"
-                android:text="Iniciar Sesion"
-                android:textStyle="bold"
-                android:textSize="16dp"/>
+                    <AutoCompleteTextView
+                        android:id="@+id/IdNombre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_email"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:visibility="visible"
+                        android:theme="@style/EditText"/>
 
-            <Button
-                android:id="@+id/btnLR"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@android:color/holo_blue_light"
-                android:text="Registrarse"
-                android:textStyle="bold"
-                android:textSize="16dp"/>
+                </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:id="@+id/btnRecuperar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20px"
-                android:text="¿Olvidaste tu contraseña?"
-                android:textColor="#0D47A1"
-                android:background = "@drawable/borderbutton"
-                android:textSize="18dp" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintTextAppearance="@style/AppTheme.FloatingLabel">
 
-        </LinearLayout>
-    </ScrollView>
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Password"
+                        android:imeActionId="6"
+                        android:imeActionLabel="@string/action_sign_in_short"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:theme="@style/EditText"/>
+
+                </android.support.design.widget.TextInputLayout>
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone">
+                </ProgressBar>
+                <Button
+                    android:id="@+id/btnInicio"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:textColor="#fff"
+                    android:text="Iniciar Sesion"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:theme="@style/RaisedButton"/>
+
+                <Button
+                    android:id="@+id/btnLR"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Registrarse"
+                    android:textColor="#fff"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:theme="@style/RaisedButton"/>
+
+                <Button
+                    android:id="@+id/btnRecuperar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20px"
+                    android:text="¿Olvidaste tu contraseña?"
+                    android:textColor="#0D47A1"
+                    android:background = "@drawable/borderbutton"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+        </ScrollView>
 
 
-</LinearLayout>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

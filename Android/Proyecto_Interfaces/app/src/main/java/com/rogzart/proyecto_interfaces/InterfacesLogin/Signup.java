@@ -1,5 +1,9 @@
 package com.rogzart.proyecto_interfaces.InterfacesLogin;
 
+import android.content.Intent;
+import android.media.Image;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -14,6 +18,7 @@ import com.rogzart.proyecto_interfaces.R;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
+
     private static final String CERO = "0";
     private static final String BARRA = "/";
 
@@ -27,17 +32,20 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
     //Widgets
     EditText etFecha;
-    ImageButton ibObtenerFecha;
+    ImageButton ibObtenerFecha, ImagenUsuario;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.signup);
         etFecha = (EditText) findViewById(R.id.et_mostrar_fecha_picker);
         //Widget ImageButton del cual usaremos el evento clic para obtener la fecha
         ibObtenerFecha = (ImageButton) findViewById(R.id.ib_obtener_fecha);
         //Evento setOnClickListener - clic
         ibObtenerFecha.setOnClickListener(this);
+        ImagenUsuario=findViewById(R.id.RegistroImagenUsuario);
+
     }
 
     @Override
@@ -46,7 +54,25 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             case R.id.ib_obtener_fecha:
                 obtenerFecha();
                 break;
+            case R.id.RegistroImagenUsuario:
+                cargarimagen();
 
+        }
+
+    }
+
+    private void cargarimagen() {
+        Intent intent= new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("Image/");
+        startActivityForResult(intent.createChooser(intent,"Seleccione la aplicación"),10);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            Uri path= data.getData();
+            ImagenUsuario.setImageURI(path);
         }
     }
 
