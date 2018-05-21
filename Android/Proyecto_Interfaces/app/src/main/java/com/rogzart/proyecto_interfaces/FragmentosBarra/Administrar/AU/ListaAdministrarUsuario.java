@@ -65,6 +65,7 @@ public class ListaAdministrarUsuario extends Fragment {
                     //Toast.makeText(getContext(), user.getNombre() + " " + user.getApellidoPaterno(), Toast.LENGTH_SHORT).show();
                     Bundle packet = new Bundle();
                     packet.putSerializable("Objeto",user);
+
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.replace(R.id.contenedor, AdministrarUsuario.newInstance(packet));
                     ft.addToBackStack(null);

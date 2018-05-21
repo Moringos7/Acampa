@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:name=".Barra_desplegable"
-            android:label="Acampa"
+            android:label="@string/labelBarra"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ActivitysConexion.Conexion_Exitosa" />
         <activity android:name=".ActivitysConexion.ErrorPeticion" />

@@ -10,6 +10,8 @@ import com.rogzart.proyecto_interfaces.R;
 
 
 public class Fragmento06 extends Fragment {
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

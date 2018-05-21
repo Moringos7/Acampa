@@ -22,6 +22,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="labelBarra">Acampao</string>
     <string name="id_edittext5">\@+id/editText5</string>
     <string name="id_edittext6">\@+id/editText6</string>
     <string name="title_activity_inicio">Sign in</string>
