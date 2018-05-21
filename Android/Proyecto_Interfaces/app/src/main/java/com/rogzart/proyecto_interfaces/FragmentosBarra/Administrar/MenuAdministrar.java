@@ -1,19 +1,27 @@
 package com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.AU.ListaAdministrarUsuario;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento04;
+import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.R;
 
 
 
 public class MenuAdministrar extends Fragment {
 
-    public static MenuAdministrar newInstance(String param1, String param2) {
+    public  MenuAdministrar(){
+
+    }
+    public static MenuAdministrar newInstance() {
         MenuAdministrar fragment = new MenuAdministrar();
 
         return fragment;
@@ -29,10 +37,20 @@ public class MenuAdministrar extends Fragment {
 
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
+        final Conexion conexion = new Conexion(getContext());
         Button Usuarios = (Button) getView().findViewById(R.id.btnUsuarios);
+
         Usuarios.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                if (conexion.isConnected()){
+                    ft.replace(R.id.contenedor, ListaAdministrarUsuario.newInstance());
+                    ft.addToBackStack(null);
+                    ft.commit();
+                }else{
+                    Toast.makeText(getContext(), "Verifique su conexion", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -40,14 +58,28 @@ public class MenuAdministrar extends Fragment {
         AdultosMayores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                if (conexion.isConnected()){
+                    ft.replace(R.id.contenedor, ListaAdministrarUsuario.newInstance());
+                    ft.addToBackStack(null);
+                    ft.commit();
+                }else{
+                    Toast.makeText(getContext(), "Verifique su conexion", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         Button Coordinadores = (Button)getView().findViewById(R.id.btnCoordiadores);
         Coordinadores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                if (conexion.isConnected()){
+                    ft.replace(R.id.contenedor, ListaAdministrarUsuario.newInstance());
+                    ft.addToBackStack(null);
+                    ft.commit();
+                }else{
+                    Toast.makeText(getContext(), "Verifique su conexion", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

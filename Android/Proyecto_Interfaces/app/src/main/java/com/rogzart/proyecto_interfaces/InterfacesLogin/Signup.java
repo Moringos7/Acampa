@@ -16,7 +16,7 @@ import java.util.Calendar;
 
 import com.rogzart.proyecto_interfaces.R;
 
-public class SignUp extends AppCompatActivity implements View.OnClickListener {
+public class signup extends AppCompatActivity implements View.OnClickListener {
 
 
     private static final String CERO = "0";
@@ -39,9 +39,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
-        etFecha = (EditText) findViewById(R.id.et_mostrar_fecha_picker);
+        etFecha = findViewById(R.id.et_mostrar_fecha_picker);
         //Widget ImageButton del cual usaremos el evento clic para obtener la fecha
-        ibObtenerFecha = (ImageButton) findViewById(R.id.ib_obtener_fecha);
+        ibObtenerFecha = findViewById(R.id.ib_obtener_fecha);
         //Evento setOnClickListener - clic
         ibObtenerFecha.setOnClickListener(this);
         ImagenUsuario=findViewById(R.id.RegistroImagenUsuario);
@@ -64,7 +64,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     private void cargarimagen() {
         Intent intent= new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("Image/");
-        startActivityForResult(intent.createChooser(intent,"Seleccione la aplicación"),10);
+        startActivityForResult(Intent.createChooser(intent,"Seleccione la aplicación"),10);
     }
 
     @Override

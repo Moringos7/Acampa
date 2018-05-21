@@ -4,10 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import com.rogzart.proyecto_interfaces.InterfacesLogin.Inicio;
 import com.rogzart.proyecto_interfaces.Modelo.Asignacion;
 import com.rogzart.proyecto_interfaces.Modelo.ComentarioAM;
 import com.rogzart.proyecto_interfaces.Modelo.Dependencia;
@@ -46,10 +44,7 @@ import com.rogzart.proyecto_interfaces.sqlite.EstructuraBaseDatos.asignacion;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public final class OperacionesBaseDatos {
     private static BaseDatosAcampa baseDatos;
@@ -111,6 +106,19 @@ public final class OperacionesBaseDatos {
             } while (c.moveToNext());
         }
         //return list;
+    }
+    public Seccion ObtenerSeccion(int IdSeccion){
+        Seccion seccion = new Seccion();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM seccion WHERE IdSeccion = "+IdSeccion,null);
+        if(c.moveToFirst()) {
+            seccion.setIdSeccion(c.getInt(1));
+            seccion.setNombre(c.getString(2));
+        }else{
+            seccion.setIdSeccion(6);
+            seccion.setNombre("Civil");
+        }
+        return seccion;
     }
     /**Ubicacion**/
     public void InsertarUbcacion(Ubicacion x){
@@ -229,13 +237,14 @@ public final class OperacionesBaseDatos {
         valores.put(usuario.FkSeccion,x.getFkSeccion());
         query.insert("usuario",null,valores);
     }
-    public void LeerTablaUsuario(){
-        //List<Seccion> list;
-        Usuario x = new Usuario();
+    public ArrayList<Usuario> LeerTablaUsuario(Context co){
+        ArrayList<Usuario> list = new ArrayList<Usuario>();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Usuario x;
         Cursor c = query.rawQuery("SELECT * FROM usuario",null);
         if(c.moveToFirst()) {
             do {
+                x = new Usuario();
                 x.setIdUsuario(c.getInt(1));
                 x.setNombre(c.getString(2));
                 x.setApellidoPaterno(c.getString(3));
@@ -245,11 +254,10 @@ public final class OperacionesBaseDatos {
                 x.setFechaNacimiento(c.getString(7));
                 x.setScout(c.getInt(8));
                 x.setFkSeccion(c.getInt(9));
-                //list.add(x);
-                //Toast.makeText(contexto, ""+x.getNombre(), Toast.LENGTH_SHORT).show();
+                list.add(x);
             } while (c.moveToNext());
         }
-        //return list;
+        return list;
     }
     /**Evento*/
     public void InsertarEvento(Evento x){

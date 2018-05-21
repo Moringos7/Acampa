@@ -1,9 +1,7 @@
 package com.rogzart.proyecto_interfaces;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.constraint.solver.widgets.WidgetContainer;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,8 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.MenuAdministrar;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.AdultosMayoresAE;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Editar_AdultosM;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento01;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento02;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.TrazadoRuta.Fragmento03;
@@ -28,15 +24,10 @@ import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento06;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento07;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento08;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento09;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento10;
-import com.rogzart.proyecto_interfaces.InterfacesLogin.Inicio;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.Singleton.LogUser;
 import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
-import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
-
-import static android.os.Build.VERSION_CODES.M;
 
 
 public class Barra_desplegable extends AppCompatActivity
@@ -100,8 +91,6 @@ public class Barra_desplegable extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.BarraMiPerfil) {
             
         }else if(id == R.id.BarraActualizar){
@@ -116,22 +105,22 @@ public class Barra_desplegable extends AppCompatActivity
             finish();
             LogUser.obtenerInstancia(getApplicationContext()).logout();
         }
-        android.support.v4.app.FragmentManager fragmentManager=getSupportFragmentManager();
-        getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento01()).commit();
         return super.onOptionsItemSelected(item);
-
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-       android.support.v4.app.FragmentManager fragmentManager=getSupportFragmentManager();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
         int id = item.getItemId();
         if(id == R.id.nav_Asignacion){
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento04()).commit();
+            ft.replace(R.id.contenedor, Fragmento04.newInstance());
+            ft.addToBackStack(null);
+            ft.commit();
         }else if(id == R.id.nav_Lugares){
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento02()).commit();
+            ft.replace(R.id.contenedor, Fragmento02.newInstance());
+            ft.addToBackStack(null);
+            ft.commit();
         }else if(id == R.id.nav_Ruta){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento03()).commit();
         }else if(id == R.id.nav_Info){
@@ -147,13 +136,12 @@ public class Barra_desplegable extends AppCompatActivity
         }else if(id == R.id.nav_Estadisticas){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento08()).commit();
         }else if(id == R.id.nav_Eventos){
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento09()).commit();
+            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento09()).addToBackStack(null).commit();
         }else if(id == R.id.nav_Administrar) {
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new MenuAdministrar()).commit();
+            ft.replace(R.id.contenedor, MenuAdministrar.newInstance());
+            ft.addToBackStack(null);
+            ft.commit();
         }
-
-        //getFragmentManager().beginTransaction().replace(R.id.contenedor,new Editar_AdultosM()).commit();
-        //getFragmentManager().beginTransaction().replace(R.id.contenedor,new AdultosMayoresAE()).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

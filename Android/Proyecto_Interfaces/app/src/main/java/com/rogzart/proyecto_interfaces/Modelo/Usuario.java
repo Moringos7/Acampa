@@ -1,6 +1,8 @@
 package com.rogzart.proyecto_interfaces.Modelo;
 
-public class Usuario {
+import java.io.Serializable;
+
+public class Usuario implements Serializable {
     private int IdUsuario;
     private String Nombre;
     private String ApellidoPaterno;

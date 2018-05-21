@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:layout_gravity="center"
-        android:paddingTop="100dp">
+        android:paddingTop="120dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -17,7 +17,8 @@
             android:text="Menu Administrar"
             android:gravity="center"
             android:textSize="35sp"
-            android:textColor="#000"/>
+            android:textColor="#000"
+            android:textStyle="bold"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,22 +27,30 @@
         android:orientation="vertical">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:text="Usuarios"
-            android:id="@+id/btnUsuarios"/>
+            android:id="@+id/btnUsuarios"
+            android:layout_marginBottom="10dp"
+            android:theme="@style/RaisedButton"
+            android:textColor="#fff"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:text="Adultos Mayores"
-            android:id="@+id/btnAdultosMayores"/>
+            android:id="@+id/btnAdultosMayores"
+            android:layout_marginBottom="10dp"
+            android:theme="@style/RaisedButton"
+            android:textColor="#fff"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:text="Coordinadores"
-            android:id="@+id/btnCoordiadores"/>
+            android:id="@+id/btnCoordiadores"
+            android:theme="@style/RaisedButton"
+            android:textColor="#fff"/>
 
     </LinearLayout>
 

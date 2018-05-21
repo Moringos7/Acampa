@@ -35,7 +35,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ActualizacionBaseDatos {
-    private static BaseDatosAcampa baseDatos;
     private static ActualizacionBaseDatos instancia = new ActualizacionBaseDatos();
     private static Context GeneralContext;
     private JsonObjectRequest jsonObjectRequest;
@@ -44,15 +43,7 @@ public class ActualizacionBaseDatos {
 
     }
     public ActualizacionBaseDatos(Context contexto) {
-    }
-
-    public static ActualizacionBaseDatos CreacionBaseDatos(Context contexto) {
-        if (baseDatos == null) {
-            baseDatos = new BaseDatosAcampa(contexto);
-            GeneralContext = contexto;
-        }
-
-        return instancia;
+        GeneralContext = contexto;
     }
     public void ActualizarBasedeDatos(Context context){
         ErrorActualizacion = false;
@@ -95,6 +86,7 @@ public class ActualizacionBaseDatos {
         else{
             Toast.makeText(context, "Actualización Completada", Toast.LENGTH_LONG).show();
         }
+        Toast.makeText(context, ""+ErrorActualizacion, Toast.LENGTH_SHORT).show();
     }
 
     public void VolcarBasedeDatos() {

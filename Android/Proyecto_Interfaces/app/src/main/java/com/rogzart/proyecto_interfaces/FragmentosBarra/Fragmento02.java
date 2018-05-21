@@ -10,6 +10,13 @@ import com.rogzart.proyecto_interfaces.R;
 
 
 public class Fragmento02 extends Fragment {
+    public Fragmento02() {
+        // Required empty public constructor
+    }
+    public static Fragmento02 newInstance() {
+        Fragmento02 fragment = new Fragmento02();
+        return fragment;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

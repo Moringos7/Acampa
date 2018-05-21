@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".FragmentosBarra.Administrar.AU.AdministrarUsuario">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="top|center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imagen"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/user" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/administrar_seccion_usuario"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:text="Seccion"
+                android:textColor="#000"
+                android:layout_marginTop="20dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Scout"
+                    android:textSize="20dp"
+                    android:textColor="#000"
+                    android:layout_marginLeft="30dp"/>
+                <CheckBox
+                    android:id="@+id/administar_checkscout_usuario"
+                    style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:checked="false"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextAppearance="@style/AppTheme.FloatingLabel">
+
+                <EditText
+                    android:id="@+id/administar_nombre_usuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:color="#000"
+                    android:hint="Nombre"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Apellidos"
+                    android:textColor="#A8A8A8"
+                    android:textSize="15dp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    app:hintTextAppearance="@style/AppTheme.FloatingLabel">
+
+                    <EditText
+                        android:id="@+id/administar_apellidoP_usuario"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:color="#000"
+                        android:hint="Paterno"
+                        android:textSize="15dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    app:hintTextAppearance="@style/AppTheme.FloatingLabel">
+
+                    <EditText
+                        android:id="@+id/administar_apellidoM_usuario"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:color="#000"
+                        android:hint="Materno"
+                        android:textSize="15dp" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextAppearance="@style/AppTheme.FloatingLabel">
+
+                <EditText
+                    android:id="@+id/administar_correo_usuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:color="#000"
+                    android:hint="Correo"
+                    android:textSize="15dp" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
