@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,16 +29,21 @@ import java.util.ArrayList;
 
 import static com.rogzart.proyecto_interfaces.R.layout.list_usuario_administrar;
 
-public class ListaAdaptadorUsuario extends BaseAdapter {
+public class ListaAdaptadorUsuario extends BaseAdapter implements Filterable{
 
     private ArrayList<Usuario> datos;
     private Context contexto;
     private OperacionesBaseDatos operador;
+    private CustomFilter filter;
+    private ArrayList<Usuario> filterList;
     public ListaAdaptadorUsuario(ArrayList<Usuario> datos, Context contexto)
     {
         this.datos = datos;
         this.contexto = contexto;
+        this.filterList = datos;
     }
+
+
     @Override
     public int getCount() {
 
@@ -107,5 +114,45 @@ public class ListaAdaptadorUsuario extends BaseAdapter {
         VolleySingleton.getInstance(contexto).addToRequestQueue(imageRequest);
 
         return v;
+    }
+
+    @Override
+    public Filter getFilter() {
+
+        if(filter == null){
+            filter = new CustomFilter();
+        }
+
+        return filter;
+    }
+    class CustomFilter extends Filter{
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+            if(constraint != null && constraint.length() > 0){
+                constraint = constraint.toString().toUpperCase();
+                ArrayList<Usuario> filters = new ArrayList<Usuario>();
+                Usuario u = new Usuario();
+                for(int i=0; i<filterList.size();i++){
+                    if(filterList.get(i).getNombre().toUpperCase().contains(constraint)){
+                        u = filterList.get(i);
+                        filters.add(u);
+                    }
+                }
+                results.count = filters.size();
+                results.values = filters;
+            }else {
+                results.count = filterList.size();
+                results.values = filterList;
+            }
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            datos = (ArrayList<Usuario>) results.values;
+            notifyDataSetChanged();
+        }
     }
 }

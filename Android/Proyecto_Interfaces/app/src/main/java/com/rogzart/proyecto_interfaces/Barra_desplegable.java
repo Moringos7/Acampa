@@ -41,9 +41,26 @@ public class Barra_desplegable extends AppCompatActivity
         Usuario mUsuario = ControlUser.getUser();
         CONECT = new Conexion(getApplicationContext());
 
+
+
         setContentView(R.layout.activity_barra_desplegable);
+
+        /*ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle("Canteen Home");
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setIcon(R.drawable.back);*/
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setTitle(mUsuario.getNombre());
+        if(ControlUser.getCoordinador() > 0){
+            getSupportActionBar().setSubtitle("Coordinador");
+        }else if(ControlUser.getScouter() > 0){
+            getSupportActionBar().setSubtitle("Scouter");
+        }
+
 
         ///Este código genera la Hamburguesa///
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
