@@ -9,16 +9,22 @@ import android.os.Bundle;
 
 import android.app.DatePickerDialog;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
+
 import java.util.Calendar;
 
 import com.rogzart.proyecto_interfaces.R;
 
+import static java.security.AccessController.getContext;
+
 public class signup extends AppCompatActivity implements View.OnClickListener {
 
-
+    private static final int PICK_IMAGE = 100;
     private static final String CERO = "0";
     private static final String BARRA = "/";
 
@@ -32,7 +38,10 @@ public class signup extends AppCompatActivity implements View.OnClickListener {
 
     //Widgets
     EditText etFecha;
-    ImageButton ibObtenerFecha, ImagenUsuario;
+    ImageButton ibObtenerFecha;
+    ImageView ImagenUsuario;
+    Button Agregar;
+    Uri ImageUrl;
 
 
     @Override
@@ -44,9 +53,11 @@ public class signup extends AppCompatActivity implements View.OnClickListener {
         ibObtenerFecha = findViewById(R.id.ib_obtener_fecha);
         //Evento setOnClickListener - clic
         ibObtenerFecha.setOnClickListener(this);
-        ImagenUsuario=findViewById(R.id.RegistroImagenUsuario);
+        ImagenUsuario= (ImageView) findViewById(R.id.RegistroImagenUsuario);
+
 
     }
+
 
     @Override
     public void onClick(View v) {
@@ -61,18 +72,22 @@ public class signup extends AppCompatActivity implements View.OnClickListener {
 
     }
 
+
     private void cargarimagen() {
         Intent intent= new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("Image/");
-        startActivityForResult(Intent.createChooser(intent,"Seleccione la aplicación"),10);
+        startActivityForResult(intent, PICK_IMAGE);
+        // intent.setType("Image/");
+        //startActivityForResult(Intent.createChooser(intent,"Seleccione la aplicación"),10);
+
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK){
-            Uri path= data.getData();
-            ImagenUsuario.setImageURI(path);
+        //super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK && requestCode == PICK_IMAGE){
+            ImageUrl= data.getData();
+            ImagenUsuario.setImageURI(ImageUrl);
         }
     }
 
@@ -100,5 +115,6 @@ public class signup extends AppCompatActivity implements View.OnClickListener {
         recogerFecha.show();
 
     }
+
 }
 

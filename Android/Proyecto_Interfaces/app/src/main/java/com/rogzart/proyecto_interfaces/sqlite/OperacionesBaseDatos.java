@@ -202,8 +202,8 @@ public final class OperacionesBaseDatos {
         valores.put(inventario.Extra,x.getExtra());
         query.insert("inventario",null,valores);
     }
-    public List<Inventario> LeerTablaInventario(){
-        List<Inventario> list = new ArrayList<Inventario>();
+    public ArrayList<Inventario> LeerTablaInventario(){
+        ArrayList<Inventario> list = new ArrayList<Inventario>();
         Inventario x = new Inventario();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
         Cursor c = query.rawQuery("SELECT * FROM inventario",null);

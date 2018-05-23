@@ -17,9 +17,9 @@ import android.widget.Toast;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.MenuAdministrar;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento01;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento02;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventario;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.TrazadoRuta.Fragmento03;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento04;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.Inventario;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento06;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento07;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento08;
@@ -147,7 +147,9 @@ public class Barra_desplegable extends AppCompatActivity
         }else if(id == R.id.nav_Convivio){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento06()).commit();
         }else if(id == R.id.nav_Inventario){
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Inventario()).commit();
+            ft.replace(R.id.contenedor, ListaInventario.newInstance());
+            ft.addToBackStack(null);
+            ft.commit();
         }else if(id == R.id.nav_Scouters){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento07()).commit();
         }else if(id == R.id.nav_Estadisticas){
