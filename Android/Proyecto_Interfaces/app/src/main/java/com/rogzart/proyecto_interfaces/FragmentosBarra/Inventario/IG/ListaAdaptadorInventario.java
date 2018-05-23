@@ -33,16 +33,19 @@ public class ListaAdaptadorInventario extends BaseAdapter {
     }
     @Override
     public int getCount() {
+
         return Cosas.size();
     }
 
     @Override
     public Object getItem(int position) {
+
         return Cosas.get(position);
     }
 
     @Override
     public long getItemId(int position) {
+
         return Cosas.get(position).getIdInventario();
     }
 
@@ -50,7 +53,7 @@ public class ListaAdaptadorInventario extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Conexion conexion = new Conexion(contexto);
         LayoutInflater inflate = LayoutInflater.from(contexto);
-        View v = inflate.inflate(R.layout.activity_inventario_general,null);
+        View v = inflate.inflate(R.layout.list_inventario_general,null);
 
         TextView nombre = (TextView) v.findViewById(R.id.list_inventario_general_nombre_articulo);
         TextView existencia =(TextView) v.findViewById(R.id.list_inventario_general_existencia);
@@ -59,10 +62,14 @@ public class ListaAdaptadorInventario extends BaseAdapter {
         TextView descripcion= (TextView) v.findViewById(R.id.list_inventario_general_descripcion);
         operador = OperacionesBaseDatos.obtenerInstancia(contexto);
 
-
         nombre.setText(Cosas.get(position).getProducto());
-        existencia.setText(Cosas.get(position).getExistencia());
-        cantidad.setText(String.valueOf( Cosas.get(position).getCantidad()) );
+        existencia.setText(String.valueOf(Cosas.get(position).getExistencia()));
+        int valor = (int) (1/Cosas.get(position).getCantidad());
+        if(valor <= 1){
+            cantidad.setText(String.valueOf((int)Cosas.get(position).getCantidad()));
+        }else{
+            cantidad.setText("1/"+valor);
+        }
         descripcion.setText(Cosas.get(position).getDescripcion());
 
         conexion.setRuta("WebService/"+Cosas.get(position).getImagen());

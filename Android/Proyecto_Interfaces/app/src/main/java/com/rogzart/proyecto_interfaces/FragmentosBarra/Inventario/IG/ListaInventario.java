@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 
@@ -57,14 +58,16 @@ public class ListaInventario extends Fragment {
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         conexion =  new Conexion(getContext());
         ArrayList <Inventario> arrayList = operador.LeerTablaInventario();
+
+        Toast.makeText(getContext(), ""+arrayList.size(), Toast.LENGTH_SHORT).show();
         final ListaAdaptadorInventario miLista = new ListaAdaptadorInventario(arrayList, getContext());
         listaInventario.setAdapter(miLista);
-        listaInventario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*listaInventario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int x,  long l) {
                 Inventario inventario1 =  (Inventario) adapterView.getItemAtPosition(x);
                 Bundle bolsa = new  Bundle();
-                bolsa.putSerializable("articulo", (Serializable) inventario1);
+                bolsa.putSerializable("articulo",inventario1);
 
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.contenedor, ListaInventarioMain.newInstance(bolsa));
@@ -77,12 +80,8 @@ public class ListaInventario extends Fragment {
 
             }
         });
-
+            */
         }
-        ArrayAdapter<String> adaptador; //Bugle
-        //Bundle c;
-
-
     }
 
 

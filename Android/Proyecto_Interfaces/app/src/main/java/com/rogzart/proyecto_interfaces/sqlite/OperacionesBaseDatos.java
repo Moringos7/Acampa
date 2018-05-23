@@ -204,11 +204,12 @@ public final class OperacionesBaseDatos {
     }
     public ArrayList<Inventario> LeerTablaInventario(){
         ArrayList<Inventario> list = new ArrayList<Inventario>();
-        Inventario x = new Inventario();
+        Inventario x;
         SQLiteDatabase query = baseDatos.getReadableDatabase();
         Cursor c = query.rawQuery("SELECT * FROM inventario",null);
         if(c.moveToFirst()) {
             do {
+                x = new Inventario();
                 x.setIdInventario(c.getInt(1));
                 x.setProducto(c.getString(2));
                 x.setCantidad(c.getFloat(3));

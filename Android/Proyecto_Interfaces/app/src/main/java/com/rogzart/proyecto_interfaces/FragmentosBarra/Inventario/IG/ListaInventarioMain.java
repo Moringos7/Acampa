@@ -66,7 +66,7 @@ public class ListaInventarioMain extends Fragment {
         cantidad.setText(String.valueOf(inventario.getCantidad()));
         Descripcion.setText(inventario.getDescripcion());
 
-        conexion.setRuta("WebService/"+inventario.getImagen());
+        /*conexion.setRuta("WebService/"+inventario.getImagen());
         imageRequest =  new ImageRequest(conexion.getRuta(), new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
@@ -79,7 +79,7 @@ public class ListaInventarioMain extends Fragment {
             }
         }
         );
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(imageRequest);
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(imageRequest);*/
 
     }
 
