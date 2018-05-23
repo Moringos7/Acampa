@@ -1,6 +1,8 @@
 package com.rogzart.proyecto_interfaces.Modelo;
 
-public class Inventario {
+import java.io.Serializable;
+
+public class Inventario implements Serializable {
     private int IdInventario;
     private String Producto;
     private float Cantidad;
