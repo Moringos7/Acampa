@@ -62,7 +62,7 @@ public class ListaInventario extends Fragment {
         Toast.makeText(getContext(), ""+arrayList.size(), Toast.LENGTH_SHORT).show();
         final ListaAdaptadorInventario miLista = new ListaAdaptadorInventario(arrayList, getContext());
         listaInventario.setAdapter(miLista);
-        /*listaInventario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listaInventario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int x,  long l) {
                 Inventario inventario1 =  (Inventario) adapterView.getItemAtPosition(x);
@@ -80,7 +80,6 @@ public class ListaInventario extends Fragment {
 
             }
         });
-            */
         }
     }
 

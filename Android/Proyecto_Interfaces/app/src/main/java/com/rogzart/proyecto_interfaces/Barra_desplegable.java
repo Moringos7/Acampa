@@ -18,6 +18,7 @@ import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.MenuAdministr
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento01;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento02;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventario;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventarioMain;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.TrazadoRuta.Fragmento03;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento04;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento06;
@@ -151,7 +152,13 @@ public class Barra_desplegable extends AppCompatActivity
             ft.addToBackStack(null);
             ft.commit();
         }else if(id == R.id.nav_Scouters){
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento07()).commit();
+            //getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento07()).commit();
+            Bundle bolsa = new Bundle();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.contenedor, ListaInventarioMain.newInstance(bolsa));
+            transaction.addToBackStack(null);
+            transaction.commit();
+
         }else if(id == R.id.nav_Estadisticas){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento08()).commit();
         }else if(id == R.id.nav_Eventos){
