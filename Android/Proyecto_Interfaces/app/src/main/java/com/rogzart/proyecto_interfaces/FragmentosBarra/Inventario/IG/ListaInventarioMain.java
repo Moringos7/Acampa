@@ -17,6 +17,7 @@ import com.android.volley.toolbox.ImageRequest;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Inventario;
 import com.rogzart.proyecto_interfaces.R;
+import com.rogzart.proyecto_interfaces.Singleton.LogUser;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
 
 public class ListaInventarioMain extends Fragment {
@@ -52,7 +53,7 @@ public class ListaInventarioMain extends Fragment {
     public void onActivityCreated (Bundle state) {
 
         super.onActivityCreated(state);
-        Nombre= getView().findViewById(R.id.detalles_inventario_nombre);
+        Nombre = getView().findViewById(R.id.detalles_inventario_nombre);
         existencia =  getView().findViewById(R.id.detalles_inventario_existencia);
         cantidad = getView().findViewById(R.id.detalles_inventario_cantidad);
         Descripcion = getView().findViewById(R.id.detalles_inventario_descripcion);
@@ -62,11 +63,20 @@ public class ListaInventarioMain extends Fragment {
         Conexion conexion = new Conexion(getContext());
 
         Nombre.setText(inventario.getProducto());
-        existencia.setText(inventario.getExistencia());
+        existencia.setText(String.valueOf(inventario.getExistencia()));
         cantidad.setText(String.valueOf(inventario.getCantidad()));
         Descripcion.setText(inventario.getDescripcion());
 
-        /*conexion.setRuta("WebService/"+inventario.getImagen());
+
+        if(LogUser.obtenerInstancia(getContext()).getCoordinador() == 0){
+            Nombre.setEnabled(false);
+            existencia.setEnabled(false);
+            cantidad.setEnabled(false);
+            Descripcion.setEnabled(false);
+        }
+
+
+        conexion.setRuta("WebService/"+inventario.getImagen());
         imageRequest =  new ImageRequest(conexion.getRuta(), new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
@@ -79,7 +89,7 @@ public class ListaInventarioMain extends Fragment {
             }
         }
         );
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(imageRequest);*/
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(imageRequest);
 
     }
 
