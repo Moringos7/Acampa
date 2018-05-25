@@ -8,11 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.rogzart.proyecto_interfaces.MapsActivity;
+import com.rogzart.proyecto_interfaces.Barra_desplegable;
+import com.rogzart.proyecto_interfaces.Mapas;
 import com.rogzart.proyecto_interfaces.R;
 
 
-public class Fragmento03 extends Fragment {
+public class Trazado_de_ruta extends Fragment {
     Button mapa;
 
     @Override
@@ -37,8 +38,8 @@ public class Fragmento03 extends Fragment {
         mapa.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Intent mapa = new Intent(getActivity(), MapsActivity.class);
-                                        startActivity(mapa);
+                                        Intent mapa = new Intent(getActivity(), Mapas.class);
+                                        getActivity().startActivity(mapa);
 
                                     }
                                 }
