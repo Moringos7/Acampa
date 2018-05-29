@@ -29,9 +29,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.rogzart.proyecto_interfaces.ActivitysConexion.Conexion_Exitosa;
+import com.rogzart.proyecto_interfaces.ActivitysConexion.ValidadorCorreo;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
-import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
 
@@ -140,14 +139,15 @@ public class signup extends AppCompatActivity implements View.OnClickListener {
                             JSONArray json = response.optJSONArray("SignUp");
                             try {
                                 JSONObject jsonObject = json.getJSONObject(0);
-                                json.length();
                                 if(jsonObject.optBoolean("CheckParam")){
                                     if(jsonObject.optBoolean("CheckExiste")){
                                         Toast.makeText(signup.this, "Usuario ya registrado", Toast.LENGTH_LONG).show();
                                     }else{
                                         if(jsonObject.optBoolean("CheckCreacion")){
-                                            //Toast.makeText(signup.this, "Registrado", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(getApplicationContext(), Conexion_Exitosa.class);
+                                            Intent intent = new Intent(getApplicationContext(), ValidadorCorreo.class);
+                                            intent.putExtra("Asunto","Inicio");
+                                            intent.putExtra("Correo", correo);
+                                            finish();
                                             startActivityForResult(intent, 0);
                                         }else{
                                             Toast.makeText(signup.this, "Usuario NO registrado intentelo otra vez", Toast.LENGTH_SHORT).show();

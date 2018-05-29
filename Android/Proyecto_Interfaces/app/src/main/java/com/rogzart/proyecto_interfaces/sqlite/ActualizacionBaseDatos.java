@@ -86,7 +86,6 @@ public class ActualizacionBaseDatos {
         else{
             Toast.makeText(context, "Actualización Completada", Toast.LENGTH_LONG).show();
         }
-        Toast.makeText(context, ""+ErrorActualizacion, Toast.LENGTH_SHORT).show();
     }
 
     public void VolcarBasedeDatos() {

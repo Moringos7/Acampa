@@ -58,7 +58,6 @@
                         android:layout_marginBottom="15dp"
                         android:layout_marginRight="15dp"
                         android:hint="Nombre"
-                        android:text="José"
                         android:theme="@style/EditText" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -88,7 +87,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Paterno"
-                            android:text="Pérez"
                             android:theme="@style/EditText" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -103,7 +101,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Materno"
-                            android:text="González"
                             android:theme="@style/EditText" />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>

@@ -14,7 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.rogzart.proyecto_interfaces.ActivitysConexion.Conexion_Exitosa;
+import com.rogzart.proyecto_interfaces.ActivitysConexion.ValidadorCorreo;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
@@ -91,33 +91,13 @@ public class RecuperacionPassword extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Fecha No valida", Toast.LENGTH_SHORT).show();
                     }else {
                         Fecha = anio + "-" + vMes + "-" + vDia;
-                        conexion.setRuta("WebService/wsEnvioCorreoprueba.php");
-
-
-                        Map<String, String> params = new HashMap();
-                        params.put("asunto","Inicio");
-                        params.put("correo", correo);
-                        params.put("pass", "12345");
-                        JSONObject obj = new JSONObject(params);
-
-                        jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, conexion.getRuta(), obj, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                JSONArray json = response.optJSONArray("Correo");
-                                try {
-                                    JSONObject jsonObject = json.getJSONObject(0);
-                                    Toast.makeText(RecuperacionPassword.this,jsonObject.optString("Mensaje"), Toast.LENGTH_SHORT).show();
-                                } catch (JSONException e) {
-                                    Toast.makeText(getApplicationContext(), "No se encontró Respuesta", Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(getApplicationContext(), "Fallo Conexion al Servidor", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+                        Intent intent = new Intent(getApplicationContext(), ValidadorCorreo.class);
+                        intent.putExtra("Asunto","Recuperacion");
+                        intent.putExtra("Correo", correo);
+                        intent.putExtra("Nombre",nombre);
+                        intent.putExtra("Fecha",Fecha);
+                        finish();
+                        startActivityForResult(intent, 0);
                     }
                 }
             }

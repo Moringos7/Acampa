@@ -61,9 +61,10 @@
                 android:value="@integer/google_play_services_version" />
         </activity>
         <activity android:name=".FragmentosBarra.InventarioGeneral" />
-        <activity android:name=".InterfacesLogin.signup"></activity>
-	<activity android:name=".InterfacesLogin.RecuperacionPassword">   
-	</activity>     
-</application>
+        <activity android:name=".InterfacesLogin.signup" />
+        <activity android:name=".InterfacesLogin.RecuperacionPassword" />
+        <activity android:name=".ActivitysConexion.ValidadorCorreo" />
+        <activity android:name=".InterfacesLogin.NuevaContrasenia"></activity>
+    </application>
 
 </manifest>
