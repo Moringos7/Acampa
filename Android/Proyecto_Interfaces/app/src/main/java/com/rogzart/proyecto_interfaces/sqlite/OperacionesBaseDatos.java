@@ -202,11 +202,11 @@ public final class OperacionesBaseDatos {
         valores.put(inventario.Extra,x.getExtra());
         query.insert("inventario",null,valores);
     }
-    public ArrayList<Inventario> LeerTablaInventario(){
+    public ArrayList<Inventario> LeerTablaInventarioSinExtras(){
         ArrayList<Inventario> list = new ArrayList<Inventario>();
         Inventario x;
         SQLiteDatabase query = baseDatos.getReadableDatabase();
-        Cursor c = query.rawQuery("SELECT * FROM inventario",null);
+        Cursor c = query.rawQuery("SELECT * FROM inventario where Extra=0",null);
         if(c.moveToFirst()) {
             do {
                 x = new Inventario();
@@ -223,6 +223,28 @@ public final class OperacionesBaseDatos {
         }
         return list;
     }
+    public ArrayList<Inventario> LeerTablaInventarioExtras(){
+        ArrayList<Inventario> list = new ArrayList<Inventario>();
+        Inventario x;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM inventario where Extra= 1",null);
+        if(c.moveToFirst()) {
+            do {
+                x = new Inventario();
+                x.setIdInventario(c.getInt(1));
+                x.setProducto(c.getString(2));
+                x.setCantidad(c.getFloat(3));
+                x.setExistencia(c.getInt(4));
+                x.setDescripcion(c.getString(5));
+                x.setImagen(c.getString(6));
+                x.setComentario(c.getString(7));
+                x.setExtra(c.getInt(8));
+                list.add(x);
+            } while (c.moveToNext());
+        }
+        return list;
+    }
+
     /**Usuario**/
     public void InsertarUsuario(Usuario x){
         SQLiteDatabase query = baseDatos.getWritableDatabase();

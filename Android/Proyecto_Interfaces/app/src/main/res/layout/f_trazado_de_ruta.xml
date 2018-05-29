@@ -19,10 +19,21 @@
             android:text="Rutas"
             android:textSize="24sp" />
 
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="50dp" >
+
+        </SearchView>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="400dp" />
+
         <Button
             android:id="@+id/BMapa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:text="Mostrar" />
     </LinearLayout>
 
