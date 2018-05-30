@@ -27,20 +27,48 @@
                     android:layout_weight="1"
                     app:srcCompat="@drawable/inventario" />
 
-                <TextView
-                    android:id="@+id/list_inventario_general_nombre_articulo"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Nombre" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/list_inventario_general_existencia"
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_weight="1"
+                        android:text="Nombre:" />
+
+                    <TextView
+                        android:id="@+id/list_inventario_general_nombre_articulo"
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:layout_weight="1"
+                        android:text="Nombre" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center_horizontal|center"
-                    android:text="Existencia" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView22"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_weight="1"
+                        android:text="Existencia:" />
+
+                    <TextView
+                        android:id="@+id/list_inventario_general_existencia"
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center"
+                        android:text="Existencia" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -49,20 +77,49 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/list_inventario_general_cantidad"
+                <LinearLayout
                     android:layout_width="150dp"
-                    android:layout_height="50dp"
+                    android:layout_height="100dp"
                     android:layout_weight="1"
-                    android:gravity="top"
-                    android:text="Cantidad" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/list_inventario_general_descripcion"
+                    <TextView
+                        android:id="@+id/textView26"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:text="Cantidad" />
+
+                    <TextView
+                        android:id="@+id/list_inventario_general_cantidad"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:gravity="top"
+                        android:text="Cantidad" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="100dp"
                     android:layout_weight="1"
-                    android:text="Descripcion" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView32"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Descripcion" />
+
+                    <TextView
+                        android:id="@+id/list_inventario_general_descripcion"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:text="Descripcion" />
+                </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
 
