@@ -244,7 +244,6 @@ public final class OperacionesBaseDatos {
         }
         return list;
     }
-
     /**Usuario**/
     public void InsertarUsuario(Usuario x){
         SQLiteDatabase query = baseDatos.getWritableDatabase();

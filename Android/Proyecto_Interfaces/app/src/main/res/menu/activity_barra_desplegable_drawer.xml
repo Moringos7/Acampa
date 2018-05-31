@@ -9,9 +9,6 @@
             android:id="@+id/nav_Asignacion"
             android:title="Asignación Adultos Mayores" />
         <item
-            android:id="@+id/nav_Lugares"
-            android:title="Localización de Lugares" />
-        <item
             android:id="@+id/nav_Ruta"
             android:title="Trazado de Ruta" />
         <item

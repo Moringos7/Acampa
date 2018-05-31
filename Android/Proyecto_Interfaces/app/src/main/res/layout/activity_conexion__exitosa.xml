@@ -35,11 +35,10 @@
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Verifique su Correo Electronico"
-            android:textColor="#000"
             android:layout_gravity="center"
-            android:textSize="20sp"
-             />
+            android:text="Verifique su correo electronico"
+            android:textColor="#000"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/btnExito"

@@ -1,9 +1,7 @@
 package com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.AU;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,18 +11,14 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
-import com.rogzart.proyecto_interfaces.Modelo.Seccion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
-import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 
 public class AdministrarUsuario extends Fragment {
@@ -63,7 +57,7 @@ public class AdministrarUsuario extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_administrar_usuario2, container, false);
+        return inflater.inflate(R.layout.fragment_administrar_usuario_datos, container, false);
     }
 
     public void onActivityCreated(Bundle state) {

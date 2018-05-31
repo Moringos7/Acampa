@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.rogzart.proyecto_interfaces.InterfacesLogin.Inicio;
 import com.rogzart.proyecto_interfaces.InterfacesLogin.signup;
-import com.rogzart.proyecto_interfaces.Mapas;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 
 import com.rogzart.proyecto_interfaces.Modelo.Inventario;
@@ -74,7 +73,7 @@ public class ListaInventario extends Fragment {
                                          @Override
                                          public void onClick(View v) {
 
-                                            ValorExtra=1;
+                                             ValorExtra=1;
 
                                          }
                                      }
@@ -82,13 +81,13 @@ public class ListaInventario extends Fragment {
 
         );
         BtnGeneral.setOnClickListener(new View.OnClickListener() {
-                                         @Override
-                                         public void onClick(View v) {
+                                          @Override
+                                          public void onClick(View v) {
 
-                                             ValorExtra=0;
+                                              ValorExtra=0;
 
-                                         }
-                                     }
+                                          }
+                                      }
 
 
         );
@@ -145,5 +144,4 @@ public class ListaInventario extends Fragment {
 
 
 }
-
 

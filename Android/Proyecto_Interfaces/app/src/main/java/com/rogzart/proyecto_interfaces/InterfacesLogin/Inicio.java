@@ -1,5 +1,6 @@
 package com.rogzart.proyecto_interfaces.InterfacesLogin;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
@@ -15,7 +16,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.rogzart.proyecto_interfaces.ActivitysConexion.ValidadorCorreo;
 import com.rogzart.proyecto_interfaces.Barra_desplegable;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventarioMain;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.R;
@@ -68,7 +71,7 @@ public class Inicio extends AppCompatActivity{
                 Pass = mPasswordView.getText().toString();
                 if (!isEmailValid(Correo)) {
                     Toast.makeText(Inicio.this, "Ingrese Formato Correcto de Correo", Toast.LENGTH_SHORT).show();
-                } else if (!true/*isPasswordValid(Pass)*/) {
+                } else if (!isPasswordValid(Pass)) {
                     Toast.makeText(Inicio.this, "Contraseña muy corta", Toast.LENGTH_SHORT).show();
                 } else {
                     if (!conexion.isConnected()) {
@@ -102,12 +105,24 @@ public class Inicio extends AppCompatActivity{
                                             user.setFotografia(jsonObject.optString("Fotografia"));
                                             user.setFkSeccion(jsonObject.optInt("FkSeccion"));
                                             user.setCorreo(Correo);
-                                            Integer x =(jsonObject.optInt("Scouter"));
-                                            Integer y =(jsonObject.optInt("Coordinador"));
-                                            ControlUser.userLogin(user,x,y);
-                                            finish();
-                                            Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
-                                            startActivityForResult(intent, 0);
+                                            Integer x = (jsonObject.optInt("Scouter",0));
+                                            Integer y = (jsonObject.optInt("Coordinador",0));
+
+                                            if(jsonObject.optInt("Status") == 0){
+                                                //finish();
+                                                Intent intent = new Intent(getApplicationContext(), NuevaContrasenia.class);
+                                                finish();
+                                                intent.putExtra("Usuario",user);
+                                                intent.putExtra("Scouter",x);
+                                                intent.putExtra("Coordinador",y);
+                                                startActivityForResult(intent, 0);
+
+                                            }else{
+                                                ControlUser.userLogin(user, x, y);
+                                                Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
+                                                finish();
+                                                startActivityForResult(intent, 0);
+                                            }
                                         }
                                     }
                                 } catch (JSONException e) {
@@ -133,7 +148,7 @@ public class Inicio extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent (Inicio.this, signup.class);
-                startActivityForResult(intent, 0);
+                startActivity(intent);
             }
         });
         ///Boton
@@ -141,9 +156,8 @@ public class Inicio extends AppCompatActivity{
         Recuperar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                //operador.LeerTablaVoluntarioFrecuente(getApplicationContext());
-                Intent go = new Intent (view.getContext(), RecuperacionPassword.class);
-                startActivityForResult(go, 0);
+                Intent intent = new Intent(getApplicationContext(), RecuperacionPassword.class);
+                startActivityForResult(intent, 0);
             }
         });
     }

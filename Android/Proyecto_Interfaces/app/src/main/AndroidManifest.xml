@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -35,7 +34,7 @@
         </activity>
         <activity
             android:name=".Barra_desplegable"
-            android:label="@string/labelBarra"
+            android:label="Acampa"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ActivitysConexion.Conexion_Exitosa" />
         <activity android:name=".ActivitysConexion.ErrorPeticion" />
@@ -44,7 +43,9 @@
             android:label="Acampa" />
         <activity android:name=".FragmentosBarra.InventarioGeneral" />
         <activity android:name=".InterfacesLogin.signup" />
-        <activity android:name=".InterfacesLogin.RecuperacionPassword"></activity>
+        <activity android:name=".InterfacesLogin.RecuperacionPassword" />
+        <activity android:name=".ActivitysConexion.ValidadorCorreo" />
+        <activity android:name=".InterfacesLogin.NuevaContrasenia" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -56,16 +57,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
-
+         <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
         <activity
-            android:name=".Mapas"
-            android:label="@string/title_activity_mapas">
-
-
-        </activity>
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>

@@ -22,6 +22,7 @@ import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInvent
 import com.rogzart.proyecto_interfaces.FragmentosBarra.TrazadoRuta.Trazado_de_ruta;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento04;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento06;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento07;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento08;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento09;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
@@ -132,10 +133,6 @@ public class Barra_desplegable extends AppCompatActivity
         int id = item.getItemId();
         if(id == R.id.nav_Asignacion){
             ft.replace(R.id.contenedor, Fragmento04.newInstance());
-            ft.addToBackStack(null);
-            ft.commit();
-        }else if(id == R.id.nav_Lugares){
-            ft.replace(R.id.contenedor, Fragmento02.newInstance());
             ft.addToBackStack(null);
             ft.commit();
         }else if(id == R.id.nav_Ruta){

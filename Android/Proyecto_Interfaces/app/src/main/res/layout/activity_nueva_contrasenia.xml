@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InterfacesLogin.NuevaContrasenia">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center">
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Restablecer contraseña"
+            android:gravity="center"
+            android:textColor="#000"
+            android:textSize="30sp"/>
+
+        <TextView
+            android:id="@+id/idcuenta"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cuenta: moringos7@gmail.com"
+            android:gravity="center"
+            android:textColor="#000"
+            android:textSize="20sp"/>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/AppTheme.FloatingLabel">
+            <EditText
+                android:id="@+id/ncontraseña"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nueva contraseña"
+                android:imeActionId="6"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:theme="@style/EditText"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintTextAppearance="@style/AppTheme.FloatingLabel">
+            <EditText
+                android:id="@+id/cncontraseña"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Confirmar Nueva Contraseña"
+                android:imeActionId="6"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:theme="@style/EditText"/>
+        </android.support.design.widget.TextInputLayout>
+        <Button
+            android:id="@+id/btnRes"
+            style="?android:textAppearanceSmall"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textColor="#fff"
+            android:text="Restablecer"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            android:theme="@style/RaisedButton"
+            android:gravity="center"/>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
