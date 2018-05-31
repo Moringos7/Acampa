@@ -34,36 +34,35 @@
         </activity>
         <activity
             android:name=".Barra_desplegable"
-            android:label="@string/labelBarra"
+            android:label="Acampa"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ActivitysConexion.Conexion_Exitosa" />
         <activity android:name=".ActivitysConexion.ErrorPeticion" />
         <activity
             android:name=".InterfacesLogin.Inicio"
             android:label="Acampa" />
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
-
-            <!--
+        <activity android:name=".FragmentosBarra.InventarioGeneral" />
+        <activity android:name=".InterfacesLogin.signup" />
+        <activity android:name=".InterfacesLogin.RecuperacionPassword" />
+        <activity android:name=".ActivitysConexion.ValidadorCorreo" />
+        <activity android:name=".InterfacesLogin.NuevaContrasenia" />
+        <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
              Note that the API key is linked to the encryption key used to sign the APK.
              You need a different API key for each encryption key, including the release key that is used to
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/. 
-            -->
-            <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="@string/google_maps_key" />
-            <meta-data
-                android:name="com.google.android.gms.version"
-                android:value="@integer/google_play_services_version" />
-        </activity>
-        <activity android:name=".FragmentosBarra.InventarioGeneral" />
-        <activity android:name=".InterfacesLogin.signup"></activity>
-	<activity android:name=".InterfacesLogin.RecuperacionPassword">   
-	</activity>     
-</application>
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+         <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
+    </application>
 
 </manifest>

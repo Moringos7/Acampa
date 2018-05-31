@@ -19,7 +19,7 @@ import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento01;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento02;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventario;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventarioMain;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.TrazadoRuta.Fragmento03;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.TrazadoRuta.Trazado_de_ruta;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento04;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento06;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento07;
@@ -135,12 +135,8 @@ public class Barra_desplegable extends AppCompatActivity
             ft.replace(R.id.contenedor, Fragmento04.newInstance());
             ft.addToBackStack(null);
             ft.commit();
-        }else if(id == R.id.nav_Lugares){
-            ft.replace(R.id.contenedor, Fragmento02.newInstance());
-            ft.addToBackStack(null);
-            ft.commit();
         }else if(id == R.id.nav_Ruta){
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento03()).commit();
+            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Trazado_de_ruta()).commit();
         }else if(id == R.id.nav_Info){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento01()).commit();
         }else if(id == R.id.nav_Sugerencias){

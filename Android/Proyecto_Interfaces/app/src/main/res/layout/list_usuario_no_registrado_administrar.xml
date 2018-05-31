@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp"
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/list_usuario_imagen"
+                android:src="@drawable/user" />
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="20dp">
+
+                <TextView
+                    android:id="@+id/list_usuario_nombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="José Miguel"
+                    android:textColor="#000"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/list_usuario_apellidos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Pérez González"
+                    android:textColor="#000"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/list_usuario_seccion"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:text="Usuario"
+                    android:textColor="#000"
+                    android:textSize="20dp" />
+                <!--Amarillo android:background="#FFFF00"
+                    Verde android:background="#298A08"
+                    Azul android:background="#045FB4"
+                    Rojo android:background="#FF0000"
+                    Gris android:background="#848484"
+                    Azul-->
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnAceptarUsuario"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="30dp"
+                android:background="#53b029"
+                android:padding="10dp"
+                android:text="Aceptar"
+                android:textColor="#fff"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btnEliminarUsuario"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="#FF0000"
+                android:padding="10dp"
+                android:text="Eliminar"
+                android:textColor="#fff"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

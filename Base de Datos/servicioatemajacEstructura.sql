@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.8.0.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 28-04-2018 a las 02:23:55
--- Versión del servidor: 10.1.30-MariaDB
--- Versión de PHP: 7.2.1
+-- Servidor: localhost
+-- Tiempo de generación: 31-05-2018 a las 20:05:29
+-- Versión del servidor: 10.0.34-MariaDB-0ubuntu0.16.04.1
+-- Versión de PHP: 7.0.30-0ubuntu0.16.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -32,7 +32,7 @@ CREATE TABLE `adultomayor` (
   `IdAdultoMayor` int(11) NOT NULL,
   `Nombre` varchar(50) DEFAULT NULL,
   `ApellidoPaterno` varchar(50) DEFAULT NULL,
-  `ApellidoMaterno` varchar(50) CHARACTER SET latin1 NOT NULL,
+  `ApellidoMaterno` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
   `Fotografia` varchar(100) CHARACTER SET latin1 NOT NULL,
   `Diabetico` tinyint(1) NOT NULL,
   `FkDependencia` int(11) DEFAULT NULL,
@@ -494,7 +494,7 @@ ALTER TABLE `voluntariofrecuente`
 -- AUTO_INCREMENT de la tabla `adultomayor`
 --
 ALTER TABLE `adultomayor`
-  MODIFY `IdAdultoMayor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `IdAdultoMayor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `asignacion`
@@ -524,7 +524,7 @@ ALTER TABLE `dependencia`
 -- AUTO_INCREMENT de la tabla `domicilio`
 --
 ALTER TABLE `domicilio`
-  MODIFY `IdDomicilio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `IdDomicilio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `evento`
@@ -554,7 +554,7 @@ ALTER TABLE `inventario`
 -- AUTO_INCREMENT de la tabla `password`
 --
 ALTER TABLE `password`
-  MODIFY `IdPassword` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `IdPassword` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT de la tabla `problematica`
@@ -572,7 +572,7 @@ ALTER TABLE `recoger`
 -- AUTO_INCREMENT de la tabla `scouter`
 --
 ALTER TABLE `scouter`
-  MODIFY `IdScouter` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `IdScouter` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `seccion`
@@ -596,13 +596,13 @@ ALTER TABLE `tipoproblematica`
 -- AUTO_INCREMENT de la tabla `ubicacion`
 --
 ALTER TABLE `ubicacion`
-  MODIFY `IdUbicacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `IdUbicacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `IdUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `IdUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT de la tabla `voluntariofrecuente`
@@ -625,7 +625,7 @@ ALTER TABLE `adultomayor`
 -- Filtros para la tabla `asignacion`
 --
 ALTER TABLE `asignacion`
-  ADD CONSTRAINT `asignacion_ibfk_1` FOREIGN KEY (`FkAdultoMayor`) REFERENCES `adultomayor` (`IdAdultoMayor`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `asignacion_ibfk_1` FOREIGN KEY (`FkAdultoMayor`) REFERENCES `adultomayor` (`IdAdultoMayor`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `asignacion_ibfk_2` FOREIGN KEY (`FkUsuario`) REFERENCES `usuario` (`IdUsuario`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
