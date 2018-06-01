@@ -89,6 +89,7 @@ public class ListaAdministrarUsuario extends Fragment{
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         conexion = new Conexion(getContext());
         ListaUsuarios();
+
         //ListaUsuariosNoRegistrados();
         UsuarioGeneral = getView().findViewById(R.id.btnusuariosGeneral);
         NoRegistrado = getView().findViewById(R.id.btnNOregistrados);
@@ -169,7 +170,7 @@ public class ListaAdministrarUsuario extends Fragment{
     }
     private void ListaUsuarios() {
 
-        ArrayList<Usuario> arrayList = operador.LeerTablaUsuario(getContext());
+        ArrayList<Usuario> arrayList = operador.LeerTablaUsuario();
         cuenta = arrayList.size();
         resultados.setText(cuenta + " Resultados");
         final ListaAdaptadorUsuario miLista = new ListaAdaptadorUsuario(arrayList, getContext());
