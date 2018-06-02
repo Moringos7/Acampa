@@ -176,6 +176,8 @@ public class Barra_desplegable extends AppCompatActivity
             ft.replace(R.id.contenedor, MenuAdministrar.newInstance());
             ft.addToBackStack(null);
             ft.commit();
+        }else if(id == R.id.nav_Salir){
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

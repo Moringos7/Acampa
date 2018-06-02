@@ -5,8 +5,22 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.R;
+import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class AsignacionAdultoMayorUsuario extends Fragment {
@@ -26,6 +40,7 @@ public class AsignacionAdultoMayorUsuario extends Fragment {
 
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
+
 
     }
 }

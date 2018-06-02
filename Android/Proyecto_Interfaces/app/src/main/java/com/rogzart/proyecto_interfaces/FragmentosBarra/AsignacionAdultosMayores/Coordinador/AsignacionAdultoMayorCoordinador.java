@@ -4,37 +4,54 @@ import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.rogzart.proyecto_interfaces.Barra_desplegable;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos.Eventos;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
-import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.Modelo.UsuarioAsignacion;
 import com.rogzart.proyecto_interfaces.R;
+import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
 import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class AsignacionAdultoMayorCoordinador extends Fragment {
 
     private AlertDialog.Builder AlertaEvento;
     private boolean EventoDisponible;
+    private boolean Activado;
     private OperacionesBaseDatos operador;
     private Calendar c = Calendar.getInstance();
     private String FechaActual;
     private ListView listaG;
+    private Boolean A;
+    private HiloCargaLista myHiloC;
+    public int NumeroPeticiones;
+
+
     public  AsignacionAdultoMayorCoordinador(){
 
     }
@@ -42,21 +59,29 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         super.onActivityCreated(state);
         configurarDialogs();
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
-
         FechaActual = generarFecha();
+        NumeroPeticiones = 0;
         EventoDisponible = operador.verificarEvento(FechaActual);
         if(!EventoDisponible){
             AlertaEvento.show();
         }else{
-            cargarLista();
+            configurarHilos();
         }
         Button btn = getView().findViewById(R.id.btntemporal);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                operador.EliminarDatosTabla("asignacion");
-                new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext());
-                cargarLista();
+                Toast.makeText(getContext(), "Peticiones: "+NumeroPeticiones, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Estado Hilo1: "+Activado, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Estado Hilo2: "+myHiloC.getStatus(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        Button BTN = getView().findViewById(R.id.btnActivar);
+        BTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DetenerHilos();
             }
         });
     }
@@ -71,6 +96,14 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         return inflater.inflate(R.layout.fragment_asignacion_adulto_mayor_coordinador, container, false);
 
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        DetenerHilos();
+    }
+
+
 
 
     private void configurarDialogs(){
@@ -89,6 +122,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
             }
         });
     }
+
     private void agendar(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.contenedor, Eventos.newInstance());
@@ -116,11 +150,109 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         Fecha = String.valueOf(Anio)+"-"+decenaM+String.valueOf(Mes)+"-"+decenaD+String.valueOf(Dia);
         return Fecha;
     }
-    private void cargarLista(){
-
+    public void cargarLista(){
         listaG = getView().findViewById(R.id.listaAsigancionCoordinador);
         ArrayList<UsuarioAsignacion> arrayList = operador.LeerUsuariosAsignacion(FechaActual);
         ListaAdaptadorAsignacionAdultoMayor miLista = new ListaAdaptadorAsignacionAdultoMayor(arrayList, getContext());
         listaG.setAdapter(miLista);
     }
+    private void DetenerHilos(){
+        Activado = false;
+        myHiloC.cancel(true);
+        /*if (myHiloC.getStatus() == AsyncTask.Status.FINISHED) {
+            Toast.makeText(getContext(), "Muerto", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getContext(), "I´m living", Toast.LENGTH_SHORT).show();
+        }*/
+    }
+    private void configurarHilos(){
+        NumeroPeticiones = 0;
+        Activado = true;
+        myHiloC = new HiloCargaLista();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(Activado){
+                    if (myHiloC.getStatus() == AsyncTask.Status.RUNNING){
+
+                    }else{
+                        myHiloC = new HiloCargaLista();
+                        myHiloC.execute();
+                    }
+                }
+            }
+        }).start();
+    }
+
+
+    private class HiloCargaLista extends AsyncTask<Void, Void, Void> {
+
+        public Conexion conexion;
+        public JSONObject obj;
+        public JsonObjectRequest jsonObjectRequest;
+        @Override protected void onPreExecute() {
+            conexion = new Conexion(getContext());
+            conexion.setRuta("WebService/Asignacion/contarRegistros.php");
+            A = false;
+            Map<String, String> params = new HashMap();
+            params.put("fecha", FechaActual);
+            obj = new JSONObject(params);
+            jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, conexion.getRuta(), obj, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    JSONArray json = response.optJSONArray("Respuesta");
+                    try {
+                        JSONObject jsonObject = json.getJSONObject(0);
+                        int cuenta = jsonObject.optInt("Cuenta");
+                        if(cuenta != NumeroPeticiones){
+                            A = true;
+                            NumeroPeticiones = cuenta;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            boolean Salir = true;
+
+            while(Salir){
+                VolleySingleton.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
+                if(A){
+                   operador.EliminarDatosTabla("asignacion");
+                   new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext());
+                   Salir = false;
+                   A = false;
+                }
+                if(isCancelled()){
+                   break;
+                }
+                try{
+                    Thread.sleep(2000);}
+                    catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            cargarLista();
+        }
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            //Toast.makeText(getContext(), "Cancelado", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 }
+
