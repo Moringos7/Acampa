@@ -308,12 +308,25 @@ public final class OperacionesBaseDatos {
         if(c.moveToFirst()) {
             do {
                 usuarioAsignacion = new UsuarioAsignacion(ObtenerUsuario(c.getInt(0)));
-                usuarioAsignacion.setAdultosMayores(obtenerAdultosMayoresPorVoluntarioFrecuente(c.getInt(0)));
+                //usuarioAsignacion.setAdultosMayores(obtenerAdultosMayoresPorVoluntarioFrecuente(c.getInt(0)));
                 list.add(usuarioAsignacion);
             } while (c.moveToNext());
         }
         return list;
     }
+
+    public ArrayList<AdultoMayor> obtenerAdultosMayoresAsignados(String Fecha){
+        ArrayList<AdultoMayor> list = new ArrayList<AdultoMayor>();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT IdAdultoMayor FROM adultomayor,asignacion WHERE IdAdultoMayor = FkAdultoMayor AND Fecha = ?",new String[]{Fecha});
+        if(c.moveToFirst()) {
+            do {
+                list.add(obtenerAdultoMayor(c.getInt(0)));
+            } while (c.moveToNext());
+        }
+        return list;
+    }
+
     /**Evento*/
     public void InsertarEvento(Evento x){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
@@ -477,13 +490,14 @@ public final class OperacionesBaseDatos {
         valores.put(adultomayor.FkDomicilio,x.getFkDomicilio());
         query.insert("adultomayor",null,valores);
     }
-    public void LeerTablaAdultoMayor(){
-        //List<AdultoMayor> list = new Array List<AdultoMayor>();
-        AdultoMayor x = new AdultoMayor();
+    public ArrayList<AdultoMayor> LeerTablaAdultoMayor(){
+        ArrayList<AdultoMayor> list = new ArrayList<AdultoMayor>();
+        AdultoMayor x;
         SQLiteDatabase query = baseDatos.getReadableDatabase();
         Cursor c = query.rawQuery("SELECT * FROM adultomayor",null);
         if(c.moveToFirst()) {
             do {
+                x = new AdultoMayor();
                 x.setIdAdultoMayor(c.getInt(1));
                 x.setNombre(c.getString(2));
                 x.setApellidoPaterno(c.getString(3));
@@ -492,10 +506,27 @@ public final class OperacionesBaseDatos {
                 x.setDiabetico(c.getInt(6));
                 x.setFkDependencia(c.getInt(7));
                 x.setFkDomicilio(c.getInt(8));
-                //list.add(x);
+                list.add(x);
             } while (c.moveToNext());
         }
-        //return list;
+        return list;
+    }
+    public AdultoMayor obtenerAdultoMayor(int Id){
+        AdultoMayor adultoMayor = new AdultoMayor();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM adultomayor WHERE IdAdultoMayor = ? ",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()) {
+            adultoMayor = new AdultoMayor();
+            adultoMayor.setIdAdultoMayor(c.getInt(1));
+            adultoMayor.setNombre(c.getString(2));
+            adultoMayor.setApellidoPaterno(c.getString(3));
+            adultoMayor.setApellidoMaterno(c.getString(4));
+            adultoMayor.setFotografia(c.getString(5));
+            adultoMayor.setDiabetico(c.getInt(6));
+            adultoMayor.setFkDependencia(c.getInt(7));
+            adultoMayor.setFkDomicilio(c.getInt(8));
+        }
+        return adultoMayor;
     }
     /**Asignacion**/
     public void InsertarAsignacion(Asignacion x){
@@ -508,7 +539,7 @@ public final class OperacionesBaseDatos {
         valores.put(asignacion.FkAdultoMayor,x.getFkAdultoMayor());
         query.insert("asignacion",null,valores);
     }
-    public void LeerTablaAsignacion(){
+    public void LeerTablaAsignacion(Context contexto){
         //List<AdultoMayor> list = new Array List<AdultoMayor>();
         Asignacion x = new Asignacion();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
@@ -520,10 +551,34 @@ public final class OperacionesBaseDatos {
                 x.setFecha(c.getString(3));
                 x.setFkUsuario(c.getInt(4));
                 x.setFkAdultoMayor(c.getInt(5));
+                Toast.makeText(contexto, ""+x.getFecha(), Toast.LENGTH_SHORT).show();
                 //list.add(x);
             } while (c.moveToNext());
         }
         //return list;
+    }
+
+    public ArrayList<AdultoMayor> ObtenerAsignaciones(String Fecha, int Id) {
+        ArrayList<AdultoMayor> list = new ArrayList<AdultoMayor>();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        AdultoMayor aM;
+        Cursor c = query.rawQuery("SELECT adultomayor.* FROM adultomayor,asignacion WHERE IdAdultoMayor = FkAdultoMayor AND Fecha = ? AND FkUsuario = ?", new String[]{Fecha, String.valueOf(Id)});
+        if (c.moveToFirst()) {
+            do {
+                aM = new AdultoMayor();
+                aM.setIdAdultoMayor(c.getInt(1));
+                aM.setNombre(c.getString(2));
+                aM.setApellidoPaterno(c.getString(3));
+                aM.setApellidoMaterno(c.getString(4));
+                aM.setFotografia(c.getString(5));
+                aM.setDiabetico(c.getInt(6));
+                aM.setFkDependencia(c.getInt(7));
+                aM.setFkDomicilio(c.getInt(8));
+                list.add(aM);
+            } while (c.moveToNext());
+
+        }
+        return list;
     }
     /**ComentarioAM**/
     public void InsertarComentarioAM(ComentarioAM x){

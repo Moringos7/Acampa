@@ -9,17 +9,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Recargar"
-            android:id="@+id/btntemporal"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Activar"
-            android:id="@+id/btnActivar"/>
+            android:orientation="vertical"
+            android:visibility="gone">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recargar"
+                android:id="@+id/btntemporal"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Activar"
+                android:id="@+id/btnActivar"/>
 
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,21 +46,34 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/ContadorAsignados"
                 android:background="@drawable/circulo"
                 android:gravity="center"
-                android:text="24"
+                android:text="JM"
                 android:textSize="20sp"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:visibility="invisible"/>
 
         </LinearLayout>
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/progressBarAsignacion"
+            android:visibility="visible">
+            <ProgressBar
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center" />
+        </LinearLayout>
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/listaAsigancionCoordinador"
             android:layout_marginTop="15dp">
-
         </ListView>
+
+
     </LinearLayout>
 
 </FrameLayout>

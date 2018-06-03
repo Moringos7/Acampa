@@ -1,21 +1,27 @@
 <?php
 require("../wsBDcredencial.php");
 $conexion = mysqli_connect($hostname,$username,$password,$database);
-$Password = $_POST["password"];
-$Intentos = $_POST["intentos"];
-$FechaLogin = $_POST["fechalogin"];
-$FkUsuario = $_POST["fkusuario"];
 
-$sql = "INSERT INTO password VALUES(null,?,?,?,?)";
+$jsonParam = file_get_contents('php://input');
+$data = json_decode($jsonParam);
+$Password = $data->password;
+$FkUsuario = $data->fkusuario;
+$FechaLogin = date('Y/m/d');
+$Intentos = 3;
+$Status = 1;
 
+$sql = "INSERT INTO password VALUES(null,?,?,?,?,?)";
 $Password = hash('sha1',$Password, false); 
-
 $stm = $conexion->prepare($sql);
-$stm->bind_param('sisi',$Password,$Intentos,$FechaLogin,$FkUsuario);
+$stm->bind_param('sisii',$Password,$Intentos,$FechaLogin,$Status,$FkUsuario);
+
 if($stm->execute()){
-	echo "Creado";
+	$valor['Creado']=true;
 }else{
-	echo "No Creado";
+	$valor['Creado']=false;
+	
 }
+$json['Check'][] = $valor;
+echo json_encode($json);
 mysqli_close($conexion);
 ?>

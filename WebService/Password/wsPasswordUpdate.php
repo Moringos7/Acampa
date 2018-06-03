@@ -1,25 +1,28 @@
 <?php 
 require("../wsBDcredencial.php");
 
-$conexion =mysqli_connect($hostname,$username,$password,$database);
+$conexion = mysqli_connect($hostname,$username,$password,$database);
 
-$IdPassword = $_POST["idpassword"];
-$Password = $_POST["password"];
-$Intentos = $_POST["intentos"];
-$FechaLogin = $_POST["fechalogin"];
-$FkUsuario = $_POST["fkusuario"];
+$jsonParam = file_get_contents('php://input');
+$data = json_decode($jsonParam);
+$Password = $data->password;
+$FechaLogin = date('Y/m/d');
+$Status = $data->status;
+$FkUsuario = $data->fkusuario;
 
 
-$sql = "UPDATE password SET Password = ?, Intentos = ?,FechaLogin = ?, FkUsuario = ? WHERE IdPassword = ?";
+$sql = "UPDATE password SET Password = ?,FechaLogin = ?, Status = ? WHERE FkUsuario = ?";
 
 $Password = hash('sha1',$Password, false); 
 
 $stm = $conexion->prepare($sql);
-$stm->bind_param('sisii',$Password,$Intentos,$FechaLogin,$FkUsuario,$IdPassword);
+$stm->bind_param('ssii',$Password,$FechaLogin,$Status,$FkUsuario);
 if($stm->execute()){
-	echo "Actualizado";
+	$valor['Actualizado']=true;
 }else{
-	echo "NoActulizado";
+	$valor['Actualizado']=false;
 }
+$json['Check'][] = $valor;
+echo json_encode($json);
 mysqli_close($conexion);
 ?>

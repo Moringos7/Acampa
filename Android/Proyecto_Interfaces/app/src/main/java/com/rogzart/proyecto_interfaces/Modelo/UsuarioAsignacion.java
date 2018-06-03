@@ -1,8 +1,9 @@
 package com.rogzart.proyecto_interfaces.Modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class UsuarioAsignacion extends Usuario {
+public class UsuarioAsignacion extends Usuario implements Serializable {
     private ArrayList<AdultoMayor> AdultosMayores;
     public UsuarioAsignacion(){
 
@@ -17,6 +18,7 @@ public class UsuarioAsignacion extends Usuario {
             this.setFechaNacimiento(user.getFechaNacimiento());
             this.setFotografia(user.getFotografia());
             this.setFkSeccion(user.getFkSeccion());
+            this.AdultosMayores = new ArrayList<AdultoMayor>();
     }
     public ArrayList<AdultoMayor> getAdultosMayores() {
         return AdultosMayores;

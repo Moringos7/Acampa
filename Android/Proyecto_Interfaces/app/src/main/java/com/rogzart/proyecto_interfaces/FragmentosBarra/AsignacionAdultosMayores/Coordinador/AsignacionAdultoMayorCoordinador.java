@@ -1,5 +1,6 @@
 package com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Coordinador;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
@@ -11,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,9 +22,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.rogzart.proyecto_interfaces.Adultos.Adultos;
 import com.rogzart.proyecto_interfaces.Barra_desplegable;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.MenuAdministrar;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos.Eventos;
+import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
+import com.rogzart.proyecto_interfaces.Modelo.SeleccionAM;
 import com.rogzart.proyecto_interfaces.Modelo.UsuarioAsignacion;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
@@ -50,61 +57,77 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     private Boolean A;
     private HiloCargaLista myHiloC;
     public int NumeroPeticiones;
+    private int posicion;
+    private ArrayList<SeleccionAM> Selecciones;
+    private LinearLayout LinearprogressBar;
+    private TextView ContadorAsignados;
+
 
 
     public  AsignacionAdultoMayorCoordinador(){
-
+        Selecciones = new ArrayList<SeleccionAM>();
     }
+    @SuppressLint("ValidFragment")
+    public  AsignacionAdultoMayorCoordinador(Bundle bolsa){
+        Selecciones = (ArrayList<SeleccionAM>) bolsa.getSerializable("Selecciones");
+    }
+    public static AsignacionAdultoMayorCoordinador newInstance() {
+        AsignacionAdultoMayorCoordinador fragment = new AsignacionAdultoMayorCoordinador();
+        return fragment;
+    }
+    public static AsignacionAdultoMayorCoordinador newInstance(Bundle bolsa) {
+        AsignacionAdultoMayorCoordinador fragment = new AsignacionAdultoMayorCoordinador(bolsa);
+        return fragment;
+    }
+
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
         configurarDialogs();
+        LinearprogressBar = getView().findViewById(R.id.progressBarAsignacion);
+        ContadorAsignados = getView().findViewById(R.id.ContadorAsignados);
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         FechaActual = generarFecha();
         NumeroPeticiones = 0;
         EventoDisponible = operador.verificarEvento(FechaActual);
         if(!EventoDisponible){
             AlertaEvento.show();
-        }else{
-            configurarHilos();
         }
+        LinearprogressBar.setVisibility(View.VISIBLE);
+        configurarHilos();
+        ////Botones de Administracion
         Button btn = getView().findViewById(R.id.btntemporal);
+        btn.setText("Recargar");
         btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DetenerHilos();
+                configurarHilos();
+
+            }
+        });
+        Button BTN = getView().findViewById(R.id.btnActivar);
+        BTN.setText("Status");
+        BTN.setOnClickListener(
+                new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Peticiones: "+NumeroPeticiones, Toast.LENGTH_SHORT).show();
                 Toast.makeText(getContext(), "Estado Hilo1: "+Activado, Toast.LENGTH_SHORT).show();
                 Toast.makeText(getContext(), "Estado Hilo2: "+myHiloC.getStatus(), Toast.LENGTH_SHORT).show();
-
             }
         });
-        Button BTN = getView().findViewById(R.id.btnActivar);
-        BTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DetenerHilos();
-            }
-        });
+        //Botones de Administracion
     }
-
-    public static AsignacionAdultoMayorCoordinador newInstance() {
-        AsignacionAdultoMayorCoordinador fragment = new AsignacionAdultoMayorCoordinador();
-        return fragment;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_asignacion_adulto_mayor_coordinador, container, false);
 
     }
-
     @Override
     public void onPause() {
         super.onPause();
         DetenerHilos();
     }
-
-
-
 
     private void configurarDialogs(){
         AlertaEvento = new AlertDialog.Builder(getContext());
@@ -124,8 +147,9 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     }
 
     private void agendar(){
+        //Toast.makeText(getContext(), "Agendame", Toast.LENGTH_SHORT).show();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.contenedor, Eventos.newInstance());
+        ft.replace(R.id.contenedor,Eventos.newInstance());
         ft.addToBackStack(null);
         ft.commit();
     }
@@ -153,17 +177,31 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     public void cargarLista(){
         listaG = getView().findViewById(R.id.listaAsigancionCoordinador);
         ArrayList<UsuarioAsignacion> arrayList = operador.LeerUsuariosAsignacion(FechaActual);
-        ListaAdaptadorAsignacionAdultoMayor miLista = new ListaAdaptadorAsignacionAdultoMayor(arrayList, getContext());
+        for(UsuarioAsignacion usuario : arrayList){
+            for(SeleccionAM regirsto : Selecciones){
+                if(regirsto.getIdentificador() == usuario.getIdUsuario()){
+                    usuario.setAdultosMayores(regirsto.getListaAsigandos());
+                }
+            }
+        }
+        ListaAdaptadorAsignacionAdultoMayor miLista = new ListaAdaptadorAsignacionAdultoMayor(arrayList, getContext(),FechaActual,Selecciones);
+        LinearprogressBar.setVisibility(View.GONE);
         listaG.setAdapter(miLista);
+        Asignaciones();
+    }
+    private void Asignaciones(){
+        int NumAdultosMayores;
+        //Adultos Mayores en el sistema
+        ArrayList<AdultoMayor> AdultosMayores = operador.LeerTablaAdultoMayor();
+        //Adultos Mayores Asignados Actualmente
+        ArrayList<AdultoMayor> Asignados = operador.obtenerAdultosMayoresAsignados(FechaActual);
+        NumAdultosMayores = AdultosMayores.size() - Asignados.size();
+        ContadorAsignados.setText(String.valueOf(NumAdultosMayores));
+        ContadorAsignados.setVisibility(View.VISIBLE);
     }
     private void DetenerHilos(){
         Activado = false;
         myHiloC.cancel(true);
-        /*if (myHiloC.getStatus() == AsyncTask.Status.FINISHED) {
-            Toast.makeText(getContext(), "Muerto", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(getContext(), "I´m living", Toast.LENGTH_SHORT).show();
-        }*/
     }
     private void configurarHilos(){
         NumeroPeticiones = 0;

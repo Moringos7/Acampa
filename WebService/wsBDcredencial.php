@@ -3,11 +3,11 @@ $hostname = "localhost";
 $database = "servicioatemajac";
 $username = "root";
 //Local
-
-$password = "";
-
-//Online
 /*
-$password ="FDroothostJM";
+$password = "";
 */
+//Online
+
+$password ="FDroothostJM";
+
 ?>

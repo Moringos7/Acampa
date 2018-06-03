@@ -6,14 +6,19 @@ $Fecha = $_POST["fecha"];
 $FkUsuario = $_POST["fkusuario"];
 $FkAdultoMayor = $_POST["fkadultomayor"];
 
-$sql = "INSERT INTO asignacion VALUES(null,?,?,?,?)";
-
-$stm = $conexion->prepare($sql);
-$stm->bind_param('isii',$Status,$Fecha,$FkUsuario,$FkAdultoMayor);
-if($stm->execute()){
-	echo "Creado";
+$select = "SELECT IdAsignacion FROM asignacion WHERE FkAdultoMayor IS NULL AND Fecha = '$Fecha' AND FkUsuario = '$FkUsuario'";
+$resultado = mysqli_query($conexion,$select);
+if($registro = mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
+	echo "Solicitud Enviada";
 }else{
-	echo "No Creado";
+	$sql = "INSERT INTO asignacion VALUES(null,?,?,?,?)";
+	$stm = $conexion->prepare($sql);
+	$stm->bind_param('isii',$Status,$Fecha,$FkUsuario,$FkAdultoMayor);
+	if($stm->execute()){
+		echo "Solicitud Enviada";
+	}else{
+		echo "Solicitud No Enviada";
+	}
 }
 mysqli_close($conexion);
 ?>

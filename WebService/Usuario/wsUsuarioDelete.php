@@ -1,8 +1,10 @@
 <?php 
 require("../wsBDcredencial.php");
+$json = file_get_contents('php://input');
+$data = json_decode($json); 
 
-if(isset($_POST["idusuario"])){
-	$IdUsuario = $_POST["idusuario"];
+if(isset($data->idusuario){
+	$IdUsuario = $data->idusuario;
 	$conexion = mysqli_connect($hostname,$username,$password,$database);
 	$sql = "DELETE FROM usuario WHERE IdUsuario = ? ";
 	$stm = $conexion->prepare($sql);

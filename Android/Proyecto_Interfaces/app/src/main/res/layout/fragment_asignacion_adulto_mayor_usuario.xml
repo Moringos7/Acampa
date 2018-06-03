@@ -5,10 +5,25 @@
     android:layout_height="match_parent"
     tools:context=".FragmentosBarra.AsignacionAdultosMayores.Usuario.AsignacionAdultoMayorUsuario">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hola" />
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayoutCargando"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        >
+        <ProgressBar
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Cargando..."
+            android:paddingBottom="10dp"
+            android:textSize="20sp"/>
+    </LinearLayout>
+
 
 </FrameLayout>
