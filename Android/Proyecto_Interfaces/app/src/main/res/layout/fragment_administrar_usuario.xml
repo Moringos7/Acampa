@@ -15,12 +15,14 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:paddingTop="10dp">
+
             <Button
                 android:id="@+id/btnusuariosGeneral"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="General"
-                android:layout_marginRight="30dp"/>
+                android:layout_marginRight="30dp"
+                android:text="General" />
+
             <Button
                 android:id="@+id/btnNOregistrados"
                 android:layout_width="wrap_content"
@@ -34,19 +36,20 @@
             android:orientation="vertical"
             android:id="@+id/layoutNoRegistrados"
             android:visibility="gone">
+
             <TextView
+                android:id="@+id/resultadosNoRegistrado"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/resultadosNoRegistrado"
+                android:gravity="center"
                 android:text="n Resultados"
-                android:textSize="20dp"
                 android:textColor="#838383"
-                android:gravity="center"/>
+                android:textSize="20dp" />
+
             <ListView
                 android:id="@+id/lista_administar_usuario_no_registrados"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </ListView>
+                android:layout_height="wrap_content"></ListView>
         </LinearLayout>
         <LinearLayout
             android:layout_width="320dp"
@@ -61,14 +64,16 @@
                 android:id="@+id/searchUsuario"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
             <TextView
+                android:id="@+id/resultados"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/resultados"
+                android:gravity="center"
                 android:text="n Resultados"
-                android:textSize="20dp"
                 android:textColor="#838383"
-                android:gravity="center"/>
+                android:textSize="20dp" />
+
             <ListView
                 android:id="@+id/lista_administar_usuario"
                 android:layout_width="wrap_content"
@@ -79,4 +84,5 @@
 
 
     </LinearLayout>
+
 </FrameLayout>

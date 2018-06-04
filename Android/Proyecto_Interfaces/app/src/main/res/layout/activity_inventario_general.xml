@@ -8,57 +8,112 @@
 
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/list_inventario_general_btnG"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:text="General" />
-
-            <Button
-                android:id="@+id/list_inventario_general_btnE"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:text="Extras" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView20"
+            android:id="@+id/inventario_general_layout_general"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="Inventario General"
-            android:textSize="24sp" />
+            android:orientation="vertical">
 
-        <SearchView
-            android:id="@+id/list_inventario_general_buscador"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Inventario General"
+                android:textSize="24sp" />
 
-        <ListView
-            android:id="@+id/list_inventario_general_lista"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/list_inventario_general_btnG"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:text="General" />
+
+                <Button
+                    android:id="@+id/list_inventario_general_btnE"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:text="Extras" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LinearLGeneral"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/list_Inventario_general_resultados"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="N Resultados" />
+
+                <SearchView
+                    android:id="@+id/list_inventario_general_buscador"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </SearchView>
 
 
-        </ListView>
+                <ListView
+                    android:id="@+id/listaGeneral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-    </LinearLayout>
+
+                </ListView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/LinearLExtra"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/resultadosE"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="N Resultados" />
+
+                <SearchView
+                    android:id="@+id/buscadorExtras"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </SearchView>
+
+
+                <ListView
+                    android:id="@+id/listaExtras"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+
+                </ListView>
+            </LinearLayout>
+        </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/list_inventario_general_agregar"
@@ -69,9 +124,119 @@
         android:layout_marginBottom="28dp"
         android:layout_marginEnd="26dp"
         android:clickable="true"
+        android:onClick="onClick"
         android:src="@android:drawable/ic_input_add"
         app:backgroundTint="?attr/colorBackgroundFloating" />
 
+    <ScrollView
+        android:id="@+id/Scroll_agregar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
+        <LinearLayout
+            android:id="@+id/inventario_general_layout_agregar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:paddingLeft="10dp">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/boton_regresar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                app:backgroundTint="@android:color/holo_red_light"
+                app:rippleColor="?attr/colorError"
+                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+            <ImageView
+                android:id="@+id/agregar_producto_imagen"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="30dp"
+                app:srcCompat="@drawable/inventario" />
+
+            <android.support.design.widget.TextInputLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="30dp"
+                app:hintTextAppearance="@style/AppTheme.FloatingLabel">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/agregar_producto_nombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="30dp"
+                app:hintTextAppearance="@style/AppTheme.FloatingLabel">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/agregar_producto_existencia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Existencia" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="30dp"
+                app:hintTextAppearance="@style/AppTheme.FloatingLabel">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/agregar_producto_cantidad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Cantidad" />
+            </android.support.design.widget.TextInputLayout>
+
+            <EditText
+
+                android:id="@+id/agregar_producto_descripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:hint="Descripción"
+                android:inputType="textMultiLine" />
+
+            <CheckBox
+                android:id="@+id/agregar_producto_extra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Extra" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Button"
+                android:theme="@style/RaisedButton" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

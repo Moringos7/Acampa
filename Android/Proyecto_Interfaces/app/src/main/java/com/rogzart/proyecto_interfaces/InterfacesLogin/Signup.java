@@ -90,7 +90,7 @@ public class signup extends AppCompatActivity implements View.OnClickListener {
 
 
     }
-    void Registro(){
+        void Registro(){
         String Dia,Mes,Anio;
         String nombre = Nombre.getText().toString();
         String apellidoPaterno = ApellidoPaterno.getText().toString();
