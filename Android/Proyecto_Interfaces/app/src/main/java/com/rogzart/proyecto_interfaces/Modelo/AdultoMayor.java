@@ -2,7 +2,11 @@ package com.rogzart.proyecto_interfaces.Modelo;
 
 import android.support.annotation.IntegerRes;
 
-public class AdultoMayor {
+
+import java.io.Serializable;
+
+
+public class AdultoMayor implements Serializable{
     private int IdAdultoMayor;
     private String Nombre;
     private String ApellidoPaterno;
@@ -11,8 +15,10 @@ public class AdultoMayor {
     private int Diabetico;
     private Integer FkDependencia;
     private Integer FkDomicilio;
-    public AdultoMayor(){
+    private Boolean Check;
 
+    public AdultoMayor(){
+        Check = false;
     }
 
     public int getIdAdultoMayor() {
@@ -83,4 +89,11 @@ public class AdultoMayor {
         }
         FkDomicilio = fkDomicilio;
     }
+    public Boolean getCheck() {
+        return Check;
+    }
+    public void setCheck(boolean Check) {
+        this.Check = Check;
+    }
+
 }

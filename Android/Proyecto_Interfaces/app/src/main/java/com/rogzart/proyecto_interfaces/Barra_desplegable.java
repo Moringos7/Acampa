@@ -15,16 +15,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.MenuAdministrar;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Coordinador.AsignacionAdultoMayorCoordinador;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Usuario.AsignacionAdultoMayorUsuario;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos.Eventos;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento01;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento02;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventario;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventarioMain;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.TrazadoRuta.Trazado_de_ruta;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento04;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento06;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento07;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento08;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento09;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.Singleton.LogUser;
@@ -34,16 +33,14 @@ import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
 public class Barra_desplegable extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private Conexion CONECT;
+    private LogUser ControlUser;
     private ActualizacionBaseDatos Act;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogUser ControlUser = LogUser.obtenerInstancia(getApplicationContext());
+        ControlUser = LogUser.obtenerInstancia(getApplicationContext());
         Usuario mUsuario = ControlUser.getUser();
         CONECT = new Conexion(getApplicationContext());
-
-
-
         setContentView(R.layout.activity_barra_desplegable);
 
         /*ActionBar actionBar = getActionBar();
@@ -90,12 +87,13 @@ public class Barra_desplegable extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        /*if (drawer.isDrawerOpen(GravityCompat.START)) {
+            //drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
-        }
+
+        }*/
+        super.onBackPressed();
     }
 
     @Override
@@ -115,7 +113,9 @@ public class Barra_desplegable extends AppCompatActivity
             if(CONECT.isConnected()) {
                 Act = new ActualizacionBaseDatos(getApplicationContext());
                 Act.VolcarBasedeDatos();
-                Act.ActualizarBasedeDatos(getApplicationContext());
+                if(Act.ActualizarBasedeDatos(getApplicationContext())){
+                    Toast.makeText(this, "Actualizacion Completada", Toast.LENGTH_SHORT).show();
+                }
             }else{
                 Toast.makeText(this, "Error: Actualización, Verifique su conexión", Toast.LENGTH_SHORT).show();
             }
@@ -129,12 +129,22 @@ public class Barra_desplegable extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        boolean CheckConexionCoordinador = true;
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         int id = item.getItemId();
         if(id == R.id.nav_Asignacion){
-            ft.replace(R.id.contenedor, Fragmento04.newInstance());
-            ft.addToBackStack(null);
-            ft.commit();
+            if(ControlUser.getCoordinador() > 0) {
+                ft.replace(R.id.contenedor, AsignacionAdultoMayorCoordinador.newInstance());
+                CheckConexionCoordinador = CONECT.isConnected();
+            }else{
+                ft.replace(R.id.contenedor, AsignacionAdultoMayorUsuario.newInstance());
+            }
+            if(CheckConexionCoordinador) {
+                ft.addToBackStack(null);
+                ft.commit();
+            }else {
+                Toast.makeText(this, "Verifica tu conexion a Internet", Toast.LENGTH_SHORT).show();
+            }
         }else if(id == R.id.nav_Ruta){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Trazado_de_ruta()).commit();
         }else if(id == R.id.nav_Info){
@@ -158,11 +168,17 @@ public class Barra_desplegable extends AppCompatActivity
         }else if(id == R.id.nav_Estadisticas){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento08()).commit();
         }else if(id == R.id.nav_Eventos){
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento09()).addToBackStack(null).commit();
+
+            ft.replace(R.id.contenedor, Eventos.newInstance());
+            ft.addToBackStack(null);
+            ft.commit();
+
         }else if(id == R.id.nav_Administrar) {
             ft.replace(R.id.contenedor, MenuAdministrar.newInstance());
             ft.addToBackStack(null);
             ft.commit();
+        }else if(id == R.id.nav_Salir){
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
