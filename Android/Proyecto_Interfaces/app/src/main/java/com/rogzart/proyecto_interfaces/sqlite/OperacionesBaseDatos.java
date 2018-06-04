@@ -576,7 +576,6 @@ public final class OperacionesBaseDatos {
                 aM.setFkDomicilio(c.getInt(8));
                 list.add(aM);
             } while (c.moveToNext());
-
         }
         return list;
     }
@@ -702,4 +701,108 @@ public final class OperacionesBaseDatos {
         }
         return list;
     }
+    /**Estaditicas**/
+    //(1)
+    public int promedioVoluntariosMes(String mes, String anio){
+        int numero = 0;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT COUNT(*) FROM asignacion WHERE substr(Fecha,1,4) = ?  AND substr(Fecha,6,2) = ? AND Status = ?",new String[]{anio,mes,String.valueOf(1)});
+        if(c.moveToFirst()){
+            numero = c.getInt(0);
+        }
+        return numero;
+    }
+    public int contarAdultoMayor(){
+        int cuenta = 0;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT COUNT(*) FROM adultomayor",null);
+        if(c.moveToFirst()){
+            cuenta = c.getInt(0);
+        }
+        return cuenta;
+    }
+    //(2)
+    public int asignacionesMes(String mes, String anio){
+        int numero = 0;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT COUNT(*) FROM asignacion,adultomayor WHERE substr(Fecha,1,4) = ?  AND substr(Fecha,6,2) = ? AND FkAdultoMayor = IdAdultoMayor",new String[]{anio,mes});
+        if(c.moveToFirst()){
+            numero = c.getInt(0);
+        }
+        return numero;
+    }
+    public int numeroUsuarios(){
+        int numero = 0;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT COUNT(*) FROM usuario",null);
+        if(c.moveToFirst()){
+            numero = c.getInt(0);
+            numero = numero-1;
+        }
+        return numero;
+    }
+    //(3)
+    public ArrayList<Usuario> usuariosAsignacion(String mes, String anio){
+        ArrayList<Usuario> List = new ArrayList<Usuario>();
+        Usuario x;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT DISTINCT usuario.* FROM usuario,asignacion,adultomayor " +
+                "WHERE IdUsuario = FkUsuario " +
+                "AND IdAdultoMayor = FkAdultoMayor " +
+                "AND substr(Fecha,1,4) = ?" +
+                "AND substr(Fecha,6,2) = ?",new String[]{anio,mes});
+        if(c.moveToFirst()) {
+            do {
+                x = new Usuario();
+                x.setIdUsuario(c.getInt(1));
+                x.setNombre(c.getString(2));
+                x.setApellidoPaterno(c.getString(3));
+                x.setApellidoMaterno(c.getString(4));
+                x.setCorreo(c.getString(5));
+                x.setFotografia(c.getString(6));
+                x.setFechaNacimiento(c.getString(7));
+                x.setScout(c.getInt(8));
+                x.setFkSeccion(c.getInt(9));
+                List.add(x);
+            } while (c.moveToNext());
+        }
+        return List;
+    }
+    //Semestral
+    public ArrayList<Usuario> usuariosActivos(){
+        ArrayList<Usuario> List = new ArrayList<Usuario>();
+        Usuario x;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM usuario",null);
+        if(c.moveToFirst()) {
+            do {
+                x = new Usuario();
+                x.setIdUsuario(c.getInt(1));
+                x.setNombre(c.getString(2));
+                x.setApellidoPaterno(c.getString(3));
+                x.setApellidoMaterno(c.getString(4));
+                x.setCorreo(c.getString(5));
+                x.setFotografia(c.getString(6));
+                x.setFechaNacimiento(c.getString(7));
+                x.setScout(c.getInt(8));
+                x.setFkSeccion(c.getInt(9));
+                List.add(x);
+            } while (c.moveToNext());
+        }
+        return List;
+    }
+    public String substring(){
+        String pedazo = "";
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT substr('2018-06-04',6,2)",null);
+        //2018-06-04
+        //12345678910
+        if(c.moveToFirst()){
+            pedazo = c.getString(0);
+        }
+        return pedazo;
+    }
+
+
+
 }

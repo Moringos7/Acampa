@@ -58,30 +58,34 @@ public class ListaAdaptadorAsignacionIndividual extends BaseAdapter {
 
         final ViewHolder holder;
 
-        if(convertView == null){
+        //if(convertView == null){
             convertView = inflate.inflate(R.layout.fragment_asignacion_individual_list,null);
             holder = new ViewHolder();
             holder.Nombre = convertView.findViewById(R.id.IdNombreAdultoMayorAsignacion);
             holder.imagen = convertView.findViewById(R.id.imagenAdultoMayorAsignacionIndividual);
             holder.check = convertView.findViewById(R.id.checkAsignacion);
-
+            holder.Frecuente = convertView.findViewById(R.id.IdVoluntarioFrecuente);
+            holder.adultoMayor = adultomayor.get(position);
             convertView.setTag(holder);
-        }else{
+        /*}else{
             holder = (ViewHolder)convertView.getTag();
-        }
-        TextView Frecuente = convertView.findViewById(R.id.IdVoluntarioFrecuente);
+            holder.check.setOnCheckedChangeListener(null);
+        }*/
+
         for(int i=0; i<Frecuentes.size();i++){
-            if(Frecuentes.get(i).getIdAdultoMayor() == adultomayor.get(position).getIdAdultoMayor()){
-                Frecuente.setVisibility(View.VISIBLE);
+            if(Frecuentes.get(i).getIdAdultoMayor() == holder.adultoMayor.getIdAdultoMayor()){
+                holder.Frecuente.setVisibility(View.VISIBLE);
             }
         }
+        holder.check.setChecked(holder.adultoMayor.getCheck());
+        /*
         if(adultomayor.get(position).getCheck()){
             holder.check.setChecked(true);
-        }
-        final AdultoMayor adultoMayor  = adultomayor.get(position);
+        }*/
+
         Conexion conexion = new Conexion(contexto);
 
-        conexion.setRuta("WebService/"+adultomayor.get(position).getFotografia());
+        conexion.setRuta("WebService/"+holder.adultoMayor.getFotografia());
         ImageRequest imageRequest = new ImageRequest(conexion.getRuta(), new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
@@ -97,10 +101,16 @@ public class ListaAdaptadorAsignacionIndividual extends BaseAdapter {
 
         String NombreCompleto = adultomayor.get(position).getNombre()+" "+adultomayor.get(position).getApellidoPaterno()+" "+adultomayor.get(position).getApellidoMaterno();
         holder.Nombre.setText(NombreCompleto);
+
         holder.check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                adultomayor.get(position).setCheck(isChecked);
+                if(isChecked){
+                    adultomayor.get(position).setCheck(true);
+                }else{
+                    adultomayor.get(position).setCheck(false);
+                }
+
             }
         });
 
@@ -110,6 +120,7 @@ public class ListaAdaptadorAsignacionIndividual extends BaseAdapter {
         TextView Nombre,Frecuente;
         ImageView imagen;
         CheckBox check;
+        AdultoMayor adultoMayor;
     }
 }
 

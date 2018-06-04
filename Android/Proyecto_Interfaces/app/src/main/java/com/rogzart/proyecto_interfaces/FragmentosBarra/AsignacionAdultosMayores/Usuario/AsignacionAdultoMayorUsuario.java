@@ -62,27 +62,24 @@ public class AsignacionAdultoMayorUsuario extends Fragment {
         super.onActivityCreated(state);
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         conexion = new Conexion(getContext());
-
+        Asignados = new ArrayList<AdultoMayor>();
         LayoutPrincipal = getView().findViewById(R.id.linearLayoutCargando);
         FechaActual = generarFecha();
         ControlUser = LogUser.obtenerInstancia(getContext());
         mUsuario = ControlUser.getUser();
         if(VerificarAsignaciones()){
-            Toast.makeText(getContext(), "Tienes Asignaciones", Toast.LENGTH_SHORT).show();
-            //Ir a Interfaz Recibir Asignacion
+            Bundle bolsa = new Bundle();
+            bolsa.putSerializable("AdultosMayores",Asignados);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.contenedor, AdultosMayoresAsignados.newInstance(bolsa));
+            ft.addToBackStack(null);
+            ft.commit();
         }else{
             if(!conexion.isConnected()){
-                Toast.makeText(getContext(), "Sin asignaciones,Conectate a Internet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Sin Asignaciones,Conectate a Internet", Toast.LENGTH_SHORT).show();
             }else{
                 myHiloC = new HiloRecargarAsignacion();
                 myHiloC.execute();
-                /*new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //ActualizarAsignacion();
-
-                    }
-                }).start();*/
             }
         }
     }
@@ -110,7 +107,9 @@ public class AsignacionAdultoMayorUsuario extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        myHiloC.cancel(true);
+        if(myHiloC != null){
+            myHiloC.cancel(true);
+        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -147,11 +146,13 @@ public class AsignacionAdultoMayorUsuario extends Fragment {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             if(VerificarAsignaciones()){
-                Toast.makeText(getContext(), "Tienes Asignaciones2", Toast.LENGTH_SHORT).show();
-                //Ir a Interfaz Recibir Asignacion
+                /*Bundle bolsa = new Bundle();
+                bolsa.putSerializable("AdultosMayores",Asignados);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.contenedor, AdultosMayoresAsignados.newInstance(bolsa));
+                ft.addToBackStack(null);
+                ft.commit();*/
             }else{
-                //Toast.makeText(getContext(), "No Tienes Asignaciones2", Toast.LENGTH_SHORT).show();
-                //Ir a Interfaz peticion asignacion
                 Bundle bolsa = new Bundle();
                 bolsa.putString("FechaActual",FechaActual);
                 bolsa.putSerializable("Usuario",mUsuario);

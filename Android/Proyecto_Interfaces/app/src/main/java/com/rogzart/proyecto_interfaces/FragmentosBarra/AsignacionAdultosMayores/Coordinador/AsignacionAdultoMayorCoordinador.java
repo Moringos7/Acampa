@@ -95,6 +95,8 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         LinearprogressBar.setVisibility(View.VISIBLE);
         configurarHilos();
         ////Botones de Administracion
+        LinearLayout Botones = getView().findViewById(R.id.layoutBotones);
+        Botones.setVisibility(View.VISIBLE);
         Button btn = getView().findViewById(R.id.btntemporal);
         btn.setText("Recargar");
         btn.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +162,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     }
     private String generarFecha(){
         String Fecha;
+        Calendar c = Calendar.getInstance();
         int Dia = c.get(Calendar.DAY_OF_MONTH);
         int Mes = c.get(Calendar.MONTH)+1;
         int Anio = c.get(Calendar.YEAR);
@@ -253,7 +256,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    Toast.makeText(getContext(), "Fallo Conexion", Toast.LENGTH_SHORT).show();
                 }
             });
         }

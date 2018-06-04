@@ -156,7 +156,13 @@ public class SolicitarAsignacion extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            Toast.makeText(getContext(), "Encontrado", Toast.LENGTH_SHORT).show();
+            Bundle bolsa = new Bundle();
+            bolsa.putSerializable("AdultosMayores",Asignados);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.contenedor, AdultosMayoresAsignados.newInstance(bolsa));
+            ft.addToBackStack(null);
+            ft.commit();
+
 
         }
     }
