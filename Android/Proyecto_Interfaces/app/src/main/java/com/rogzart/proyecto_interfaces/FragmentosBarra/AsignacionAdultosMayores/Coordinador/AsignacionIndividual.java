@@ -36,8 +36,6 @@ import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.Modelo.UsuarioAsignacion;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
-import com.rogzart.proyecto_interfaces.prueba.AdaptadorObjetoSimple;
-import com.rogzart.proyecto_interfaces.prueba.ObjetoSimple;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import java.util.ArrayList;

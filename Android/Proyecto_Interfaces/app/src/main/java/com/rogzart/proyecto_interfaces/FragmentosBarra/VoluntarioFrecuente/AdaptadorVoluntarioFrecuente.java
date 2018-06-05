@@ -1,6 +1,5 @@
-package com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.AU;
+package com.rogzart.proyecto_interfaces.FragmentosBarra.VoluntarioFrecuente;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -11,98 +10,71 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.AU.ListaAdaptadorUsuario;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
-import com.rogzart.proyecto_interfaces.Modelo.Seccion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
-import com.rogzart.proyecto_interfaces.Modelo.Seccion;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
-import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import java.util.ArrayList;
 
-import static com.rogzart.proyecto_interfaces.R.layout.list_usuario_administrar;
+public class AdaptadorVoluntarioFrecuente extends BaseAdapter implements Filterable {
 
-public class ListaAdaptadorUsuario extends BaseAdapter implements Filterable{
-
-    private ArrayList<Usuario> datos;
+    private ArrayList<Usuario> users;
     private Context contexto;
-    private OperacionesBaseDatos operador;
     private CustomFilter filter;
     private ArrayList<Usuario> filterList;
-    public ListaAdaptadorUsuario(ArrayList<Usuario> datos, Context contexto)
-    {
-        this.datos = datos;
+    public AdaptadorVoluntarioFrecuente(ArrayList<Usuario> users, Context contexto){
+        this.users = users;
         this.contexto = contexto;
-        this.filterList = datos;
+        this.filterList = users;
     }
-
-
     @Override
     public int getCount() {
-        return datos.size();
+        return users.size();
     }
 
     @Override
     public Object getItem(int position) {
-
-        return datos.get(position);
+        return users.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-
-        return datos.get(position).getIdUsuario();
+        return users.get(position).getIdUsuario();
     }
-
+    private static class ViewHolder{
+        TextView Nombre,Apellido;
+        ImageView Fotografia;
+        View v;
+    }
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
+    public View getView(final int position, View convertView, ViewGroup parent) {
         Conexion conexion = new Conexion(contexto);
+
         LayoutInflater inflate = LayoutInflater.from(contexto);
-        View v = inflate.inflate(R.layout.list_usuario_administrar,null);
+        View v = inflate.inflate(R.layout.list_voluntarios,null);
+        Usuario usuario = users.get(position);
 
-        TextView nombre = (TextView) v.findViewById(R.id.list_usuario_nombre);
-        TextView apellidos = (TextView) v.findViewById(R.id.list_usuario_apellidos);
-        final ImageView imagen = (ImageView) v.findViewById(R.id.list_usuario_imagen);
-        TextView seccionLista = (TextView) v.findViewById(R.id.list_usuario_seccion);
-        operador = OperacionesBaseDatos.obtenerInstancia(contexto);
+        final ViewHolder holder;
+        holder = new ViewHolder();
 
-        nombre.setText(datos.get(position).getNombre());
-        apellidos.setText(datos.get(position).getApellidoPaterno()+" "+datos.get(position).getApellidoMaterno());
+        holder.Fotografia = v.findViewById(R.id.FotografiaVF);
+        holder.Nombre = v.findViewById(R.id.IdNombre);
+        holder.Apellido = v.findViewById(R.id.IdApellido);
 
-        Seccion seccionUsuario = operador.ObtenerSeccion(datos.get(position).getFkSeccion());
-        seccionLista.setText(seccionUsuario.getNombre());
-        switch (seccionUsuario.getIdSeccion()){
-            case 1:
-                seccionLista.setBackgroundColor(Color.argb(255, 255, 255, 0));
-            break;
-            case 2:
-                seccionLista.setBackgroundColor(Color.argb(255, 41, 138, 8));
-            break;
-            case 3:
-                seccionLista.setBackgroundColor(Color.argb(255, 4, 95, 180));
-                seccionLista.setTextSize(15);
-            break;
-            case 4:
-                seccionLista.setBackgroundColor(Color.argb(255, 255, 0, 0));
-            break;
-            case 5:
-                seccionLista.setBackgroundColor(Color.argb(255, 132, 132, 132));
-            break;
-        }
-
-        conexion.setRuta("WebService/"+datos.get(position).getFotografia());
+        conexion.setRuta("WebService/"+usuario.getFotografia());
         ImageRequest imageRequest = new ImageRequest(conexion.getRuta(), new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
-                imagen.setImageBitmap(response);
+                holder.Fotografia.setImageBitmap(response);
             }
         }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
             @Override
@@ -111,13 +83,14 @@ public class ListaAdaptadorUsuario extends BaseAdapter implements Filterable{
             }
         });
         VolleySingleton.getInstance(contexto).addToRequestQueue(imageRequest);
+        holder.Nombre.setText(usuario.getNombre());
+        holder.Apellido.setText(usuario.getApellidoPaterno()+" "+usuario.getApellidoMaterno());
 
         return v;
     }
 
     @Override
     public Filter getFilter() {
-
         if(filter == null){
             filter = new CustomFilter();
         }
@@ -134,7 +107,13 @@ public class ListaAdaptadorUsuario extends BaseAdapter implements Filterable{
                 ArrayList<Usuario> filters = new ArrayList<Usuario>();
                 Usuario u = new Usuario();
                 for(int i=0; i<filterList.size();i++){
-                    if(filterList.get(i).getNombre().toUpperCase().contains(constraint)){
+                    String Nombre = filterList.get(i).getNombre()+" "+filterList.get(i).getApellidoPaterno()+" "+filterList.get(i).getApellidoMaterno();
+                    Nombre.replace('á','a');
+                    Nombre.replace('é','e');
+                    Nombre.replace('í','i');
+                    Nombre.replace('ó','o');
+                    Nombre.replace('u','ú');
+                    if(Nombre.toUpperCase().contains(constraint)){
                         u = filterList.get(i);
                         filters.add(u);
                     }
@@ -150,7 +129,7 @@ public class ListaAdaptadorUsuario extends BaseAdapter implements Filterable{
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            datos = (ArrayList<Usuario>) results.values;
+            users = (ArrayList<Usuario>) results.values;
             notifyDataSetChanged();
         }
     }

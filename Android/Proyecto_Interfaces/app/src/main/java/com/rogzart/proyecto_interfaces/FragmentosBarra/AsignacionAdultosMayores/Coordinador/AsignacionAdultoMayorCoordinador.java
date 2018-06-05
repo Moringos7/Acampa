@@ -92,7 +92,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         if(!EventoDisponible){
             AlertaEvento.show();
         }
-        LinearprogressBar.setVisibility(View.VISIBLE);
+        //LinearprogressBar.setVisibility(View.VISIBLE);
         configurarHilos();
         ////Botones de Administracion
         LinearLayout Botones = getView().findViewById(R.id.layoutBotones);

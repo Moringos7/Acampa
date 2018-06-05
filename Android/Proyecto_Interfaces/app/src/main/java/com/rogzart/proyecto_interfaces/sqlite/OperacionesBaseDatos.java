@@ -145,6 +145,17 @@ public final class OperacionesBaseDatos {
         }
         //return list;
     }
+    public Ubicacion obtenerUbicacion(int Id){
+        Ubicacion mUbicacion = new Ubicacion();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM ubicacion WHERE IdUbicacion = ? ",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()) {
+            mUbicacion.setIdUbicacion(c.getInt(1));
+            mUbicacion.setLongitud(c.getDouble(2));
+            mUbicacion.setLatitud(c.getDouble(3));
+        }
+        return mUbicacion;
+    }
     /**TipoEvento**/
     public void InsertarTipoEvento(TipoEvento x){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
@@ -378,6 +389,20 @@ public final class OperacionesBaseDatos {
         valores.put(domicilio.FkUbicacion,x.getFkUbicacion());
         query.insert("domicilio",null,valores);
     }
+    public Domicilio obtenerDomicilio(int Id){
+        Domicilio mDomicilio = new Domicilio();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM domicilio WHERE IdDomicilio = ? ",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()) {
+            mDomicilio.setIdDomicilio(c.getInt(1));
+            mDomicilio.setNumero(c.getInt(2));
+            mDomicilio.setCalle(c.getString(3));
+            mDomicilio.setColonia(c.getString(4));
+            mDomicilio.setFoto(c.getString(5));
+            mDomicilio.setFkUbicacion(c.getInt(6));
+        }
+        return mDomicilio;
+    }
     public void LeerTablaDomicilio(){
         //List<Seccion> list;
         Domicilio x = new Domicilio();
@@ -445,6 +470,22 @@ public final class OperacionesBaseDatos {
             } while (c.moveToNext());
         }
         //return list;
+    }
+    public ArrayList<FotoAlrededores> obtenerFotoAlredoresporIdDomicilio(int Id){
+        ArrayList<FotoAlrededores> list = new ArrayList<FotoAlrededores>();
+        FotoAlrededores foto;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM fotoalrededores WHERE FkDomicilio = ?",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()) {
+            do {
+                foto = new FotoAlrededores();
+                foto.setIdFotoAlrededores(c.getInt(1));
+                foto.setFoto(c.getString(2));
+                foto.setFkDomicilio(c.getInt(3));
+                list.add(foto);
+            } while (c.moveToNext());
+        }
+        return list;
     }
     /**Problematica**/
     public void InsertarProblematica(Problematica x){
@@ -679,6 +720,23 @@ public final class OperacionesBaseDatos {
             } while (c.moveToNext());
         }
         //return list;
+    }
+    public Usuario obtenerVoluntarioFrecuente(int Id){
+        Usuario mUsuario = new Usuario();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT usuario.* FROM usuario,voluntariofrecuente WHERE FkUsuario = IdUsuario AND FkAdultoMayor = ?",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()){
+            mUsuario.setIdUsuario(c.getInt(1));
+            mUsuario.setNombre(c.getString(2));
+            mUsuario.setApellidoPaterno(c.getString(3));
+            mUsuario.setApellidoMaterno(c.getString(4));
+            mUsuario.setCorreo(c.getString(5));
+            mUsuario.setFotografia(c.getString(6));
+            mUsuario.setFechaNacimiento(c.getString(7));
+            mUsuario.setScout(c.getInt(8));
+            mUsuario.setFkSeccion(c.getInt(9));
+        }
+        return mUsuario;
     }
     public ArrayList<AdultoMayor> obtenerAdultosMayoresPorVoluntarioFrecuente(int Id){
         ArrayList<AdultoMayor> list = new ArrayList<AdultoMayor>();
