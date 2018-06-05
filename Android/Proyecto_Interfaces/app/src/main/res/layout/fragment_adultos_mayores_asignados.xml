@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FragmentosBarra.AsignacionAdultosMayores.Usuario.AdultosMayoresAsignados">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingTop="40dp"
+            android:text="Adultos Mayores Asignados"
+            android:textColor="#000"
+            android:textSize="21sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/numeroAdultos"
+            android:textSize="20dp"
+            android:text="23"
+            android:textStyle="bold"
+            android:background="@drawable/circulo"
+            android:gravity="center"
+            android:textColor="#fff"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/listAsignados">
+            </ListView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnTrazaRutaAsignacion"
+                android:layout_marginTop="50dp"
+                android:background="#2D73BF"
+                android:padding="10dp"
+                android:text="Trazar Ruta"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

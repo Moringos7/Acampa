@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.8.0.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 28-04-2018 a las 02:23:15
--- Versión del servidor: 10.1.30-MariaDB
--- Versión de PHP: 7.2.1
+-- Servidor: localhost
+-- Tiempo de generación: 31-05-2018 a las 20:04:52
+-- Versión del servidor: 10.0.34-MariaDB-0ubuntu0.16.04.1
+-- Versión de PHP: 7.0.30-0ubuntu0.16.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -184,7 +184,7 @@ CREATE TABLE `adultomayor` (
   `IdAdultoMayor` int(11) NOT NULL,
   `Nombre` varchar(50) DEFAULT NULL,
   `ApellidoPaterno` varchar(50) DEFAULT NULL,
-  `ApellidoMaterno` varchar(50) CHARACTER SET latin1 NOT NULL,
+  `ApellidoMaterno` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
   `Fotografia` varchar(100) CHARACTER SET latin1 NOT NULL,
   `Diabetico` tinyint(1) NOT NULL,
   `FkDependencia` int(11) DEFAULT NULL,
@@ -196,16 +196,16 @@ CREATE TABLE `adultomayor` (
 --
 
 INSERT INTO `adultomayor` (`IdAdultoMayor`, `Nombre`, `ApellidoPaterno`, `ApellidoMaterno`, `Fotografia`, `Diabetico`, `FkDependencia`, `FkDomicilio`) VALUES
-(1, 'Patricia', 'González', 'Martinez', 'img/am/1.jpg', 0, 2, 1),
-(2, 'Manuel', 'Alvarez', 'Figueroa', 'img/am/2.jpg', 0, 1, 2),
-(3, 'Ramiro', 'Pérez', 'Chavez', 'img/am/9.jpg', 0, 2, 3),
-(4, 'Facundo', 'Cabral', 'Ramiro', 'img/am/90.jpg', 0, 1, 4),
-(5, 'Luis', 'Reyes', 'Martinez', 'img/am/50.jpg', 0, 3, 5),
-(6, 'JoseMi', 'González', 'Pérez', 'img/0001.jpg', 0, 3, 1),
-(7, 'Pepe', 'Partida', 'edede', 'imeffefe', 1, 3, 6),
-(8, 'foto', 'foto', 'foto', 'irff', 1, 1, 2),
-(9, 'rtrtrt', 'swdedw', 'dffrfe', 'ddwdwd', 1, 2, 5),
-(10, 'ededed', 'ededed', 'edeef', 'dedede', 1, 1, 4);
+(11, 'Pascualito', 'Sevilla', 'Mártinez', 'img/adultomayor/x.jpg', 0, 2, 11),
+(12, 'Sebastiana', 'Corona', 'Gómez', 'img/adultomayor/x.jpg', 0, 2, 12),
+(13, 'Jovita', 'Benito', 'Rosales', 'img/adultomayor/x.jpg', 0, 2, 13),
+(14, 'María del Carmen', 'Valerio', 'Martinez', 'img/adultomayor/x.jpg', 1, 2, 14),
+(15, 'Juana', 'Saucedo', 'Fausto', 'img/adultomayor/x.jpg', 0, 2, 15),
+(16, 'Emilia', 'Virgen', 'López', 'img/adultomayor/x.jpg', 1, 2, 16),
+(17, 'Vicente', 'Prudencio', NULL, 'img/adultomayor/x.jpg', 1, 2, 17),
+(18, 'Regina', 'Reynaga', 'Zuñiga', 'img/adultomayor/x.jpg', 1, 2, 18),
+(19, 'Natalia', 'Candelario', 'Virgen', 'img/adultomayor/x.jpg', 1, 1, 19),
+(20, 'Rosario', 'Daniel', 'Contreras', 'img/adultomayor/x.jpg', 1, 2, 20);
 
 -- --------------------------------------------------------
 
@@ -221,17 +221,6 @@ CREATE TABLE `asignacion` (
   `FkAdultoMayor` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `asignacion`
---
-
-INSERT INTO `asignacion` (`IdAsignacion`, `Status`, `Fecha`, `FkUsuario`, `FkAdultoMayor`) VALUES
-(1, 1, '2018-03-12', 1, 1),
-(2, 1, '2018-03-12', 3, 2),
-(8, 1, '2018-10-23', 3, 4),
-(11, 0, '2018-04-18', NULL, 7),
-(12, 1, '2018-04-18', NULL, 7);
-
 -- --------------------------------------------------------
 
 --
@@ -244,16 +233,6 @@ CREATE TABLE `comentarioam` (
   `Fecha` date NOT NULL,
   `FkAdultoMayor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `comentarioam`
---
-
-INSERT INTO `comentarioam` (`IdComentarioAM`, `Nombre`, `Fecha`, `FkAdultoMayor`) VALUES
-(1, 'Hola me parece buena personA', '2018-03-12', 1),
-(2, 'Hola es un poco extraño, pero me agrada', '2018-03-12', 2),
-(3, 'wdwdwd', '2018-04-03', 6),
-(6, '', '2017-04-26', 6);
 
 -- --------------------------------------------------------
 
@@ -271,8 +250,7 @@ CREATE TABLE `coordinador` (
 --
 
 INSERT INTO `coordinador` (`IdCoordinador`, `FkScouter`) VALUES
-(1, 1),
-(2, 2);
+(1, 1);
 
 -- --------------------------------------------------------
 
@@ -314,16 +292,16 @@ CREATE TABLE `domicilio` (
 --
 
 INSERT INTO `domicilio` (`IdDomicilio`, `Numero`, `Calle`, `Colonia`, `Foto`, `FkUbicacion`) VALUES
-(1, 23, 'Porfirio', 'Claudio', 'img/09454.jpg', 1),
-(2, 12, 'Gigantes', 'calma', 'img/03434.jpg', 2),
-(3, 35, 'guadalajara', 'Jalisco', 'img/34343.jpg', 3),
-(4, 12, 'roma', 'italia', 'img/0434.jpg', 4),
-(5, 13, 'Brasilia', 'Brasil', 'img/0434.jpg', 5),
-(6, 768, 'Hola', 'Saludo', 'img/0943.jpg', 6),
-(7, 123, 'Angel', 'Terralta', 'img/0943.jpg', 7),
-(8, 3456, 'Ciclope', 'Terralta', 'img/9434.jpg', 8),
-(9, 21, 'foca', 'hecheverria', 'img/0943.jpg', 9),
-(10, 506, 'Pollo', 'Rosticeria', 'img/9432.jpg', 10);
+(11, 23, 'Gómez Farias', 'El Jagüey', 'img/domicilio/x.jpg', 21),
+(12, 245, 'Gómez Farias', 'El Jagüey', 'img/domicilio/x.jpg', 22),
+(13, 222, 'Ramón Corona', 'Ocotitos', 'img/domicilio/x.jpg', 23),
+(14, 288, 'Av. Brizuela', 'Atemajac', 'img/domicilio/x.jpg', 24),
+(15, 168, 'Reforma', 'Atemajac', 'img/domicilio/x.jpg', 25),
+(16, 174, 'Morelos', 'Santiaguito', 'img/domicilio/x.jpg', 26),
+(17, 61, 'Galeana', 'Santiaguito', 'img/domicilio/x.jpg', 27),
+(18, 30, 'Ogazón', 'Santiaguito', 'img/domicilio/x.jpg', 28),
+(19, 218, 'Ogazón', 'Santiaguito', 'img/domicilio/x.jpg', 29),
+(20, 13, 'Porfirio Diaz', 'Lirios', 'img/domicilio/x.jpg', 30);
 
 -- --------------------------------------------------------
 
@@ -360,17 +338,6 @@ CREATE TABLE `fotoalrededores` (
   `Foto` varchar(100) NOT NULL,
   `FkDomicilio` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `fotoalrededores`
---
-
-INSERT INTO `fotoalrededores` (`IdFotoAlrededores`, `Foto`, `FkDomicilio`) VALUES
-(1, 'img/001.jpg', 4),
-(2, 'img/031.jpg', 5),
-(3, 'img/301.jpg', 2),
-(4, 'img/2001.jpg', 3),
-(5, 'img/031.jpg', 3);
 
 -- --------------------------------------------------------
 
@@ -418,25 +385,25 @@ CREATE TABLE `inventario` (
 --
 
 INSERT INTO `inventario` (`IdInventario`, `Producto`, `Cantidad`, `Existencia`, `Descripcion`, `Imagen`, `Comentario`, `Extra`) VALUES
-(1, 'Azucar', 1, 5, 'Kilogramo de Azuzar', 'img/hola', '', 0),
-(2, 'Maceca', 1, 20, 'Kilogramo de Maceca', 'img/hola', '', 0),
-(3, 'Lentejas', 0.5, 20, 'Kilogramo de Lenteja', 'img/hola', '', 0),
-(4, 'Atun', 2, 20, 'Latas', 'img/hola', '', 0),
-(5, 'Manteca', 1, 20, 'Paquete de Kilogramo de Maseca', 'img/hola', 'Fueron donandas por Asc', 0),
-(6, 'Galletas', 1, 20, 'Paquete de Galletas', 'img/hola', '', 0),
-(7, 'Canela', 1, 20, 'Debe ser un Raja', 'img/hola', '', 0),
-(8, 'Jabón de Tocador', 1, 20, 'Jabón de Tocador', 'img/hola', '', 0),
-(9, 'Jabón Zote', 1, 20, 'Jabón Zote o similar', 'img/hola', '', 0),
-(10, 'Gelatina', 1, 20, 'Puede ser en sobre o caja', 'img/hola', '', 0),
-(11, 'Sal', 1, 20, 'Bolsita de Sal', 'img/hola', '', 0),
-(12, 'Cerrillos', 1, 20, 'Caja de Cerrillos', 'img/hola', '', 0),
-(13, 'Frijol', 1, 20, 'Kilogramo de Frijol', 'img/hola', '', 0),
-(14, 'Aceite', 0.5, 20, 'Litro de Aceite', 'img/hola', '', 0),
-(15, 'Trigo Inflado', 0.25, 20, 'Kilogramo de Trigo Inflado', 'img/hola', '', 0),
-(16, 'Tablilla de Chocolate', 1, 20, 'Tablilla de chocolate', 'img/hola', 'Puede ser de cualquier marca', 0),
-(17, 'Pasta', 2, 20, 'Paquetes de pasta', 'img/hola', '', 0),
-(18, 'Arroz', 1, 20, 'Kilogramo de Arroz', 'img/hola', '', 0),
-(19, 'Splenda', 1, 20, 'Paquetes de 20 sobres de Splenda', 'img/hola', '', 0);
+(1, 'Azucar', 1, 5, 'Kilogramo de Azuzar', 'img/inventario/1.jpg', '', 0),
+(2, 'Maseca', 1, 20, 'Kilogramo de Maceca', 'img/inventario/2.jpg', '', 0),
+(3, 'Lentejas', 0.5, 20, 'Kilogramo de Lenteja', 'img/inventario/3.jpg', '', 0),
+(4, 'Atun', 2, 20, 'Latas', 'img/inventario/4.jpg', '', 0),
+(5, 'Manteca', 1, 20, 'Paquete de Kilogramo de Maseca', 'img/inventario/5.jpg', 'Fueron donandas por Asc', 1),
+(6, 'Galletas', 1, 20, 'Paquete de Galletas', 'img/inventario/6.jpg', '', 0),
+(7, 'Canela', 1, 20, 'Bara ', 'img/inventario/7.jpg', '', 0),
+(8, 'Jabón de Tocador', 1, 20, 'Jabón de Tocador', 'img/inventario/8.jpg', '', 0),
+(9, 'Jabón Zote', 1, 20, 'Jabón Zote o similar', 'img/inventario/9.jpg', '', 0),
+(10, 'Gelatina', 1, 20, 'Sobre o Caja', 'img/inventario/10.jpg', '', 0),
+(11, 'Sal', 1, 20, 'Bolsita de Sal', 'img/inventario/11.jpg', '', 0),
+(12, 'Cerrillos', 1, 20, 'Caja de Cerrillos', 'img/inventario/12.jpg', '', 0),
+(13, 'Frijol', 1, 20, 'Kilogramo de Frijol', 'img/inventario/13.jpg', '', 0),
+(14, 'Aceite', 0.5, 20, 'Litro de Aceite', 'img/inventario/14.jpg', '', 0),
+(15, 'Trigo Inflado', 0.25, 20, 'Kilogramo de Trigo Inflado', 'img/inventario/15.jpg', '', 0),
+(16, 'Tablilla de Chocolate', 1, 20, 'Tablilla de chocolate', 'img/inventario/16.jpg', 'Puede ser de cualquier marca', 0),
+(17, 'Pasta', 2, 20, 'Paquetes de pasta', 'img/inventario/17.jpg', '', 0),
+(18, 'Arroz', 1, 20, 'Kilogramo de Arroz', 'img/inventario/18.jpg', '', 0),
+(19, 'Splenda', 1, 20, 'Paquetes de 20 sobres de Splenda', 'img/inventario/19.jpg', '', 0);
 
 -- --------------------------------------------------------
 
@@ -458,10 +425,11 @@ CREATE TABLE `password` (
 --
 
 INSERT INTO `password` (`IdPassword`, `Password`, `Intentos`, `FechaLogin`, `Status`, `FkUsuario`) VALUES
-(1, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-28', 1, 1),
-(2, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-28', 1, 5),
-(3, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-28', 1, 3),
-(4, '8cb2237d0679ca88db6464eac60da96345513964', 3, '2018-04-28', 1, 3);
+(1, '0acc00bf8abac7533d0e07b01b8079fb6ec4b4c5', 1, '2018-05-30', 1, 1),
+(2, 'c6f7002cafe494df5c72fe647bc5767b563bfc3d', 3, '2018-05-29', 0, 5),
+(3, '0acc00bf8abac7533d0e07b01b8079fb6ec4b4c5', 3, '2018-05-31', 1, 3),
+(10, 'e1794a744abf405a0d1c8bee81a909de329ff7f4', 3, '2018-05-29', 0, 6),
+(43, '0acc00bf8abac7533d0e07b01b8079fb6ec4b4c5', 2, '2018-05-29', 1, 56);
 
 -- --------------------------------------------------------
 
@@ -499,15 +467,6 @@ CREATE TABLE `recoger` (
   `FkAsignacion` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `recoger`
---
-
-INSERT INTO `recoger` (`IdRecoger`, `FkScouter`, `FkAsignacion`) VALUES
-(1, 1, 1),
-(2, 1, 2),
-(3, 2, 8);
-
 -- --------------------------------------------------------
 
 --
@@ -527,8 +486,7 @@ CREATE TABLE `scouter` (
 
 INSERT INTO `scouter` (`IdScouter`, `FechaInicio`, `FechaFinal`, `FkUsuario`) VALUES
 (1, '2018-03-12', '9999-12-30', 1),
-(2, '2018-03-12', '9999-12-30', 3),
-(9, '2018-04-02', '2018-04-28', 6);
+(2, '2018-03-12', '9999-12-30', 3);
 
 -- --------------------------------------------------------
 
@@ -589,7 +547,7 @@ CREATE TABLE `tipoproblematica` (
 
 INSERT INTO `tipoproblematica` (`IdTipoProblematica`, `Nombre`) VALUES
 (1, 'Fallo Aplicacion'),
-(2, 'Datos Incorrectos');
+(2, 'Vatos Incorrectos');
 
 -- --------------------------------------------------------
 
@@ -608,26 +566,16 @@ CREATE TABLE `ubicacion` (
 --
 
 INSERT INTO `ubicacion` (`IdUbicacion`, `Longitud`, `Latitud`) VALUES
-(1, 103.4534335352, -20.434343434343436),
-(2, 104.333545454, -20.987554),
-(3, 0, 0),
-(4, 106.312456, 31.4702),
-(5, 106.87979, 32.78),
-(6, 106.454545, 32.5687),
-(7, 106.856, 32.5473),
-(8, 106.5934, 32.1232),
-(9, 106.5903, 32.4567),
-(10, 106.3456, 32.879),
-(11, 106.5678, 32.8904),
-(12, 103.43434, 32.6851),
-(13, 106.312456, 31.4702),
-(14, 106.87979, 32.78),
-(15, 106.454545, 32.5687),
-(16, 106.856, 32.5473),
-(17, 106.5934, 32.1232),
-(18, 106.5903, 32.4567),
-(19, 106.3456, 32.879),
-(20, 106.5678, 32.8904);
+(21, -103.731535, 20.13793),
+(22, -103.731709, 20.137833),
+(23, -103.727815, 20.137428),
+(24, -103.727261, 20.135919),
+(25, -103.729534, 20.140039),
+(26, -103.726993, 20.143354),
+(27, -103.725605, 20.141702),
+(28, -103.723677, 20.141654),
+(29, -103.723706, 20.141568),
+(30, -103.730462, 20.140903);
 
 -- --------------------------------------------------------
 
@@ -652,13 +600,14 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`IdUsuario`, `Nombre`, `ApellidoPaterno`, `ApellidoMaterno`, `Correo`, `Fotografia`, `FechaNacimiento`, `Scout`, `FkSeccion`) VALUES
-(1, 'Jose Miguel', '1998-10-25', 'Reconocimos 1 plm', 'moringos7@gmail.com', 'Reconocimos 1 plm', '2001-10-25', 1, 3),
-(3, 'Daniel', 'Castellanos', 'Miranda', 'fdanycast@gmail.com', 'Reconocimos 1 plm', '1998-10-11', 1, 4),
-(5, 'Martin Ricardo ', 'Del Rio', 'Grageda', 'langur@gmail.com', 'Reconocimos 1 plm', '1999-11-17', 1, 4),
-(6, 'Marcela María', 'Pérez', 'González', 'mace@hotmail.com', 'Reconocimos 1 plm', '1999-11-27', 1, 4),
-(8, 'Pancho', 'Hernandez', 'Chavez', 'pancho@gmail.com', 'Reconocimos 1 plm', '1980-07-29', 1, 5),
-(9, 'Miguel Angel', 'Pérez', 'Murillo', 'tekton.formen@gmail.com', 'Reconocimos 1 plm', '1968-09-30', 1, 5),
-(10, 'Trapos', 'Perez', 'Furto', 'ddede', 'wdwdw', '1999-10-02', 0, 6);
+(1, 'José Miguel', 'Pérez', 'González', 'moringos7@gmail.com', 'img/img1.jpg', '1998-10-25', 1, 4),
+(3, 'Daniel', 'Castellanos', 'Miranda', 'fdanycast@gmail.com', 'img/img2.jpg', '2005-10-11', 1, 2),
+(5, 'Ma Ricardo ', 'Del Rio', 'Grageda', 'langur@gmail.com', 'img/img3.jpg', '2002-11-17', 1, 3),
+(6, 'Marcela María', 'Pérez', 'González', 'mace@hotmail.com', 'img/img4.jpg', '1999-11-27', 1, 4),
+(8, 'Pancho', 'Hernandez', 'Chavez', 'pancho@gmail.com', 'img/img5.jpg', '1980-07-29', 1, 5),
+(9, 'Miguel Angel', 'Pérez', 'Murillo', 'tekton.formen@gmail.com', 'img/img6.jpg', '1968-09-30', 0, 6),
+(34, 'Manuel', 'Pérez', 'González', 'manuel.perez.24.06.01@gmail.com', 'img/usuarios/x.jpg', '2001-06-24', 0, 6),
+(56, 'Prueba', 'potter', 'pérez', 'moringosprueba@gmail.com', 'img/usuarios/x.jpg', '1998-05-29', 0, 6);
 
 --
 -- Disparadores `usuario`
@@ -723,16 +672,6 @@ CREATE TABLE `voluntariofrecuente` (
   `FkUsuario` int(11) NOT NULL,
   `FkAdultoMayor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `voluntariofrecuente`
---
-
-INSERT INTO `voluntariofrecuente` (`IdVoluntarioFrecuente`, `FkUsuario`, `FkAdultoMayor`) VALUES
-(1, 1, 3),
-(2, 1, 4),
-(3, 8, 5),
-(4, 6, 2);
 
 --
 -- Índices para tablas volcadas
@@ -886,7 +825,7 @@ ALTER TABLE `voluntariofrecuente`
 -- AUTO_INCREMENT de la tabla `adultomayor`
 --
 ALTER TABLE `adultomayor`
-  MODIFY `IdAdultoMayor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `IdAdultoMayor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `asignacion`
@@ -916,7 +855,7 @@ ALTER TABLE `dependencia`
 -- AUTO_INCREMENT de la tabla `domicilio`
 --
 ALTER TABLE `domicilio`
-  MODIFY `IdDomicilio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `IdDomicilio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `evento`
@@ -946,7 +885,7 @@ ALTER TABLE `inventario`
 -- AUTO_INCREMENT de la tabla `password`
 --
 ALTER TABLE `password`
-  MODIFY `IdPassword` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `IdPassword` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT de la tabla `problematica`
@@ -964,7 +903,7 @@ ALTER TABLE `recoger`
 -- AUTO_INCREMENT de la tabla `scouter`
 --
 ALTER TABLE `scouter`
-  MODIFY `IdScouter` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `IdScouter` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `seccion`
@@ -988,13 +927,13 @@ ALTER TABLE `tipoproblematica`
 -- AUTO_INCREMENT de la tabla `ubicacion`
 --
 ALTER TABLE `ubicacion`
-  MODIFY `IdUbicacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `IdUbicacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `IdUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `IdUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT de la tabla `voluntariofrecuente`
@@ -1017,7 +956,7 @@ ALTER TABLE `adultomayor`
 -- Filtros para la tabla `asignacion`
 --
 ALTER TABLE `asignacion`
-  ADD CONSTRAINT `asignacion_ibfk_1` FOREIGN KEY (`FkAdultoMayor`) REFERENCES `adultomayor` (`IdAdultoMayor`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `asignacion_ibfk_1` FOREIGN KEY (`FkAdultoMayor`) REFERENCES `adultomayor` (`IdAdultoMayor`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `asignacion_ibfk_2` FOREIGN KEY (`FkUsuario`) REFERENCES `usuario` (`IdUsuario`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
@@ -1100,8 +1039,16 @@ DELIMITER $$
 --
 -- Eventos
 --
-CREATE DEFINER=`root`@`localhost` EVENT `VerificacionScouter` ON SCHEDULE EVERY 1 DAY STARTS '2017-11-30 00:00:00' ON COMPLETION PRESERVE ENABLE DO BEGIN 
-CALL ActualizacionScouter(); 
+CREATE DEFINER=`root`@`localhost` EVENT `EliminacionUsuarios` ON SCHEDULE EVERY 1 MINUTE STARTS '2018-04-27 19:20:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+CALL VerificarLogin();
+END$$
+
+CREATE DEFINER=`root`@`localhost` EVENT `CambioSeccion` ON SCHEDULE EVERY 1 DAY STARTS '2017-11-30 00:00:00' ON COMPLETION PRESERVE ENABLE DO BEGIN 
+CALL ActualizacionSeccion(); 
+END$$
+
+CREATE DEFINER=`root`@`localhost` EVENT `ActualizacionIntentosPassword` ON SCHEDULE EVERY 1 MONTH STARTS '2018-04-26 10:15:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
+CALL VerificacionIntentos();
 END$$
 
 CREATE DEFINER=`root`@`localhost` EVENT `ReinicioInventario` ON SCHEDULE EVERY 1 MONTH STARTS '2017-11-30 00:00:00' ON COMPLETION PRESERVE ENABLE DO BEGIN 
@@ -1112,16 +1059,8 @@ CREATE DEFINER=`root`@`localhost` EVENT `EliminacionComentarios` ON SCHEDULE EVE
 CALL ActualizacionComentarios(); 
 END$$
 
-CREATE DEFINER=`root`@`localhost` EVENT `ActualizacionIntentosPassword` ON SCHEDULE EVERY 1 MONTH STARTS '2018-04-26 10:15:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
-CALL VerificacionIntentos();
-END$$
-
-CREATE DEFINER=`root`@`localhost` EVENT `CambioSeccion` ON SCHEDULE EVERY 1 DAY STARTS '2017-11-30 00:00:00' ON COMPLETION PRESERVE ENABLE DO BEGIN 
-CALL ActualizacionSeccion(); 
-END$$
-
-CREATE DEFINER=`root`@`localhost` EVENT `EliminacionUsuarios` ON SCHEDULE EVERY 1 MINUTE STARTS '2018-04-27 19:20:00' ON COMPLETION PRESERVE ENABLE DO BEGIN
-CALL VerificarLogin();
+CREATE DEFINER=`root`@`localhost` EVENT `VerificacionScouter` ON SCHEDULE EVERY 1 DAY STARTS '2017-11-30 00:00:00' ON COMPLETION PRESERVE ENABLE DO BEGIN 
+CALL ActualizacionScouter(); 
 END$$
 
 DELIMITER ;

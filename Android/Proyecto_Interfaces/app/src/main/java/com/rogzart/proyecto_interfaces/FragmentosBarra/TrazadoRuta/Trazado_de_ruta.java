@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.rogzart.proyecto_interfaces.MapsActivity;
@@ -16,7 +15,6 @@ import com.rogzart.proyecto_interfaces.R;
 
 public class Trazado_de_ruta extends Fragment {
     Button mapa;
-    ListView milistview;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,7 +29,6 @@ public class Trazado_de_ruta extends Fragment {
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
         mapa = (Button) getView().findViewById(R.id.BMapa);
-        milistview.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mapa.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

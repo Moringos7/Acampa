@@ -134,4 +134,4 @@ public class ListaAdaptadorInventario extends BaseAdapter implements Filterable 
         }
 
     }
-    }
+}

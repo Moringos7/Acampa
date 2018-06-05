@@ -9,111 +9,110 @@
     android:orientation="vertical">
 
 
+    <LinearLayout
+        android:id="@+id/inventario_general_layout_general"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/inventario_general_layout_general"
+        <TextView
+            android:id="@+id/textView20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="Inventario General"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/list_inventario_general_btnG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:text="General" />
+
+            <Button
+                android:id="@+id/list_inventario_general_btnE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:text="Extras" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLGeneral"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView20"
+                android:id="@+id/list_Inventario_general_resultados"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="Inventario General"
-                android:textSize="24sp" />
+                android:text="N Resultados" />
 
-            <LinearLayout
+            <SearchView
+                android:id="@+id/list_inventario_general_buscador"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
-                <Button
-                    android:id="@+id/list_inventario_general_btnG"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:text="General" />
-
-                <Button
-                    android:id="@+id/list_inventario_general_btnE"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:text="Extras" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/LinearLGeneral"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/list_Inventario_general_resultados"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="N Resultados" />
-
-                <SearchView
-                    android:id="@+id/list_inventario_general_buscador"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </SearchView>
+            </SearchView>
 
 
-                <ListView
-                    android:id="@+id/listaGeneral"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+            <ListView
+                android:id="@+id/listaGeneral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
 
-                </ListView>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/LinearLExtra"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/resultadosE"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="N Resultados" />
-
-                <SearchView
-                    android:id="@+id/buscadorExtras"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </SearchView>
-
-
-                <ListView
-                    android:id="@+id/listaExtras"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-
-                </ListView>
-            </LinearLayout>
+            </ListView>
         </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/LinearLExtra"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/resultadosE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="N Resultados" />
+
+            <SearchView
+                android:id="@+id/buscadorExtras"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </SearchView>
+
+
+            <ListView
+                android:id="@+id/listaExtras"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+            </ListView>
+        </LinearLayout>
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/list_inventario_general_agregar"
@@ -225,10 +224,12 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
+                android:checked="true"
+                android:enabled="false"
                 android:text="Extra" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/agregar_producto_btnguardar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"

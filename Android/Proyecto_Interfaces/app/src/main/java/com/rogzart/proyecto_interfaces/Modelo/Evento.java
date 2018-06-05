@@ -1,12 +1,15 @@
 package com.rogzart.proyecto_interfaces.Modelo;
 
-public class Evento {
+import java.io.Serializable;
+
+public class Evento implements Serializable{
     private int IdEvento;
     private String Fecha;
     private String Hora;
     private String Lugar;
     private String Informacion;
     private Integer FkTipoEvento;
+    private String nombre;
     public Evento(){
 
     }
@@ -50,6 +53,7 @@ public class Evento {
     public void setInformacion(String informacion) {
         Informacion = informacion;
     }
+
 
     public Integer getFkTipoEvento() { return FkTipoEvento;
     }

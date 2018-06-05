@@ -1,4 +1,4 @@
-<resources xmlns:android="http://schemas.android.com/tools">
+<resources>
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -30,5 +30,4 @@
         <item name="colorControlHighlight">@android:color/holo_green_light</item>
         <item name="colorButtonNormal">#2D73BF</item>
     </style>
-
 </resources>

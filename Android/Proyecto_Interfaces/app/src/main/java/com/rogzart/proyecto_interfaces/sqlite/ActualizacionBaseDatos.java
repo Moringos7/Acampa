@@ -45,47 +45,47 @@ public class ActualizacionBaseDatos {
     public ActualizacionBaseDatos(Context contexto) {
         GeneralContext = contexto;
     }
-    public void ActualizarBasedeDatos(Context context){
+
+    public boolean ActualizarBasedeDatos(Context context) {
         ErrorActualizacion = false;
-        if(ActualizacionDependencia(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionSeccion(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionUbicacion(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionTipoEvento(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionTipoProblematica(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionInventario(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionUsuario(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionEvento(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionDomicilio(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionScouter(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionFotoAlrededores(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionProblematica(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionAdultoMayor(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionAsignacion(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionComentarioAM(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if( ActualizacionGestionInventario(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionRecoger(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else if(ActualizacionVoluntarioFrecuente(context))
-        {Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show(); }
-        else{
-            Toast.makeText(context, "Actualización Completada", Toast.LENGTH_LONG).show();
+        if (ActualizacionDependencia(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionSeccion(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionUbicacion(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionTipoEvento(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionTipoProblematica(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionInventario(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionUsuario(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionEvento(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionDomicilio(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionScouter(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionFotoAlrededores(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionProblematica(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionAdultoMayor(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionAsignacion(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionComentarioAM(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionGestionInventario(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionRecoger(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
+        } else if (ActualizacionVoluntarioFrecuente(context)) {
+            Toast.makeText(context, "Error: Actualización, Verifique su conexión", Toast.LENGTH_LONG).show();
         }
+        return !ErrorActualizacion;
     }
 
     public void VolcarBasedeDatos() {
@@ -202,7 +202,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionTipoEvento(final Context context) {
+    public boolean ActualizacionTipoEvento(final Context context) {
         Conexion x = new Conexion();
         final TipoEvento mTipoEvento = new TipoEvento();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -232,7 +232,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionTipoProblematica(final Context context) {
+    public boolean ActualizacionTipoProblematica(final Context context) {
         Conexion x = new Conexion();
         final TipoProblematica mTipoProblematica = new TipoProblematica();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -262,7 +262,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionInventario(final Context context) {
+    public boolean ActualizacionInventario(final Context context) {
         Conexion x = new Conexion();
         final Inventario mInventario = new Inventario();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -298,7 +298,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionUsuario(final Context context) {
+    public boolean ActualizacionUsuario(final Context context) {
         Conexion x = new Conexion();
         final Usuario mUsuario = new Usuario();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -335,7 +335,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionEvento(final Context context) {
+    public boolean ActualizacionEvento(final Context context) {
         Conexion x = new Conexion();
         final Evento mEvento = new Evento();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -369,7 +369,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionDomicilio(final Context context) {
+    public boolean ActualizacionDomicilio(final Context context) {
         Conexion x = new Conexion();
         final Domicilio mDomicilio = new Domicilio();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -403,7 +403,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionScouter(final Context context) {
+    public boolean ActualizacionScouter(final Context context) {
         Conexion x = new Conexion();
         final Scouter mScouter = new Scouter();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -435,7 +435,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionFotoAlrededores(final Context context) {
+    public boolean ActualizacionFotoAlrededores(final Context context) {
         Conexion x = new Conexion();
         final FotoAlrededores mFotoAlrededores = new FotoAlrededores();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -466,7 +466,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionProblematica(final Context context) {
+    public boolean ActualizacionProblematica(final Context context) {
         Conexion x = new Conexion();
         final Problematica mProblematica = new Problematica();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -500,7 +500,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionAdultoMayor(final Context context) {
+    public boolean ActualizacionAdultoMayor(final Context context) {
         Conexion x = new Conexion();
         final AdultoMayor mAdultoMayor = new AdultoMayor();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -536,7 +536,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionAsignacion(final Context context) {
+    public boolean ActualizacionAsignacion(final Context context) {
         Conexion x = new Conexion();
         final Asignacion mAsignacion = new Asignacion();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -569,7 +569,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionComentarioAM(final Context context) {
+    public boolean ActualizacionComentarioAM(final Context context) {
         Conexion x = new Conexion();
         final ComentarioAM mComentario = new ComentarioAM();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -601,7 +601,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionGestionInventario(final Context context) {
+    public boolean ActualizacionGestionInventario(final Context context) {
         Conexion x = new Conexion();
         final GestionInventario mGestionInventario = new GestionInventario();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -633,7 +633,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionRecoger(final Context context) {
+    public boolean ActualizacionRecoger(final Context context) {
         Conexion x = new Conexion();
         final Recoger mRecoger = new Recoger();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();
@@ -664,7 +664,7 @@ public class ActualizacionBaseDatos {
         VolleySingleton.getInstance(GeneralContext).addToRequestQueue(jsonObjectRequest);
         return ErrorActualizacion;
     }
-    private boolean ActualizacionVoluntarioFrecuente(final Context context) {
+    public boolean ActualizacionVoluntarioFrecuente(final Context context) {
         Conexion x = new Conexion();
         final VoluntarioFrecuente mVoluntarioFrecuente = new VoluntarioFrecuente();
         final OperacionesBaseDatos Insert = new OperacionesBaseDatos();

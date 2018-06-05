@@ -42,6 +42,7 @@ import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Inventario;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.R;
+import com.rogzart.proyecto_interfaces.Singleton.LogUser;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
@@ -75,11 +76,11 @@ public class ListaInventario extends Fragment {
     Conexion conexion, conexionE;
     String Imagen;
     private JsonObjectRequest jsonObjectRequest;
+    private LogUser ControlUser;
     private int cuenta, cuentaE;
     private static final int PICK_IMAGE = 100;
     LinearLayout layoutG, layoutE, layoutT, layoutA;
     OperacionesBaseDatos operador;
-    public static int ValorExtra = 1;
 
     public static ListaInventario newInstance() {
         ListaInventario fragmento = new ListaInventario();
@@ -101,6 +102,7 @@ public class ListaInventario extends Fragment {
 
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
+        ControlUser = LogUser.obtenerInstancia(getContext());
         ABtnGuardar = (Button) getView().findViewById(R.id.agregar_producto_btnguardar);
         ACantidad = (EditText) getView().findViewById(R.id.agregar_producto_cantidad);
         ADescripcion = (EditText) getView().findViewById(R.id.agregar_producto_descripcion);
@@ -135,6 +137,7 @@ public class ListaInventario extends Fragment {
                                                  layoutT.setVisibility(View.VISIBLE);
                                                  scroll.setVisibility(View.GONE);
                                                  botonAgregar.setVisibility(View.VISIBLE);
+
                                              }
                                          }
 
@@ -147,6 +150,11 @@ public class ListaInventario extends Fragment {
                                                     layoutT.setVisibility(View.GONE);
                                                     scroll.setVisibility(View.VISIBLE);
                                                     botonAgregar.setVisibility(View.GONE);
+                                                    if(ControlUser.getCoordinador() > 0){
+                                                        AExtra.setEnabled(true);
+                                                        AExtra.setChecked(false);
+
+                                                    }
 
                                                 } else {
                                                     Toast.makeText(getContext(), "Verifique su conexion a Internet", Toast.LENGTH_SHORT).show();
@@ -157,6 +165,14 @@ public class ListaInventario extends Fragment {
 
         );
 
+        ImagenProducto.setOnClickListener(new View.OnClickListener(){
+
+                                              @Override
+                                              public void onClick(View v) {
+                                                  cargarimagen();
+                                              }
+                                          }
+        );
         BtnExtras.setOnClickListener(new View.OnClickListener() {
                                          @Override
                                          public void onClick(View v) {
@@ -181,14 +197,6 @@ public class ListaInventario extends Fragment {
 
 
         );
-    }
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.agregar_producto_imagen:
-                cargarimagen();
-                break;
-        }
-
     }
 
     private void cargarimagen() {
@@ -242,13 +250,13 @@ public class ListaInventario extends Fragment {
                 Toast.makeText(getContext(), "Fallo Conexion al Servidor", Toast.LENGTH_SHORT).show();
             }
 
-    });
+        });
         VolleySingleton.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
     }
     private void cargarlistainventarioExtras() {
 
-         ArrayList<Inventario> arrayList2 = operador.LeerTablaInventarioExtras();
-         listainventarioGeneralExtras(arrayList2);
+        ArrayList<Inventario> arrayList2 = operador.LeerTablaInventarioExtras();
+        listainventarioGeneralExtras(arrayList2);
 
 
 
@@ -277,6 +285,44 @@ public class ListaInventario extends Fragment {
             }
         });
         listaInventarioE.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                    @Override
+                                                    public void onItemClick(AdapterView<?> adapterView, View view, int x, long l) {
+                                                        Inventario inventario1 = (Inventario) adapterView.getItemAtPosition(x);
+                                                        Bundle bolsa = new Bundle();
+                                                        bolsa.putSerializable("articulo", inventario1);
+
+                                                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                                        transaction.replace(R.id.contenedor, ListaInventarioMain.newInstance(bolsa));
+                                                        transaction.addToBackStack(null);
+                                                        transaction.commit();
+                                                    }
+
+
+                                                }
+        );
+
+    }
+
+    private void ListaGeneral() {
+        ArrayList<Inventario> arrayList = operador.LeerTablaInventarioSinExtras();
+        cuenta = arrayList.size();
+        resultados.setText(cuenta + " Resultados");
+        // Toast.makeText(getContext(), "" + arrayList.size(), Toast.LENGTH_SHORT).show();
+        final ListaAdaptadorInventario miLista = new ListaAdaptadorInventario(arrayList, getContext());
+        listaInventario.setAdapter(miLista);
+        buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                miLista.getFilter().filter(query);
+                return false;
+            }
+        });
+        listaInventario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                    @Override
                                                    public void onItemClick(AdapterView<?> adapterView, View view, int x, long l) {
                                                        Inventario inventario1 = (Inventario) adapterView.getItemAtPosition(x);
@@ -292,46 +338,8 @@ public class ListaInventario extends Fragment {
 
                                                }
         );
-
     }
-
-    private void ListaGeneral() {
-            ArrayList<Inventario> arrayList = operador.LeerTablaInventarioSinExtras();
-             cuenta = arrayList.size();
-             resultados.setText(cuenta + " Resultados");
-            // Toast.makeText(getContext(), "" + arrayList.size(), Toast.LENGTH_SHORT).show();
-            final ListaAdaptadorInventario miLista = new ListaAdaptadorInventario(arrayList, getContext());
-            listaInventario.setAdapter(miLista);
-            buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String query) {
-                    miLista.getFilter().filter(query);
-                    return false;
-                }
-            });
-            listaInventario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                       @Override
-                                                       public void onItemClick(AdapterView<?> adapterView, View view, int x, long l) {
-                                                           Inventario inventario1 = (Inventario) adapterView.getItemAtPosition(x);
-                                                           Bundle bolsa = new Bundle();
-                                                           bolsa.putSerializable("articulo", inventario1);
-
-                                                           FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                                                           transaction.replace(R.id.contenedor, ListaInventarioMain.newInstance(bolsa));
-                                                           transaction.addToBackStack(null);
-                                                           transaction.commit();
-                                                       }
-
-
-                                                   }
-            );
-        }
-    }
+}
 
 
 
