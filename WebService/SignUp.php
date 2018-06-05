@@ -30,7 +30,7 @@ if($Nombre != "" && $ApellidoP != "" && $ApellidoM != "" && $Correo != ""){
 		$ApellidoP = utf8_decode($ApellidoP);
 		$ApellidoM = utf8_decode($ApellidoM);
 		$Correo = utf8_decode($Correo);
-		$ruta = "img/usuarios/$IdUsuario.jpg";		
+		$ruta = "https://acampa.000webhostapp.com/img/inventario/$IdUsuario.jpg";		
 		$insert = "INSERT INTO usuario VALUES(null,?,?,?,?,?,?,?,null)";
 
 		$stm = $conexion->prepare($insert);
@@ -44,7 +44,7 @@ if($Nombre != "" && $ApellidoP != "" && $ApellidoM != "" && $Correo != ""){
 				if($Id = mysqli_fetch_array($resultado,MYSQLI_ASSOC)){
 					$IdUsuario = $Id['IdUsuario'];
 					$registro["IdUsuario"] = $IdUsuario;
-					$ruta = "img/usuarios/$IdUsuario.jpg";
+					$ruta = "https://acampa.000webhostapp.com/img/inventario/$IdUsuario.jpg";
 					file_put_contents($ruta,base64_decode($Imagen));
 					$update = "UPDATE usuario SET Fotografia = ? WHERE IdUsuario = ?";
 					$stm = $conexion->prepare($update);

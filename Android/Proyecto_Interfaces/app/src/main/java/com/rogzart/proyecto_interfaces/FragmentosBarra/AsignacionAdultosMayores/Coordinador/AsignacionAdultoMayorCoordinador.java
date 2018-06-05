@@ -82,12 +82,14 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
 
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
+
         configurarDialogs();
         LinearprogressBar = getView().findViewById(R.id.progressBarAsignacion);
         ContadorAsignados = getView().findViewById(R.id.ContadorAsignados);
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         FechaActual = generarFecha();
         NumeroPeticiones = 0;
+
         EventoDisponible = operador.verificarEvento(FechaActual);
         if(!EventoDisponible){
             AlertaEvento.show();
@@ -268,6 +270,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                 VolleySingleton.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
                 if(A){
                    operador.EliminarDatosTabla("asignacion");
+                   new ActualizacionBaseDatos(getContext()).VolcarBasedeDatos();
                    new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext());
                    Salir = false;
                    A = false;

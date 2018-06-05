@@ -60,6 +60,8 @@ public class AsignacionAdultoMayorUsuario extends Fragment {
     }
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
+        new ActualizacionBaseDatos(getContext()).VolcarBasedeDatos();
+        new ActualizacionBaseDatos(getContext()).ActualizarBasedeDatos(getContext());
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         conexion = new Conexion(getContext());
         Asignados = new ArrayList<AdultoMayor>();
@@ -84,10 +86,10 @@ public class AsignacionAdultoMayorUsuario extends Fragment {
         }
     }
 
-    private boolean ActualizarAsignacion(){
+    /*private boolean ActualizarAsignacion(){
         operador.EliminarDatosTabla("asignacion");
          return (new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext()));
-    }
+    }*/
     private String generarFecha(){
         String Fecha;
         int Dia = c.get(Calendar.DAY_OF_MONTH);
@@ -146,12 +148,12 @@ public class AsignacionAdultoMayorUsuario extends Fragment {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             if(VerificarAsignaciones()){
-                /*Bundle bolsa = new Bundle();
+                Bundle bolsa = new Bundle();
                 bolsa.putSerializable("AdultosMayores",Asignados);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.contenedor, AdultosMayoresAsignados.newInstance(bolsa));
                 ft.addToBackStack(null);
-                ft.commit();*/
+                ft.commit();
             }else{
                 Bundle bolsa = new Bundle();
                 bolsa.putString("FechaActual",FechaActual);
