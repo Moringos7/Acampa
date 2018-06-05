@@ -265,6 +265,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                 VolleySingleton.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
                 if(A){
                    operador.EliminarDatosTabla("asignacion");
+                   new ActualizacionBaseDatos(getContext()).VolcarBasedeDatos();
                    new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext());
                    Salir = false;
                    A = false;

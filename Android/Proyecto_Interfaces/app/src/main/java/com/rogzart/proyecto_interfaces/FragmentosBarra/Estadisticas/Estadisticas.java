@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
@@ -30,13 +33,15 @@ public class Estadisticas extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        BarChart chart = new BarChart(getContext());
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.f_estadisticas, container, false);
     }
 
     public void onActivityCreated(Bundle bundle) {
-
         super.onActivityCreated(bundle);
+
+
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         String x = operador.substring();
         //Toast.makeText(getContext(), ""+x, Toast.LENGTH_SHORT).show();
@@ -59,18 +64,18 @@ public class Estadisticas extends Fragment {
 
         //Usuarios
         int usuarios = operador.numeroUsuarios();
-        Toast.makeText(getContext(), "" + usuarios, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Usuarios app: " + usuarios, Toast.LENGTH_SHORT).show();
 
         //Estadistica Mensual 3
 
         ArrayList<Usuario> Usuarios = new ArrayList<Usuario>();
         Usuarios = operador.usuariosAsignacion("06", "2018");
-        Toast.makeText(getContext(), "" + Usuarios.size(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Usuarios mensual: " + Usuarios.size(), Toast.LENGTH_SHORT).show();
 
         //Semestrales
         //Select Usuarios
         Usuarios = operador.usuariosActivos();
-        Toast.makeText(getContext(), "" + Usuarios.size(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Usuarios semestral: " + Usuarios.size(), Toast.LENGTH_SHORT).show();
 
 
     }
