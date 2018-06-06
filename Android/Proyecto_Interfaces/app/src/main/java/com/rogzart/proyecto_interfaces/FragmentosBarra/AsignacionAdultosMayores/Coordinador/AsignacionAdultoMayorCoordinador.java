@@ -25,7 +25,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.rogzart.proyecto_interfaces.Adultos.Adultos;
 import com.rogzart.proyecto_interfaces.Barra_desplegable;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.MenuAdministrar;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos.Eventos;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos.ListaEventos;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.SeleccionAM;
@@ -82,21 +82,24 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
 
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
+
         configurarDialogs();
         LinearprogressBar = getView().findViewById(R.id.progressBarAsignacion);
         ContadorAsignados = getView().findViewById(R.id.ContadorAsignados);
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         FechaActual = generarFecha();
         NumeroPeticiones = 0;
+
         EventoDisponible = operador.verificarEvento(FechaActual);
         if(!EventoDisponible){
             AlertaEvento.show();
+        }else {
+            configurarHilos();
         }
-        LinearprogressBar.setVisibility(View.VISIBLE);
-        configurarHilos();
+        //LinearprogressBar.setVisibility(View.VISIBLE);
         ////Botones de Administracion
         LinearLayout Botones = getView().findViewById(R.id.layoutBotones);
-        Botones.setVisibility(View.VISIBLE);
+        Botones.setVisibility(View.GONE);
         Button btn = getView().findViewById(R.id.btntemporal);
         btn.setText("Recargar");
         btn.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +154,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     private void agendar(){
         //Toast.makeText(getContext(), "Agendame", Toast.LENGTH_SHORT).show();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.contenedor,Eventos.newInstance());
+        ft.replace(R.id.contenedor, ListaEventos.newInstance());
         ft.addToBackStack(null);
         ft.commit();
     }
@@ -204,7 +207,9 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     }
     private void DetenerHilos(){
         Activado = false;
-        myHiloC.cancel(true);
+        if(myHiloC != null){
+            myHiloC.cancel(true);
+        }
     }
     private void configurarHilos(){
         NumeroPeticiones = 0;
@@ -268,6 +273,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                 VolleySingleton.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
                 if(A){
                    operador.EliminarDatosTabla("asignacion");
+                   new ActualizacionBaseDatos(getContext()).VolcarBasedeDatos();
                    new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext());
                    Salir = false;
                    A = false;

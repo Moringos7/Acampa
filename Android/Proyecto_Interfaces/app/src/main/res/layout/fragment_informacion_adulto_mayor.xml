@@ -8,11 +8,14 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="52dp"
+            tools:layout_editor_absoluteY="0dp">
 
             <ImageView
                 android:id="@+id/ImagenAdultoMayor"
@@ -24,21 +27,43 @@
                 android:src="@drawable/user" />
 
             <TextView
+                android:id="@+id/Nombre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:text="Teófila"
+                android:textColor="#000"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/Apellidos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="0dp"
+                android:text="Rodriguez Roblez"
+                android:textColor="#000"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/Diabetico"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/circulo_diabetico"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="Diabetico"
                 android:textColor="#000"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="visible" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:text="Domicilio"
                 android:textColor="#000"
                 android:textSize="18sp"
@@ -66,38 +91,245 @@
             <ImageView
                 android:id="@+id/ImagenDomicilioAdultoMayor"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="150dp"
+                android:layout_marginBottom="15dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
                 android:gravity="center"
                 android:src="@drawable/casa_default" />
 
-                <fragment android:id="@+id/map2"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                 />
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/map2"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp" />
+
             <Button
+                android:id="@+id/btnTrazarRutaAdultoMayor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnTrazarRutaAdultoMayor"
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
+                android:background="#2D73BF"
+                android:padding="10dp"
                 android:text="Trazar Ruta"
+                android:textAllCaps="false"
+                android:textColor="#fff"
                 android:textSize="20sp" />
-            <Button
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/LayoutCercanos">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="20dp"
+                    android:text="Lugares Cercanos"
+                    android:textSize="30sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/my_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Nivel de Dependencia"
+                    android:textColor="#898988"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/TextQuestion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/circulo_negro"
+                    android:gravity="center"
+                    android:text="?"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/InfoDependencia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="45dp"
+                android:layout_marginTop="10dp"
+                android:padding="15dp"
+                android:textColor="#000"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="#000"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="#000"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textColor="#000"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
-                android:layout_marginTop="30dp"
-                android:text="Trazar Ruta"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:background="@drawable/rectangulo"
+                android:paddingLeft="0dp">
+
+                <TextView
+                    android:id="@+id/Nivel1"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="2dp"
+                    android:layout_marginLeft="2dp" />
+
+                <TextView
+                    android:id="@+id/Nivel2"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="2dp"/>
+
+                <TextView
+                    android:id="@+id/Nivel3"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="2dp"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="5dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Voluntario Encargado"
+                android:textColor="#000"
+                android:textSize="22sp" />
+
+            <Button
+                android:id="@+id/btnAsignarVoluntarioFrecuente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Asignar"
+                android:textAllCaps="false"
                 android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/VoluntarioFrecuente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Sin Asignar"
+                android:textColor="#898988"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp">
+
+                <TextView
+                    android:id="@+id/Comentarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="left"
+                    android:text="Comentarios: n"
+                    android:textColor="#898988"
+                    android:textSize="20sp" />
+
+                <ListView
+                    android:id="@+id/ListaComentarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></ListView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LayoutConvivio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="¿Recogerla para el Convivio?"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#53b029"
+                    android:text="Aceptar"
+                    android:textAllCaps="false"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+            </LinearLayout>
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
-
 </ScrollView>

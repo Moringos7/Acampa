@@ -14,6 +14,7 @@ import com.rogzart.proyecto_interfaces.Modelo.Evento;
 import com.rogzart.proyecto_interfaces.Modelo.FotoAlrededores;
 import com.rogzart.proyecto_interfaces.Modelo.GestionInventario;
 import com.rogzart.proyecto_interfaces.Modelo.Inventario;
+import com.rogzart.proyecto_interfaces.Modelo.Mapa;
 import com.rogzart.proyecto_interfaces.Modelo.Problematica;
 import com.rogzart.proyecto_interfaces.Modelo.Recoger;
 import com.rogzart.proyecto_interfaces.Modelo.Scouter;
@@ -130,6 +131,40 @@ public final class OperacionesBaseDatos {
         valores.put(ubicacion.Latitud,x.getLatitud());
         query.insert("ubicacion",null,valores);
     }
+    public ArrayList<Mapa> obtenerUbicacionesyAdultosMayores(){
+        //
+        ArrayList<Mapa> List = new ArrayList<Mapa>();
+        AdultoMayor adultoMayor;
+        Ubicacion ubicacion;
+        Mapa mapa;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT adultomayor.*,ubicacion.* FROM adultomayor,domicilio,ubicacion WHERE IdDomicilio = FkDomicilio AND FkUbicacion = IdUbicacion",null);
+        if(c.moveToFirst()) {
+            do {
+                //procrasti
+                adultoMayor = new AdultoMayor();
+                adultoMayor.setIdAdultoMayor(c.getInt(1));
+                adultoMayor.setNombre(c.getString(2));
+                adultoMayor.setApellidoPaterno(c.getString(3));
+                adultoMayor.setApellidoMaterno(c.getString(4));
+                adultoMayor.setFotografia(c.getString(5));
+                adultoMayor.setDiabetico(c.getInt(6));
+                adultoMayor.setFkDependencia(c.getInt(7));
+                adultoMayor.setFkDomicilio(c.getInt(8));
+                //9
+                ubicacion = new Ubicacion();
+                ubicacion.setIdUbicacion(c.getInt(10));
+                ubicacion.setLongitud(c.getDouble(11));
+                ubicacion.setLatitud(c.getDouble(12));
+                //Creando Mapa
+                mapa = new Mapa();
+                mapa.setAdultoMayor(adultoMayor);
+                mapa.setUbicacion(ubicacion);
+                List.add(mapa);
+            } while (c.moveToNext());
+        }
+        return List;
+    }
     public void LeerTablaUbicacion(){
         //List<Seccion> list;
         Ubicacion x = new Ubicacion();
@@ -144,6 +179,17 @@ public final class OperacionesBaseDatos {
             } while (c.moveToNext());
         }
         //return list;
+    }
+    public Ubicacion obtenerUbicacion(int Id){
+        Ubicacion mUbicacion = new Ubicacion();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM ubicacion WHERE IdUbicacion = ? ",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()) {
+            mUbicacion.setIdUbicacion(c.getInt(1));
+            mUbicacion.setLongitud(c.getDouble(2));
+            mUbicacion.setLatitud(c.getDouble(3));
+        }
+        return mUbicacion;
     }
     /**TipoEvento**/
     public void InsertarTipoEvento(TipoEvento x){
@@ -339,23 +385,24 @@ public final class OperacionesBaseDatos {
         valores.put(evento.FkTipoEveto,x.getFkTipoEvento());
         query.insert("evento",null,valores);
     }
-    public void LeerTablaEvento(){
-        //List<Seccion> list;
-        Evento x = new Evento();
+    public ArrayList<Evento> LeerTablaEvento(){
+        ArrayList<Evento> list = new ArrayList<Evento>();
+        Evento x;
         SQLiteDatabase query = baseDatos.getReadableDatabase();
         Cursor c = query.rawQuery("SELECT * FROM evento",null);
         if(c.moveToFirst()) {
             do {
+                x = new Evento();
                 x.setIdEvento(c.getInt(1));
                 x.setFecha(c.getString(2));
                 x.setHora(c.getString(3));
                 x.setLugar(c.getString(4));
                 x.setInformacion(c.getString(5));
                 x.setFkTipoEvento(c.getInt(6));
-                //list.add(x);
+                list.add(x);
             } while (c.moveToNext());
         }
-        //return list;
+        return list;
     }
     public boolean verificarEvento(String Fecha){
         boolean Existe = false;
@@ -377,6 +424,20 @@ public final class OperacionesBaseDatos {
         valores.put(domicilio.Foto,x.getFoto());
         valores.put(domicilio.FkUbicacion,x.getFkUbicacion());
         query.insert("domicilio",null,valores);
+    }
+    public Domicilio obtenerDomicilio(int Id){
+        Domicilio mDomicilio = new Domicilio();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM domicilio WHERE IdDomicilio = ? ",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()) {
+            mDomicilio.setIdDomicilio(c.getInt(1));
+            mDomicilio.setNumero(c.getInt(2));
+            mDomicilio.setCalle(c.getString(3));
+            mDomicilio.setColonia(c.getString(4));
+            mDomicilio.setFoto(c.getString(5));
+            mDomicilio.setFkUbicacion(c.getInt(6));
+        }
+        return mDomicilio;
     }
     public void LeerTablaDomicilio(){
         //List<Seccion> list;
@@ -422,6 +483,16 @@ public final class OperacionesBaseDatos {
         }
         //return list;
     }
+    public TipoEvento ObtenerTipoEvento(int IdTipoEvento){
+        TipoEvento tipoEvento = new TipoEvento();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM tipoevento WHERE IdTipoEvento = "+IdTipoEvento,null);
+        if(c.moveToFirst()) {
+            tipoEvento.setIdTipoEvento(c.getInt(1));
+            tipoEvento.setNombre(c.getString(2));
+        }
+        return tipoEvento;
+    }
     /**FotoAlrededores**/
     public void InsertarFotosAlrededores(FotoAlrededores x){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
@@ -445,6 +516,22 @@ public final class OperacionesBaseDatos {
             } while (c.moveToNext());
         }
         //return list;
+    }
+    public ArrayList<FotoAlrededores> obtenerFotoAlredoresporIdDomicilio(int Id){
+        ArrayList<FotoAlrededores> list = new ArrayList<FotoAlrededores>();
+        FotoAlrededores foto;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM fotoalrededores WHERE FkDomicilio = ?",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()) {
+            do {
+                foto = new FotoAlrededores();
+                foto.setIdFotoAlrededores(c.getInt(1));
+                foto.setFoto(c.getString(2));
+                foto.setFkDomicilio(c.getInt(3));
+                list.add(foto);
+            } while (c.moveToNext());
+        }
+        return list;
     }
     /**Problematica**/
     public void InsertarProblematica(Problematica x){
@@ -679,6 +766,23 @@ public final class OperacionesBaseDatos {
             } while (c.moveToNext());
         }
         //return list;
+    }
+    public Usuario obtenerVoluntarioFrecuente(int Id){
+        Usuario mUsuario = new Usuario();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT usuario.* FROM usuario,voluntariofrecuente WHERE FkUsuario = IdUsuario AND FkAdultoMayor = ?",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()){
+            mUsuario.setIdUsuario(c.getInt(1));
+            mUsuario.setNombre(c.getString(2));
+            mUsuario.setApellidoPaterno(c.getString(3));
+            mUsuario.setApellidoMaterno(c.getString(4));
+            mUsuario.setCorreo(c.getString(5));
+            mUsuario.setFotografia(c.getString(6));
+            mUsuario.setFechaNacimiento(c.getString(7));
+            mUsuario.setScout(c.getInt(8));
+            mUsuario.setFkSeccion(c.getInt(9));
+        }
+        return mUsuario;
     }
     public ArrayList<AdultoMayor> obtenerAdultosMayoresPorVoluntarioFrecuente(int Id){
         ArrayList<AdultoMayor> list = new ArrayList<AdultoMayor>();

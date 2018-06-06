@@ -1,15 +1,23 @@
 package com.rogzart.proyecto_interfaces.Modelo;
 
-public class Mapas{
+import java.io.Serializable;
+
+public class Mapa implements Serializable{
     private AdultoMayor adultoMayor;
     private Ubicacion ubicacion;
-    public Mapas(){
+    private Boolean Check;
+
+
+
+    public Mapa(){
         adultoMayor = new AdultoMayor();
         ubicacion = new Ubicacion();
+        this.Check = false;
     }
-    public Mapas(AdultoMayor adultoMayor,Ubicacion ubicacion){
+    public Mapa(AdultoMayor adultoMayor, Ubicacion ubicacion){
         this.adultoMayor = adultoMayor;
         this.ubicacion = ubicacion;
+        this.Check = false;
     }
 
     public AdultoMayor getAdultoMayor() {
@@ -26,5 +34,12 @@ public class Mapas{
 
     public void setUbicacion(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
+    }
+    public Boolean getCheck() {
+        return Check;
+    }
+
+    public void setCheck(Boolean check) {
+        Check = check;
     }
 }

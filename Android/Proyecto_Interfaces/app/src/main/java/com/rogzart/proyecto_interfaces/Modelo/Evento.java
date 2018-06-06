@@ -1,6 +1,8 @@
 package com.rogzart.proyecto_interfaces.Modelo;
 
-public class Evento {
+import java.io.Serializable;
+
+public class Evento implements Serializable{
     private int IdEvento;
     private String Fecha;
     private String Hora;
