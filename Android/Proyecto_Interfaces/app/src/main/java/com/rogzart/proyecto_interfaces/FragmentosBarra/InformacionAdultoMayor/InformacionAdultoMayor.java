@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +64,7 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
     private Boolean Visible = false;
     private Conexion conexion;
     private Button btnVoluntarioFrecuente;
+    private LinearLayout Cercanos;
 
     @SuppressLint("ValidFragment")
     public InformacionAdultoMayor(Bundle paquete) {
@@ -83,6 +85,13 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
         configurarLugaresCercanos();
         configurarVoluntarioFrecuente();
         configurarDialogs();
+
+        //
+
+        configurarComentarios();
+
+
+
     }
     private void configurarDialogs(){
         Alerta = new AlertDialog.Builder(getContext());
@@ -207,10 +216,15 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
         VolleySingleton.getInstance(getContext()).addToRequestQueue(imageRequest);
     }
     void configurarLugaresCercanos(){
+        Cercanos = getView().findViewById(R.id.LayoutCercanos);
         ArrayList<FotoAlrededores> fotos = operador.obtenerFotoAlredoresporIdDomicilio(Domicilio.getIdDomicilio());
-        RecyclerView recyclerView =  getView().findViewById(R.id.my_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
-        recyclerView.setAdapter(new LugaresCercanosAdapter(fotos,getContext()));
+        if(fotos.size() < 1){
+            Cercanos.setVisibility(View.GONE);
+        }else{
+            RecyclerView recyclerView =  getView().findViewById(R.id.my_recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+            recyclerView.setAdapter(new LugaresCercanosAdapter(fotos,getContext()));
+        }
     }
     void configurarVoluntarioFrecuente(){
         VoluntarioFrecuente = getView().findViewById(R.id.VoluntarioFrecuente);
@@ -248,6 +262,9 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
                 ft.commit();
             }
         });
+    }
+    void configurarComentarios(){
+
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {

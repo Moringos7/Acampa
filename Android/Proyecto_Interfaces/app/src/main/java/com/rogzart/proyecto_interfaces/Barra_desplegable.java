@@ -18,7 +18,7 @@ import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.MenuAdministr
 import com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Coordinador.AsignacionAdultoMayorCoordinador;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Usuario.AsignacionAdultoMayorUsuario;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos.Eventos;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento01;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.InformacionAdultoMayor.busqueda_informacion_adulto_mayor;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventario;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventarioMain;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Sugerencias.menu_sugerencias;
@@ -149,7 +149,9 @@ public class Barra_desplegable extends AppCompatActivity
         }else if(id == R.id.nav_Ruta){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new Trazado_de_ruta()).commit();
         }else if(id == R.id.nav_Info){
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento01()).commit();
+            ft.replace(R.id.contenedor, busqueda_informacion_adulto_mayor.newInstance());
+            ft.addToBackStack(null);
+            ft.commit();
         }else if(id == R.id.nav_Sugerencias){
             ft.replace(R.id.contenedor, menu_sugerencias.newInstance());
             ft.addToBackStack(null);

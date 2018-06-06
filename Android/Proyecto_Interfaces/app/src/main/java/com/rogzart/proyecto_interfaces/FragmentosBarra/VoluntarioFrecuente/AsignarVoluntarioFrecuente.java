@@ -1,11 +1,13 @@
 package com.rogzart.proyecto_interfaces.FragmentosBarra.VoluntarioFrecuente;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -23,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.rogzart.proyecto_interfaces.Barra_desplegable;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.AU.AdministrarUsuario;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Coordinador.AsignacionAdultoMayorCoordinador;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos.Eventos;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.InformacionAdultoMayor.InformacionAdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
@@ -51,6 +55,7 @@ public class AsignarVoluntarioFrecuente extends Fragment {
     private View afterV;
     private Conexion conexion;
     private ActualizacionBaseDatos Act;
+    private LinearLayout Cargando, General;
     @SuppressLint("ValidFragment")
     public AsignarVoluntarioFrecuente(Bundle bolsa) {
         adultoMayor = (AdultoMayor) bolsa.getSerializable("AdultoMayor");
@@ -64,6 +69,9 @@ public class AsignarVoluntarioFrecuente extends Fragment {
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
         conexion = new Conexion(getContext());
+        Act = new ActualizacionBaseDatos(getContext());
+        Cargando = getView().findViewById(R.id.layoutActualizandoFrecuente);
+        General = getView().findViewById(R.id.LayoutFrecuente);
         ListaG = getView().findViewById(R.id.lista_voluntarios_frecuentes);
         busqueda = getView().findViewById(R.id.searchVoluntarioFrecuente);
         btn = getView().findViewById(R.id.btnAsignarVoluntario);
@@ -132,18 +140,14 @@ public class AsignarVoluntarioFrecuente extends Fragment {
                         StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
                                 new Response.Listener<String>()
                                 {
+                                    // operador.EliminarDatosTabla("voluntariofrecuente");
+                                    //                                                        Salir = new ActualizacionBaseDatos(getContext()).ActualizacionVoluntarioFrecuente(getContext());
                                     @Override
                                     public void onResponse(String response) {
-                                        Toast.makeText(getContext(), ""+response, Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(getContext(), ""+response, Toast.LENGTH_SHORT).show();
                                         if(response.compareTo("Asignado") == 0){
-                                            operador.EliminarDatosTabla("voluntariofrecuente");
-                                            new ActualizacionBaseDatos(getContext()).ActualizacionVoluntarioFrecuente(getContext());
-                                                Bundle bolsa = new Bundle();
-                                                bolsa.putSerializable("AdultoMayor",adultoMayor);
-                                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                                ft.replace(R.id.contenedor, InformacionAdultoMayor.newInstance(bolsa));
-                                                ft.addToBackStack(null);
-                                                ft.commit();
+                                            HiloCargaLista x = new HiloCargaLista();
+                                            x.execute();
                                         }
                                     }
                                 },
@@ -187,4 +191,40 @@ public class AsignarVoluntarioFrecuente extends Fragment {
         return inflater.inflate(R.layout.fragment_asignar_voluntario_frecuente, container, false);
     }
 
+
+
+
+    private class HiloCargaLista extends AsyncTask<Void, Void, Void>{
+
+        @Override protected void onPreExecute() {
+            General.setVisibility(View.GONE);
+            Cargando.setVisibility(View.VISIBLE);
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            operador.EliminarDatosTabla("voluntariofrecuente");
+            Act.ActualizacionVoluntarioFrecuente(getContext());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            Toast.makeText(getContext(), "Actualizado", Toast.LENGTH_SHORT).show();
+            Bundle bolsa = new Bundle();
+            bolsa.putSerializable("AdultoMayor",adultoMayor);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.contenedor, InformacionAdultoMayor.newInstance(bolsa));
+            ft.addToBackStack(null);
+            ft.commit();
+
+
+        }
+    }
 }
+
+
