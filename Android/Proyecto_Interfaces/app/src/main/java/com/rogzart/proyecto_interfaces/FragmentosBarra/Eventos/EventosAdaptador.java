@@ -21,7 +21,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class EventosAdaptador extends BaseAdapter implements Filterable{
+public class EventosAdaptador extends BaseAdapter implements Filterable {
     private ArrayList<Evento> Cosas;
     private ArrayList<TipoEvento>Cosas2;
     private Context contexto;
@@ -34,7 +34,7 @@ public class EventosAdaptador extends BaseAdapter implements Filterable{
 
     }
 
-    public void EventosAdaptadorFiltro(ArrayList<TipoEvento> cosas, Context contexto) {
+   public void EventosAdaptadorFiltro(ArrayList<TipoEvento> cosas, Context contexto) {
         this.Cosas2 = cosas;
         this.contexto = contexto;
         this.filterList= cosas;
@@ -59,7 +59,6 @@ public class EventosAdaptador extends BaseAdapter implements Filterable{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Conexion conexion = new Conexion(contexto);
         LayoutInflater inflate = LayoutInflater.from(contexto);
         View v = inflate.inflate(R.layout.list_eventos,null);
 
@@ -69,7 +68,7 @@ public class EventosAdaptador extends BaseAdapter implements Filterable{
         TextView Lugar= (TextView) v.findViewById(R.id.list_evento_lugar);
         TextView Informacion= (TextView) v.findViewById(R.id.list_evento_informacion);
         FloatingActionButton EliminarEvento = (FloatingActionButton) v.findViewById(R.id.list_evento_borrar);
-        operador= OperacionesBaseDatos.obtenerInstancia(contexto);
+        OperacionesBaseDatos operador= OperacionesBaseDatos.obtenerInstancia(contexto);
 
 
 
@@ -83,7 +82,7 @@ public class EventosAdaptador extends BaseAdapter implements Filterable{
 
 
 
-        return null;
+        return v;
     }
 
     @Override
@@ -124,4 +123,5 @@ public class EventosAdaptador extends BaseAdapter implements Filterable{
             notifyDataSetChanged();
         }
     }
+
 }

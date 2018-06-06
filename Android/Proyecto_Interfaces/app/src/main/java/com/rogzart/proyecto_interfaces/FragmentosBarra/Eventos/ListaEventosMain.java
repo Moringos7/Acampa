@@ -30,7 +30,7 @@ public class ListaEventosMain extends Fragment {
     @SuppressLint("ValidFragment")
     public  ListaEventosMain(Bundle bundle){
         packet=bundle;
-        evento = (Evento) packet.getSerializable("articulo");
+        evento = (Evento) packet.getSerializable("casos");
 
 
     }

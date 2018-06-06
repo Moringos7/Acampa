@@ -65,7 +65,7 @@ public class ListaEventos extends Fragment {
         Toast.makeText(getContext(), "" + arrayList.size(), Toast.LENGTH_SHORT).show();
         final EventosAdaptador miLista = new EventosAdaptador(arrayList, getContext());
         ListEventos.setAdapter(miLista);
-       // ArrayList <Evento> arrayList = operador.LeerTablaEvento();
+
         BuscadorEventos.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -83,7 +83,7 @@ public class ListaEventos extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int x, long l) {
                 Evento evento = (Evento) adapterView.getItemAtPosition(x);
                 Bundle bolsa = new Bundle();
-                bolsa.putSerializable("articulo", evento);
+                bolsa.putSerializable("casos", evento);
 
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.contenedor, ListaEventosMain.newInstance(bolsa));

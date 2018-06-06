@@ -125,10 +125,10 @@ public final class OperacionesBaseDatos {
         TipoEvento tipoEvento = new TipoEvento();
         SQLiteDatabase query = baseDatos.getReadableDatabase();
         Cursor c = query.rawQuery("SELECT * FROM tipoevento WHERE IdTipoEvento = "+IdTipoEvento,null);
-
+        if(c.moveToFirst()) {
             tipoEvento.setIdTipoEvento(c.getInt(1));
             tipoEvento.setNombre(c.getString(2));
-
+        }
         return tipoEvento;
     }
     /**Ubicacion**/
@@ -364,7 +364,7 @@ public final class OperacionesBaseDatos {
                 x.setLugar(c.getString(4));
                 x.setInformacion(c.getString(5));
                 x.setFkTipoEvento(c.getInt(6));
-                //list.add(x);
+                lista.add(x);
             } while (c.moveToNext());
         }
         return lista;
