@@ -53,7 +53,6 @@ public class AdaptadorVoluntarioFrecuente extends BaseAdapter implements Filtera
     private static class ViewHolder{
         TextView Nombre,Apellido;
         ImageView Fotografia;
-        View v;
     }
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -65,7 +64,6 @@ public class AdaptadorVoluntarioFrecuente extends BaseAdapter implements Filtera
 
         final ViewHolder holder;
         holder = new ViewHolder();
-
         holder.Fotografia = v.findViewById(R.id.FotografiaVF);
         holder.Nombre = v.findViewById(R.id.IdNombre);
         holder.Apellido = v.findViewById(R.id.IdApellido);

@@ -16,7 +16,8 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:text="Despensas Entregadas" />
+                android:text="Despensas Entregadas"
+                android:textSize="24sp" />
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/Grafica1"
@@ -30,14 +31,31 @@
                 android:id="@+id/textView21"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:text="Promedio de voluntarios" />
+                android:text="Promedio de voluntarios"
+                android:textSize="24sp" />
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/Grafica2"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_marginTop="20dp"></com.github.mikephil.charting.charts.PieChart>
+                android:layout_marginTop="20dp">
+
+            </com.github.mikephil.charting.charts.PieChart>
+            <TextView
+                android:id="@+id/textView28"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Promedio de voluntarios"
+                android:textSize="24sp" />
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/Grafica3"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="20dp">
+            </com.github.mikephil.charting.charts.PieChart>
         </LinearLayout>
     </ScrollView>
+
+
 
 </RelativeLayout>

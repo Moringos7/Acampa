@@ -28,13 +28,57 @@
             app:hintTextAppearance="@style/AppTheme.FloatingLabel">
 
             <android.support.design.widget.TextInputEditText
+                android:id="@+id/detalles_inventario_nombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/detalles_inventario_nombre"
                 android:hint="Nombre" />
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:id="@+id/textView30"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="30dp"
+            android:text="Existencia"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/detalles_inventario_general_btnRestarExistencia"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@android:color/holo_red_light"
+                android:text="-"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/detalles_inventario_general_Existencia"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="30sp" />
+
+            <Button
+                android:id="@+id/detalles_inventario_general_btnSumarExistencia"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@android:color/holo_green_light"
+                android:text="+"
+                android:textSize="24sp" />
+        </LinearLayout>
+
         <android.support.design.widget.TextInputLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -43,30 +87,15 @@
             app:hintTextAppearance="@style/AppTheme.FloatingLabel">
 
             <android.support.design.widget.TextInputEditText
+                android:id="@+id/detalles_inventario_cantidad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Existencia"
-                android:id="@+id/detalles_inventario_existencia"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="30dp"
-            app:hintTextAppearance="@style/AppTheme.FloatingLabel">
-
-            <android.support.design.widget.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Cantidad"
-                android:id="@+id/detalles_inventario_cantidad"/>
+                android:hint="Cantidad" />
         </android.support.design.widget.TextInputLayout>
 
         <EditText
 
+            android:id="@+id/detalles_inventario_descripcion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -74,7 +103,6 @@
             android:layout_marginTop="15dp"
             android:ems="10"
             android:hint="Descripción"
-            android:id="@+id/detalles_inventario_descripcion"
             android:inputType="textMultiLine" />
 
         <LinearLayout

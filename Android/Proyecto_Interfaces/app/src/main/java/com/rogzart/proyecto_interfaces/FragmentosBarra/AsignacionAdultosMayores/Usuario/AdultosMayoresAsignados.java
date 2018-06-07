@@ -3,6 +3,7 @@ package com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores
 import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -18,8 +19,12 @@ import android.widget.Toast;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.AU.AdministrarUsuario;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.MenuAdministrar;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.InformacionAdultoMayor.InformacionAdultoMayor;
+import com.rogzart.proyecto_interfaces.MapsActivity;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
+import com.rogzart.proyecto_interfaces.Modelo.Mapa;
+import com.rogzart.proyecto_interfaces.Modelo.Ubicacion;
 import com.rogzart.proyecto_interfaces.R;
+import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import java.util.ArrayList;
 
@@ -31,6 +36,7 @@ public class AdultosMayoresAsignados extends Fragment implements View.OnClickLis
     private ListView Lista;
     private Button btn;
     private TextView numero;
+    private OperacionesBaseDatos operador;
 
     @SuppressLint("ValidFragment")
     public AdultosMayoresAsignados(Bundle bolsa) {
@@ -43,6 +49,7 @@ public class AdultosMayoresAsignados extends Fragment implements View.OnClickLis
     }
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
+        operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         Lista = getView().findViewById(R.id.listAsignados);
         numero = getView().findViewById(R.id.numeroAdultos);
         numero.setText(Integer.toString(Asignados.size()));
@@ -77,6 +84,19 @@ public class AdultosMayoresAsignados extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         //Obtener Ubicacion por Id
+        ArrayList<Mapa> mapas = new ArrayList<Mapa>();
+        Mapa miMapa;
+        Ubicacion ubicacion;
+        for(int i = 0; i<Asignados.size();i++){
+            ubicacion = operador.obtenerUdicacionPorAdultoMayor(Asignados.get(i));
+            miMapa = new Mapa(Asignados.get(i),ubicacion);
+            mapas.add(miMapa);
+        }
+
+        Intent Imapa = new Intent(getActivity(), MapsActivity.class);
+        Imapa.putExtra("Lista",mapas);
+        getActivity().startActivity(Imapa);
+
 
     }
 }

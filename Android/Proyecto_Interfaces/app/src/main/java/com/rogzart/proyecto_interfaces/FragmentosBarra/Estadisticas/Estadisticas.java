@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-//import com.juang.jplot.PlotPastelito;
 import com.rogzart.proyecto_interfaces.EstadisticasMain;
 import com.rogzart.proyecto_interfaces.InterfacesLogin.Inicio;
 import com.rogzart.proyecto_interfaces.InterfacesLogin.signup;
@@ -30,6 +29,7 @@ import java.util.Calendar;
 public class Estadisticas extends Fragment {
     private OperacionesBaseDatos operador;
     Button btngrafica;
+    int []datos;
     public Estadisticas() {
 
     }
@@ -67,7 +67,7 @@ public class Estadisticas extends Fragment {
 
         // Despensas entregadas mensuales
         int Asignaciones = operador.promedioVoluntariosMes("06", "2018");
-        //Toast.makeText(getContext(), ""+Asignaciones, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getContext(), ""+Asignaciones, Toast.LENGTH_SHORT).show();
         //Despensas totales mensuales
         int Total = operador.contarAdultoMayor();
         //Toast.makeText(getContext(), ""+Total, Toast.LENGTH_SHORT).show();
@@ -76,21 +76,14 @@ public class Estadisticas extends Fragment {
 
         //Numero de asignaciones al mes
         int AsignacionesMes = operador.asignacionesMes("06", "2018");
-        Toast.makeText(getContext(), "Asignaciones Mes"+AsignacionesMes, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "Asignaciones Mes"+AsignacionesMes, Toast.LENGTH_SHORT).show();
 
         //Usuarios
         int usuarios = operador.numeroUsuarios();
-        Toast.makeText(getContext(), "Usuarios app: " + usuarios, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "Usuarios app: " + usuarios, Toast.LENGTH_SHORT).show();
 
         //Estadistica Mensual 3
 
-        ArrayList<Usuario> Usuarios = new ArrayList<Usuario>();
-        Usuarios = operador.usuariosAsignacion("06", "2018");
-       // Toast.makeText(getContext(), "Usuarios mensual: " + Usuarios.size(), Toast.LENGTH_SHORT).show();
-
-        //Semestrales
-        //Select Usuarios
-        Usuarios = operador.usuariosActivos();
         //Toast.makeText(getContext(), "Usuarios semestral: " + Usuarios.size(), Toast.LENGTH_SHORT).show();
 
 

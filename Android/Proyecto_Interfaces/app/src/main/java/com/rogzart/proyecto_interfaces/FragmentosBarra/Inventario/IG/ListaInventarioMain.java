@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -40,9 +41,12 @@ public class ListaInventarioMain extends Fragment {
     private Bundle packet;
     private Conexion conexion;
     private Inventario inventario;
-    private EditText Nombre, existencia, cantidad, descripcion, comentario;
+    private EditText Nombre, cantidad, descripcion, comentario;
+    private TextView TExistencia;
     private ImageView imagenarticulo;
-    private Button btnEliminar, btnGuardar;
+    private int resultadoE;
+    private Button btnEliminar, btnGuardar, btnRestar,btnSumar;
+    private LogUser ControlUser;
     Bitmap bitmap;
     Uri ImageUrl;
     String Imagen;
@@ -69,39 +73,94 @@ public class ListaInventarioMain extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.detalle_inventario_general, container, false);
     }
 
     public void onActivityCreated(Bundle state) {
 
+
         super.onActivityCreated(state);
+        ControlUser = LogUser.obtenerInstancia(getContext());
+
         Nombre = getView().findViewById(R.id.detalles_inventario_nombre);
-        existencia = getView().findViewById(R.id.detalles_inventario_existencia);
         cantidad = getView().findViewById(R.id.detalles_inventario_cantidad);
         descripcion = getView().findViewById(R.id.detalles_inventario_descripcion);
         imagenarticulo = getView().findViewById(R.id.detalles_inventario_imagen);
         btnEliminar = getView().findViewById(R.id.detalles_inventario_boton_eliminar);
         btnGuardar = getView().findViewById(R.id.detalles_inventario_boton_guardar);
+        TExistencia = getView().findViewById(R.id.detalles_inventario_general_Existencia);
         conexion = new Conexion(getContext());
+        btnRestar= (Button) getView().findViewById(R.id.detalles_inventario_general_btnRestarExistencia);
+        btnSumar= (Button) getView().findViewById(R.id.detalles_inventario_general_btnSumarExistencia);
         Nombre.setText(inventario.getProducto());
-        existencia.setText(String.valueOf(inventario.getExistencia()));
+        TExistencia.setText(String.valueOf(inventario.getExistencia()));
+        resultadoE= inventario.getExistencia();
         cantidad.setText(String.valueOf(inventario.getCantidad()));
         descripcion.setText(inventario.getDescripcion());
+        if (inventario.getExtra() < 1) {
+            if (ControlUser.getCoordinador() > 0) {
+                btnEliminar.setVisibility(View.VISIBLE);
+
+            }else{
+                btnEliminar.setVisibility(View.GONE);
+            }
+        }
+
+       /* if(ControlUser.getScouter()>0){
+            btnEliminar.setVisibility(View.GONE);
+        }*/
 
         btnEliminar.setOnClickListener(new View.OnClickListener() {
 
                                            @Override
                                            public void onClick(View v) {
-                                               EliminarProducto();
+                                               if (inventario.getExtra() < 1) {
+                                                   if (ControlUser.getCoordinador() > 0) {
+
+                                                       EliminarProducto();
+                                                   }else{
+                                                       btnEliminar.setVisibility(View.GONE);
+                                                   }
+                                               }else{
+                                                   EliminarProducto();
+                                               }
+
+
+
                                            }
                                        }
         );
+        btnRestar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(resultadoE>0){
+                    resultadoE--;
+                    TExistencia.setText(String.valueOf(resultadoE));
+                }else{
+                    TExistencia.setText(String.valueOf(resultadoE));
+                    Toast.makeText(getContext(), "El valor de existencia no puede ser menor a 0", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+        btnSumar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resultadoE++;
+                TExistencia.setText(String.valueOf(resultadoE));
+
+            }
+        });
         imagenarticulo.setOnClickListener(new View.OnClickListener() {
 
                                               @Override
@@ -122,7 +181,6 @@ public class ListaInventarioMain extends Fragment {
 
         if (LogUser.obtenerInstancia(getContext()).getCoordinador() == 0) {
             Nombre.setEnabled(false);
-            existencia.setEnabled(false);
             cantidad.setEnabled(false);
             descripcion.setEnabled(false);
         }
@@ -174,6 +232,9 @@ public class ListaInventarioMain extends Fragment {
 
 
     private void EliminarProducto() {
+
+
+
         conexion.setRuta("WebService/Inventario/wsInventarioDelete.php");
         StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
                 new Response.Listener<String>() {
@@ -193,6 +254,7 @@ public class ListaInventarioMain extends Fragment {
             @Override
             protected Map<String, String> getParams() {
                 String IdInventario = Integer.toString(inventario.getIdInventario());
+
                 String Imagen = inventario.getImagen();
 
 
@@ -209,6 +271,7 @@ public class ListaInventarioMain extends Fragment {
         ft.replace(R.id.contenedor, ListaInventario.newInstance());
         ft.addToBackStack(null);
         ft.commit();
+
 
     }
 
@@ -233,7 +296,7 @@ public class ListaInventarioMain extends Fragment {
             protected Map<String, String> getParams() {
                 String IdInventario = Integer.toString(inventario.getIdInventario());
                 String producto = Nombre.getText().toString();
-                String Existencia = existencia.getText().toString();
+                String Existencia = TExistencia.getText().toString();
                 String Cantidad = cantidad.getText().toString();
                 String Descripcion = descripcion.getText().toString();
                 String Comentario = "Hola";

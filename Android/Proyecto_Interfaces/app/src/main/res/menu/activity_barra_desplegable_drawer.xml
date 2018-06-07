@@ -2,6 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
+    //tools:showIn="navigation_view"
     <group android:checkableBehavior="single"
         android:id="@+id/menuVoluntario"
         android:visible="false">
@@ -10,7 +11,7 @@
             android:title="Asignación Adultos Mayores" />
         <item
             android:id="@+id/nav_Ruta"
-            android:title="Trazado de Ruta" />
+            android:title="Localizacion de Lugares" />
         <item
             android:id="@+id/nav_Info"
             android:title="Informacion Adultos Mayores" />
