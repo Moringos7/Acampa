@@ -12,8 +12,10 @@ public class Usuario implements Serializable {
     private String FechaNacimiento;
     private int Scout;
     private Integer FkSeccion;
-    public Usuario(){
 
+    private Boolean Check;
+    public Usuario(){
+        this.Check = false;
     }
 
     public int getIdUsuario() {
@@ -89,5 +91,12 @@ public class Usuario implements Serializable {
             fkSeccion = null;
         }
         FkSeccion = fkSeccion;
+    }
+    public Boolean getCheck() {
+        return Check;
+    }
+
+    public void setCheck(Boolean check) {
+        Check = check;
     }
 }

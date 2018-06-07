@@ -72,7 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         x.add(Ramiro_Perez_Chavez);*/
 
         for(int i = 0;i<ListaPrincipal.size();i++){
-            String NombreCompleto = ListaPrincipal.get(i).getAdultoMayor().getNombre()+" "+ListaPrincipal.get(i).getAdultoMayor().getApellidoPaterno()+""+ListaPrincipal.get(i).getAdultoMayor().getApellidoMaterno();
+            String NombreCompleto = ListaPrincipal.get(i).getAdultoMayor().getNombre()+" "+ListaPrincipal.get(i).getAdultoMayor().getApellidoPaterno()+" "+ListaPrincipal.get(i).getAdultoMayor().getApellidoMaterno();
             mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(ListaPrincipal.get(i).getUbicacion().getLatitud(),ListaPrincipal.get(i).getUbicacion().getLongitud()))
                     .title(NombreCompleto)

@@ -314,22 +314,41 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="¿Recogerla para el Convivio?"
+                    android:text="¿Recoger para el Convivio?"
                     android:textColor="#000"
                     android:textSize="18sp" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/btnRecoger"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="40dp"
+                    android:layout_marginTop="20dp"
                     android:background="#53b029"
                     android:text="Aceptar"
                     android:textAllCaps="false"
                     android:textColor="#fff"
                     android:textSize="20sp" />
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/LayoutAgregado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Llevar al Convivio"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+            </LinearLayout>
         </LinearLayout>
+
+
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

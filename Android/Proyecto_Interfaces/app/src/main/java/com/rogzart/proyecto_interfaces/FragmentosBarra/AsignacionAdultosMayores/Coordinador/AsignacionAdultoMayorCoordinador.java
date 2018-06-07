@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,10 +21,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.rogzart.proyecto_interfaces.Adultos.Adultos;
 import com.rogzart.proyecto_interfaces.Barra_desplegable;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.MenuAdministrar;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos.Eventos;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos.ListaEventos;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.SeleccionAM;
@@ -51,13 +48,11 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     private boolean EventoDisponible;
     private boolean Activado;
     private OperacionesBaseDatos operador;
-    private Calendar c = Calendar.getInstance();
     private String FechaActual;
     private ListView listaG;
     private Boolean A;
     private HiloCargaLista myHiloC;
     public int NumeroPeticiones;
-    private int posicion;
     private ArrayList<SeleccionAM> Selecciones;
     private LinearLayout LinearprogressBar;
     private TextView ContadorAsignados;
@@ -90,12 +85,13 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         FechaActual = generarFecha();
         NumeroPeticiones = 0;
 
-        EventoDisponible = operador.verificarEvento(FechaActual);
+        EventoDisponible = operador.verificarEventoServicio(FechaActual);
         if(!EventoDisponible){
             AlertaEvento.show();
+        }else {
+            configurarHilos();
         }
         //LinearprogressBar.setVisibility(View.VISIBLE);
-        configurarHilos();
         ////Botones de Administracion
         LinearLayout Botones = getView().findViewById(R.id.layoutBotones);
         Botones.setVisibility(View.VISIBLE);
@@ -136,7 +132,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     private void configurarDialogs(){
         AlertaEvento = new AlertDialog.Builder(getContext());
         AlertaEvento.setTitle("Servicio No agendado");
-        AlertaEvento.setMessage("Necesita agendar un servicio o convivio antes de Asignar Adultos Mayores, ¿Desea agendar uno?");
+        AlertaEvento.setMessage("Necesita agendar un Servicio antes de Asignar Adultos Mayores, ¿Desea agendar uno?");
         AlertaEvento.setCancelable(false);
         AlertaEvento.setPositiveButton("Agendar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
@@ -153,7 +149,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     private void agendar(){
         //Toast.makeText(getContext(), "Agendame", Toast.LENGTH_SHORT).show();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.contenedor,Eventos.newInstance());
+        ft.replace(R.id.contenedor, ListaEventos.newInstance());
         ft.addToBackStack(null);
         ft.commit();
     }
@@ -182,6 +178,8 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     public void cargarLista(){
         listaG = getView().findViewById(R.id.listaAsigancionCoordinador);
         ArrayList<UsuarioAsignacion> arrayList = operador.LeerUsuariosAsignacion(FechaActual);
+        //Toast.makeText(getContext(), ""+arrayList.size(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), ""+FechaActual, Toast.LENGTH_SHORT).show();
         for(UsuarioAsignacion usuario : arrayList){
             for(SeleccionAM regirsto : Selecciones){
                 if(regirsto.getIdentificador() == usuario.getIdUsuario()){
@@ -206,7 +204,9 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     }
     private void DetenerHilos(){
         Activado = false;
-        myHiloC.cancel(true);
+        if(myHiloC != null){
+            myHiloC.cancel(true);
+        }
     }
     private void configurarHilos(){
         NumeroPeticiones = 0;
@@ -270,7 +270,6 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                 VolleySingleton.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
                 if(A){
                    operador.EliminarDatosTabla("asignacion");
-                   new ActualizacionBaseDatos(getContext()).VolcarBasedeDatos();
                    new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext());
                    Salir = false;
                    A = false;

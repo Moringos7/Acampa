@@ -11,4 +11,11 @@
     <item
         android:id="@+id/BarraCerrarSesion"
         android:title="Cerrar Sesion" />
+    <!--<item
+        android:id="@+id/olo"
+        android:icon="@drawable/user"
+        android:title="configu"
+        app:showAsAction="always"
+        />-->
+
 </menu>

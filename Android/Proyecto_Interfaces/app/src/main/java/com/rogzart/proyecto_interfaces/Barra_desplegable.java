@@ -14,17 +14,18 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.AU.AdministrarUsuario;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.MenuAdministrar;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Coordinador.AsignacionAdultoMayorCoordinador;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Usuario.AsignacionAdultoMayorUsuario;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos.Eventos;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Convivio.Convivio;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Estadisticas.Estadisticas;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos.ListaEventos;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.InformacionAdultoMayor.busqueda_informacion_adulto_mayor;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventario;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventarioMain;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Scouter.Administracion_Scouter;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Sugerencias.menu_sugerencias;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.TrazadoRuta.Trazado_de_ruta;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento06;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento08;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.LocalizacionLugares.LocalizacionLugares;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.Singleton.LogUser;
@@ -147,7 +148,7 @@ public class Barra_desplegable extends AppCompatActivity
                 Toast.makeText(this, "Verifica tu conexion a Internet", Toast.LENGTH_SHORT).show();
             }
         }else if(id == R.id.nav_Ruta){
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Trazado_de_ruta()).commit();
+            getFragmentManager().beginTransaction().replace(R.id.contenedor,new LocalizacionLugares()).commit();
         }else if(id == R.id.nav_Info){
             ft.replace(R.id.contenedor, busqueda_informacion_adulto_mayor.newInstance());
             ft.addToBackStack(null);
@@ -157,24 +158,24 @@ public class Barra_desplegable extends AppCompatActivity
             ft.addToBackStack(null);
             ft.commit();
         }else if(id == R.id.nav_Convivio){
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento06()).commit();
+            ft.replace(R.id.contenedor, Convivio.newInstance());
+            ft.addToBackStack(null);
+            ft.commit();
         }else if(id == R.id.nav_Inventario){
             ft.replace(R.id.contenedor, ListaInventario.newInstance());
             ft.addToBackStack(null);
             ft.commit();
         }else if(id == R.id.nav_Scouters){
-            //getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento07()).commit();
-            Bundle bolsa = new Bundle();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.contenedor, ListaInventarioMain.newInstance(bolsa));
-            transaction.addToBackStack(null);
-            transaction.commit();
-
+            ft.replace(R.id.contenedor, Administracion_Scouter.newInstance());
+            ft.addToBackStack(null);
+            ft.commit();
         }else if(id == R.id.nav_Estadisticas){
-            getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento08()).commit();
+            //getFragmentManager().beginTransaction().replace(R.id.contenedor,new Fragmento08()).commit();
+            ft.replace(R.id.contenedor, Estadisticas.newInstance());
+            ft.addToBackStack(null);
+            ft.commit();
         }else if(id == R.id.nav_Eventos){
-
-            ft.replace(R.id.contenedor, Eventos.newInstance());
+            ft.replace(R.id.contenedor, ListaEventos.newInstance());
             ft.addToBackStack(null);
             ft.commit();
 

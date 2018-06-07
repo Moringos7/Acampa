@@ -27,7 +27,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.rogzart.proyecto_interfaces.Barra_desplegable;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.AU.AdministrarUsuario;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Coordinador.AsignacionAdultoMayorCoordinador;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos.Eventos;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.InformacionAdultoMayor.InformacionAdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
@@ -99,27 +98,37 @@ public class AsignarVoluntarioFrecuente extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(user == null){
                     user = (Usuario) adapterView.getItemAtPosition(i);
+                    user.setCheck(true);
+                    //view.setBackgroundColor(Color.rgb(45, 115, 191));
                 }else{
+                    user.setCheck(false);
                     Usuario userTemp = (Usuario) adapterView.getItemAtPosition(i);
                     if(user.getIdUsuario() == userTemp.getIdUsuario()){
                         user = null;
+                        //view.setBackgroundColor(Color.WHITE);
                     }else{
                         user = null;
                         user = (Usuario)adapterView.getItemAtPosition(i);
+                        user.setCheck(true);
+                        //view.setBackgroundColor(Color.WHITE);
                     }
                 }
 
-                if(afterV != null){
-                    afterV.setBackgroundColor(Color.WHITE);
-                }
-                if(afterV == view){
-                    view.setBackgroundColor(Color.WHITE);
-                    afterV = null;
-                }else{
-                    view.setBackgroundColor(Color.rgb(45, 115, 191));
+                if(afterV == null){
                     afterV = view;
-                }
+                    view.setBackgroundColor(Color.rgb(45, 115, 191));
 
+                }else{
+                    if(afterV == view){
+                        afterV = null;
+                        view.setBackgroundColor(Color.WHITE);
+                    }else{
+                        afterV.setBackgroundColor(Color.WHITE);
+                        view.setBackgroundColor(Color.rgb(45, 115, 191));
+                        afterV = view;
+                    }
+                }
+                
                 if(user != null){
                     Toast.makeText(getContext(), "->"+user.getNombre(), Toast.LENGTH_SHORT).show();
                 }else{

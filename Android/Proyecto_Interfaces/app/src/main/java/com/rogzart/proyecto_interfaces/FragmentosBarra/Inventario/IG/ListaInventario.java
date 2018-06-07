@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.AU.ListaAdaptadorUsuarioNoRegistrado;
 import com.rogzart.proyecto_interfaces.InterfacesLogin.Inicio;
 import com.rogzart.proyecto_interfaces.InterfacesLogin.signup;
@@ -42,7 +44,9 @@ import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Inventario;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.R;
+import com.rogzart.proyecto_interfaces.Singleton.LogUser;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
+import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import java.io.ByteArrayOutputStream;
@@ -66,8 +70,8 @@ public class ListaInventario extends Fragment {
     ListView listaInventario, listaInventarioE;
     ScrollView scroll;
     ImageView ImagenProducto;
-    Button BtnGeneral, BtnExtras, ABtnGuardar;
-    EditText ANombre,AExistencia,ACantidad,ADescripcion;
+    Button BtnGeneral, BtnExtras, ABtnGuardar, btnguardar;
+    EditText ANombre,AExistencia,ACantidad,ADescripcion, AComentario;
     Bitmap bitmap;
     CheckBox AExtra;
     FloatingActionButton botonAgregar, botonRegresar;
@@ -75,11 +79,11 @@ public class ListaInventario extends Fragment {
     Conexion conexion, conexionE;
     String Imagen;
     private JsonObjectRequest jsonObjectRequest;
+    private LogUser ControlUser;
     private int cuenta, cuentaE;
     private static final int PICK_IMAGE = 100;
     LinearLayout layoutG, layoutE, layoutT, layoutA;
     OperacionesBaseDatos operador;
-    public static int ValorExtra = 1;
 
     public static ListaInventario newInstance() {
         ListaInventario fragmento = new ListaInventario();
@@ -101,12 +105,14 @@ public class ListaInventario extends Fragment {
 
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
+        ControlUser = LogUser.obtenerInstancia(getContext());
+        AComentario = (EditText) getView().findViewById(R.id.agregar_producto_comentario);
         ABtnGuardar = (Button) getView().findViewById(R.id.agregar_producto_btnguardar);
         ACantidad = (EditText) getView().findViewById(R.id.agregar_producto_cantidad);
         ADescripcion = (EditText) getView().findViewById(R.id.agregar_producto_descripcion);
         AExistencia = (EditText) getView().findViewById(R.id.agregar_producto_existencia);
         AExtra = (CheckBox) getView().findViewById(R.id.agregar_producto_extra);
-        ImagenProducto= (ImageView) getView().findViewById(R.id.agregar_producto_imagen);
+        ImagenProducto = (ImageView) getView().findViewById(R.id.agregar_producto_imagen);
         ANombre = (EditText) getView().findViewById(R.id.agregar_producto_nombre);
         botonRegresar = (FloatingActionButton) getView().findViewById(R.id.boton_regresar);
         BtnGeneral = (Button) getView().findViewById(R.id.list_inventario_general_btnG);
@@ -116,8 +122,10 @@ public class ListaInventario extends Fragment {
         listaInventario = (ListView) getView().findViewById(R.id.listaGeneral);
         listaInventarioE = (ListView) getView().findViewById(R.id.listaExtras);
         buscador = (SearchView) getView().findViewById(R.id.list_inventario_general_buscador);
-        buscadorE= (SearchView) getView().findViewById(R.id.buscadorExtras);
+        buscadorE = (SearchView) getView().findViewById(R.id.buscadorExtras);
         botonAgregar = (FloatingActionButton) getView().findViewById(R.id.list_inventario_general_agregar);
+
+        new ActualizacionBaseDatos(getContext()).VolcarBasedeDatos();
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         layoutG = getView().findViewById(R.id.LinearLGeneral);
         layoutT = getView().findViewById(R.id.inventario_general_layout_general);
@@ -126,7 +134,6 @@ public class ListaInventario extends Fragment {
         layoutE = getView().findViewById(R.id.LinearLExtra);
 
         conexion = new Conexion(getContext());
-        conexion.setRuta("WebService/Inventario/wsInventarioCreate.php");
 
         ListaGeneral();
         botonRegresar.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +142,7 @@ public class ListaInventario extends Fragment {
                                                  layoutT.setVisibility(View.VISIBLE);
                                                  scroll.setVisibility(View.GONE);
                                                  botonAgregar.setVisibility(View.VISIBLE);
+
                                              }
                                          }
 
@@ -143,10 +151,16 @@ public class ListaInventario extends Fragment {
         botonAgregar.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-                                                if(conexion.isConnected()) {
+                                                if (conexion.isConnected()) {
                                                     layoutT.setVisibility(View.GONE);
                                                     scroll.setVisibility(View.VISIBLE);
                                                     botonAgregar.setVisibility(View.GONE);
+                                                    AExtra.setChecked(true);
+                                                    if (ControlUser.getCoordinador() > 0) {
+                                                        AExtra.setEnabled(true);
+                                                        AExtra.setChecked(false);
+
+                                                    }
 
                                                 } else {
                                                     Toast.makeText(getContext(), "Verifique su conexion a Internet", Toast.LENGTH_SHORT).show();
@@ -157,6 +171,14 @@ public class ListaInventario extends Fragment {
 
         );
 
+        ImagenProducto.setOnClickListener(new View.OnClickListener() {
+
+                                              @Override
+                                              public void onClick(View v) {
+                                                  cargarimagen();
+                                              }
+                                          }
+        );
         BtnExtras.setOnClickListener(new View.OnClickListener() {
                                          @Override
                                          public void onClick(View v) {
@@ -181,14 +203,14 @@ public class ListaInventario extends Fragment {
 
 
         );
-    }
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.agregar_producto_imagen:
-                cargarimagen();
-                break;
-        }
+        ABtnGuardar.setOnClickListener(new View.OnClickListener() {
 
+                                           @Override
+                                           public void onClick(View v) {
+                                               NuevoProducto();
+                                           }
+                                       }
+        );
     }
 
     private void cargarimagen() {
@@ -216,34 +238,73 @@ public class ListaInventario extends Fragment {
     }
 
     private void NuevoProducto() {
-        String producto = ANombre.getText().toString();
-        String Existencia = AExistencia.getText().toString();
-        String Cantidad = ACantidad.getText().toString();
-        String Descripcion = ADescripcion.getText().toString();
-        Map<String, String> params = new HashMap<>();
-        params.put("producto", producto);
-        params.put("Existencia", Existencia);
-        params.put("Cantidad", Cantidad);
-        params.put("Descripcion", Descripcion);
-        params.put("Extra", String.valueOf(AExtra.isChecked()));
-        JSONObject obj = new JSONObject(params);
 
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, conexion.getRuta(), obj, new Response.Listener<JSONObject>() {
+
+        conexion.setRuta("WebService/Inventario/wsInventarioCreate.php");
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getContext(),  response, Toast.LENGTH_SHORT).show();
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Toast.makeText(getContext(), ""+error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
             @Override
-            public void onResponse(JSONObject response) {
-                JSONArray json = response.optJSONArray("Inventario");
+            protected Map<String, String> getParams()
+            {
+                String producto = ANombre.getText().toString();
+                String Existencia = AExistencia.getText().toString();
+                String Cantidad = ACantidad.getText().toString();
+                String Descripcion = ADescripcion.getText().toString();
+                String Comentario = AComentario.getText().toString();
+                String VCheckT = "1";
+                String VCheckF= "0";
+                int Valor = 0;
+                final boolean valorCheck= AExtra.isChecked();
+                if (valorCheck ==false){
+                    Valor=0;
+                }
+                if(valorCheck ==true){
+                    Valor=1;
+                }
 
+
+               /* if(TextUtils.isEmpty(producto)){
+                    ANombre.setError("Este campo no puede quedar vacio");
+
+                }
+                if(TextUtils.isEmpty(Existencia)){
+                    AExistencia.setError("Este campo no puede quedar vacio");
+                }
+
+*/
+
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("producto", producto);
+                params.put("cantidad", Cantidad);
+                params.put("existencia", Existencia);
+                params.put("descripcion", Descripcion);
+                if (Valor == 0 ) {
+                    params.put("extra", String.valueOf(VCheckF));
+                }else{
+                    params.put("extra", String.valueOf(VCheckT));
+                }
+                params.put("comentario", Comentario);
+                params.put("imagen",Imagen);
+                return params;
             }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //Toast.makeText(signup.this, ""+error, Toast.LENGTH_LONG).show();
-                Toast.makeText(getContext(), "Fallo Conexion al Servidor", Toast.LENGTH_SHORT).show();
-            }
-
-        });
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
+        };
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
     }
     private void cargarlistainventarioExtras() {
 

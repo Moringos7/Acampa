@@ -1,4 +1,4 @@
-package com.rogzart.proyecto_interfaces.FragmentosBarra.TrazadoRuta;
+package com.rogzart.proyecto_interfaces.FragmentosBarra.LocalizacionLugares;
 
 import android.content.Context;
 import android.graphics.Bitmap;

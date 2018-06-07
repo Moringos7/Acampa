@@ -3,14 +3,13 @@ package com.rogzart.proyecto_interfaces.FragmentosBarra.InformacionAdultoMayor;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,35 +21,43 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.MenuAdministrar;
-import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventario;
+import com.rogzart.proyecto_interfaces.Adultos.Adultos;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.VoluntarioFrecuente.AsignarVoluntarioFrecuente;
+import com.rogzart.proyecto_interfaces.MapsActivity;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Domicilio;
 import com.rogzart.proyecto_interfaces.Modelo.FotoAlrededores;
+import com.rogzart.proyecto_interfaces.Modelo.Mapa;
 import com.rogzart.proyecto_interfaces.Modelo.Ubicacion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.LogUser;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
+import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressLint("ValidFragment")
 public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallback {
 
     private AdultoMayor AdultoMayor;
+    private ActualizacionBaseDatos Act;
     private AlertDialog.Builder Alerta;
     private Domicilio Domicilio;
     private Ubicacion Ubicacion;
@@ -63,8 +70,8 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
     private ImageView Fotografia,FotografiaDomicilio;
     private Boolean Visible = false;
     private Conexion conexion;
-    private Button btnVoluntarioFrecuente;
-    private LinearLayout Cercanos;
+    private Button btnVoluntarioFrecuente,BtnRecoger,btnTrazarRutaAdultoMayor;
+    private LinearLayout Cercanos,Convivio,LayoutExiste;
 
     @SuppressLint("ValidFragment")
     public InformacionAdultoMayor(Bundle paquete) {
@@ -79,19 +86,15 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
         super.onActivityCreated(state);
         conexion = new Conexion(getContext());
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
+        Act = new ActualizacionBaseDatos(getContext());
         configuracionPrincipalAdultoMayor();
         configuracionDependencia();
         configurarDomicilio();
         configurarLugaresCercanos();
         configurarVoluntarioFrecuente();
         configurarDialogs();
-
-        //
-
         configurarComentarios();
-
-
-
+        configurarBotonConvivio();
     }
     private void configurarDialogs(){
         Alerta = new AlertDialog.Builder(getContext());
@@ -113,6 +116,23 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
 
             }
         });
+    }
+    private String generarFechaActual(){
+        String Fecha;
+        Calendar c = Calendar.getInstance();
+        int Dia = c.get(Calendar.DAY_OF_MONTH);
+        int Mes = c.get(Calendar.MONTH)+1;
+        int Anio = c.get(Calendar.YEAR);
+        String decenaD = "";
+        String decenaM = "";
+        if(Mes < 10){
+            decenaM = "0";
+        }
+        if(Dia < 10){
+            decenaD = "0";
+        }
+        Fecha = String.valueOf(Anio)+"-"+decenaM+String.valueOf(Mes)+"-"+decenaD+String.valueOf(Dia);
+        return Fecha;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -214,6 +234,31 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
             }
         });
         VolleySingleton.getInstance(getContext()).addToRequestQueue(imageRequest);
+
+        btnTrazarRutaAdultoMayor = getView().findViewById(R.id.btnTrazarRutaAdultoMayor);
+        btnTrazarRutaAdultoMayor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), ""+AdultoMayor.getNombre(), Toast.LENGTH_SHORT).show();
+                ArrayList<Mapa> mapas = new ArrayList<Mapa>();
+                Mapa miMapa;
+                Ubicacion ubicacion;
+                //
+                ArrayList<AdultoMayor> LisataA = new ArrayList<AdultoMayor>();
+                LisataA.add(AdultoMayor);
+                //
+                for(int i = 0; i<LisataA.size();i++){
+                    ubicacion = operador.obtenerUdicacionPorAdultoMayor(LisataA.get(i));
+                    miMapa = new Mapa(LisataA.get(i),ubicacion);
+                    mapas.add(miMapa);
+                }
+
+                Intent Imapa = new Intent(getActivity(), MapsActivity.class);
+                Imapa.putExtra("Lista",mapas);
+                getActivity().startActivity(Imapa);
+            }
+        });
+
     }
     void configurarLugaresCercanos(){
         Cercanos = getView().findViewById(R.id.LayoutCercanos);
@@ -266,9 +311,61 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
     void configurarComentarios(){
 
     }
+    void configurarBotonConvivio(){
+        LayoutExiste = getView().findViewById(R.id.LayoutAgregado);
+        Convivio = getView().findViewById(R.id.LayoutConvivio);
+        Convivio.setVisibility(View.GONE);
+        LayoutExiste.setVisibility(View.GONE);
+        if(!operador.verificarEventoConvivio(generarFechaActual())){
+
+        }else if(!operador.verificarExistenciaAdultoMayorRecoger(generarFechaActual(),AdultoMayor.getIdAdultoMayor())){
+            Convivio.setVisibility(View.VISIBLE);
+
+            BtnRecoger = getView().findViewById(R.id.btnRecoger);
+            BtnRecoger.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    conexion.setRuta("WebService/Recoger/wsRecogerCreate.php");
+                    final String IdAsignacion = operador.obtenerIdentificadorAsignacionAdultoMayor(generarFechaActual(), AdultoMayor.getIdAdultoMayor());
+                    //Toast.makeText(getContext(), ""+operador.obtenerIdentificadorAsignacionAdultoMayor(generarFechaActual(), AdultoMayor.getIdAdultoMayor()),Toast.LENGTH_SHORT).show();
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
+                            new Response.Listener<String>()
+                            {
+                                @Override
+                                public void onResponse(String response) {
+                                    Toast.makeText(getContext(), ""+response, Toast.LENGTH_SHORT).show();
+                                    if(response.compareTo("Registrado") == 0) {
+                                        HiloActualizarRecoger x = new HiloActualizarRecoger();
+                                        x.execute();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener()
+                            {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(getContext(), ""+error, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                    ) {
+                        @Override
+                        protected Map<String, String> getParams()
+                        {
+                            Map<String, String>  params = new HashMap<String, String>();
+                            params.put("fkasignacion",IdAsignacion);
+                            return params;
+                        }
+                    };
+                    VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
+                }
+            });
+        }else{
+            LayoutExiste.setVisibility(View.VISIBLE);
+        }
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Ubicacion = operador.obtenerUbicacion(Domicilio.getFkUbicacion());
+        Ubicacion = operador.obtenerUbicacionPorID(Domicilio.getFkUbicacion());
         latLng = new LatLng(Ubicacion.getLatitud(), Ubicacion.getLongitud());
         //latLng = new LatLng(0, 0);
         //Toast.makeText(getContext(), "Latitud: "+latLng.latitude+" Longitud: "+latLng.longitude, Toast.LENGTH_SHORT).show();
@@ -307,4 +404,28 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
         super.onLowMemory();
         mMapView.onLowMemory();
     }
+    private class HiloActualizarRecoger extends AsyncTask<Void, Void, Void> {
+
+        @Override protected void onPreExecute() {
+
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            operador.EliminarDatosTabla("recoger");
+            Act.ActualizacionRecoger(getContext());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            configurarBotonConvivio();
+        }
+    }
+
+
 }
