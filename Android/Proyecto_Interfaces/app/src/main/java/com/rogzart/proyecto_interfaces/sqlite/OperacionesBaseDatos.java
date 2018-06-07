@@ -737,7 +737,7 @@ public final class OperacionesBaseDatos {
     public int asignacionesMes(String mes, String anio){
         int numero = 0;
         SQLiteDatabase query = baseDatos.getReadableDatabase();
-        Cursor c = query.rawQuery("SELECT COUNT(*) FROM asignacion,adultomayor WHERE substr(Fecha,1,4) = ?  AND substr(Fecha,6,2) = ? AND FkAdultoMayor = IdAdultoMayor",new String[]{anio,mes});
+        Cursor c = query.rawQuery("SELECT COUNT(DISTINCT(FkUsuario)) FROM asignacion,adultomayor WHERE substr(Fecha,1,4) = ?  AND substr(Fecha,6,2) = ? AND FkAdultoMayor = IdAdultoMayor",new String[]{anio,mes});
         if(c.moveToFirst()){
             numero = c.getInt(0);
         }

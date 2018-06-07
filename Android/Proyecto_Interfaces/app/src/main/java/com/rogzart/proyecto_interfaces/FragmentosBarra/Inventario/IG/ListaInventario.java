@@ -70,17 +70,18 @@ public class ListaInventario extends Fragment {
     ListView listaInventario, listaInventarioE;
     ScrollView scroll;
     ImageView ImagenProducto;
-    Button BtnGeneral, BtnExtras, ABtnGuardar, btnguardar;
-    EditText ANombre,AExistencia,ACantidad,ADescripcion, AComentario;
+    Button BtnGeneral, BtnExtras, ABtnGuardar, btnguardar, btnrestar,btnsumar;
+    EditText ANombre,ACantidad,ADescripcion, AComentario;
     Bitmap bitmap;
     CheckBox AExtra;
     FloatingActionButton botonAgregar, botonRegresar;
-    TextView resultados,resultadosE;
+    TextView resultados,resultadosE,AExistencia;
     Conexion conexion, conexionE;
     String Imagen;
     private JsonObjectRequest jsonObjectRequest;
     private LogUser ControlUser;
     private int cuenta, cuentaE;
+    private int resultadoE=0;
     private static final int PICK_IMAGE = 100;
     LinearLayout layoutG, layoutE, layoutT, layoutA;
     OperacionesBaseDatos operador;
@@ -110,10 +111,12 @@ public class ListaInventario extends Fragment {
         ABtnGuardar = (Button) getView().findViewById(R.id.agregar_producto_btnguardar);
         ACantidad = (EditText) getView().findViewById(R.id.agregar_producto_cantidad);
         ADescripcion = (EditText) getView().findViewById(R.id.agregar_producto_descripcion);
-        AExistencia = (EditText) getView().findViewById(R.id.agregar_producto_existencia);
+        AExistencia = (TextView) getView().findViewById(R.id.agregar_producto_existencia);
         AExtra = (CheckBox) getView().findViewById(R.id.agregar_producto_extra);
         ImagenProducto = (ImageView) getView().findViewById(R.id.agregar_producto_imagen);
         ANombre = (EditText) getView().findViewById(R.id.agregar_producto_nombre);
+        btnrestar= (Button) getView().findViewById(R.id.agregar_producto_btnRestarExistencia);
+        btnsumar = (Button) getView().findViewById(R.id.agregar_producto_btnSumarExistencia);
         botonRegresar = (FloatingActionButton) getView().findViewById(R.id.boton_regresar);
         BtnGeneral = (Button) getView().findViewById(R.id.list_inventario_general_btnG);
         BtnExtras = (Button) getView().findViewById(R.id.list_inventario_general_btnE);
@@ -124,6 +127,7 @@ public class ListaInventario extends Fragment {
         buscador = (SearchView) getView().findViewById(R.id.list_inventario_general_buscador);
         buscadorE = (SearchView) getView().findViewById(R.id.buscadorExtras);
         botonAgregar = (FloatingActionButton) getView().findViewById(R.id.list_inventario_general_agregar);
+        AExistencia.setText(String.valueOf(resultadoE));
 
         new ActualizacionBaseDatos(getContext()).VolcarBasedeDatos();
         while(!new ActualizacionBaseDatos(getContext()).ActualizarBasedeDatos(getContext())){
@@ -169,10 +173,34 @@ public class ListaInventario extends Fragment {
                                                     Toast.makeText(getContext(), "Verifique su conexion a Internet", Toast.LENGTH_SHORT).show();
                                                 }
 
+
+
                                             }
                                         }
 
         );
+        btnrestar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(resultadoE>0){
+                    resultadoE--;
+                    AExistencia.setText(String.valueOf(resultadoE));
+                }else{
+                    AExistencia.setText(String.valueOf(resultadoE));
+                    Toast.makeText(getContext(), "El valor de existencia no puede ser menor a 0", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+        btnsumar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resultadoE++;
+                AExistencia.setText(String.valueOf(resultadoE));
+
+            }
+        });
 
         ImagenProducto.setOnClickListener(new View.OnClickListener() {
 
@@ -211,6 +239,9 @@ public class ListaInventario extends Fragment {
                                            @Override
                                            public void onClick(View v) {
                                                NuevoProducto();
+                                               layoutT.setVisibility(View.VISIBLE);
+                                               scroll.setVisibility(View.GONE);
+
                                            }
                                        }
         );
@@ -239,6 +270,7 @@ public class ListaInventario extends Fragment {
         String imagenString = Base64.encodeToString(imagenByte,Base64.DEFAULT);
         return imagenString;
     }
+
 
     private void NuevoProducto() {
 
