@@ -135,10 +135,12 @@ public class AsignacionAdultoMayorUsuario extends Fragment {
         }
         @Override
         protected Void doInBackground(Void... voids) {
+            operador.EliminarDatosTabla("recoger");
             operador.EliminarDatosTabla("asignacion");
             new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext());
+            new ActualizacionBaseDatos(getContext()).ActualizacionRecoger(getContext());
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

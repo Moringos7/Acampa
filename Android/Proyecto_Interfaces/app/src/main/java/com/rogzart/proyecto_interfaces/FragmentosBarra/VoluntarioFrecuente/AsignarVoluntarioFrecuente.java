@@ -128,7 +128,7 @@ public class AsignarVoluntarioFrecuente extends Fragment {
                         afterV = view;
                     }
                 }
-                
+
                 if(user != null){
                     Toast.makeText(getContext(), "->"+user.getNombre(), Toast.LENGTH_SHORT).show();
                 }else{

@@ -136,8 +136,11 @@ public class SolicitarAsignacion extends Fragment {
             while (Salir) {
                 Check = VerificarAsignaciones();
                 if (!Check) {
+                    operador.EliminarDatosTabla("recoger");
                     operador.EliminarDatosTabla("asignacion");
                     new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext());
+                    new ActualizacionBaseDatos(getContext()).ActualizacionRecoger(getContext());
+
                     Salir = true;
                 }else{
                     Salir = false;
