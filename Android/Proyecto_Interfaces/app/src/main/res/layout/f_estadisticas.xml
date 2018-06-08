@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.rogzart.proyecto_interfaces.FragmentosBarra.Fragmento01">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -28,21 +29,14 @@
             android:theme="@style/RaisedButton"/>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/Boton_Semestrales"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="30dp"
             android:text="Semestrales"
-            android:theme="@style/RaisedButton"/>
+            android:theme="@style/RaisedButton" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/pantalla"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-    </LinearLayout>
 </RelativeLayout>

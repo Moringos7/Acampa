@@ -229,7 +229,6 @@ public class AgregarScouter extends Fragment implements View.OnClickListener {
         Act.ActualizacionGestionInventario(getContext());
         Act.ActualizacionRecoger(getContext());
         Act.ActualizacionVoluntarioFrecuente(getContext());
-        Act.ActualizacionScouter(getContext());
     }
 
     @Override

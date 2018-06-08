@@ -19,6 +19,7 @@ public class LogUser {
     private static final String UserSeccion = "FkSeccion";
     private static final String IdScouter = "IdScouter";
     private static final String IdCoordinador = "IdCoordinador";
+    private static final String FechaLogin = "FechaLogin";
     //
     private static LogUser mInstancia = null;
     private static  Context ctx;
@@ -47,6 +48,18 @@ public class LogUser {
         editor.putInt(IdScouter, Scouter);
         editor.putInt(IdCoordinador,Coordinador);
         editor.apply();
+    }
+    public void setFechaLogin(String Fecha){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(UserData, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(FechaLogin,Fecha);
+        editor.apply();
+    }
+    public String getFechaLogin(){
+        String Fecha = "";
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(UserData,Context.MODE_PRIVATE);
+        Fecha = sharedPreferences.getString(FechaLogin,null);
+        return Fecha;
     }
     public Usuario getUser(){
         Usuario User = new  Usuario();

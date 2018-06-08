@@ -13,6 +13,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Scouter.Administracion_Scouter;
 import com.rogzart.proyecto_interfaces.Modelo.Evento;
 import com.rogzart.proyecto_interfaces.Modelo.Inventario;
 import com.rogzart.proyecto_interfaces.R;
@@ -32,6 +33,7 @@ public class ListaEventos extends Fragment {
     private OperacionesBaseDatos operador;
     private LogUser ControlUser;
     private int cuenta;
+    private FloatingActionButton BtnAgregar;
 
     public ListaEventos(){
 
@@ -81,19 +83,31 @@ public class ListaEventos extends Fragment {
         ListEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int x, long l) {
-                Evento evento = (Evento) adapterView.getItemAtPosition(x);
+                /*Evento evento = (Evento) adapterView.getItemAtPosition(x);
                 Bundle bolsa = new Bundle();
                 bolsa.putSerializable("casos", evento);
 
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.contenedor, ListaEventosMain.newInstance(bolsa));
                 transaction.addToBackStack(null);
-                transaction.commit();
+                transaction.commit();*/
             }
 
 
         }
         );
+
+        BtnAgregar = getView().findViewById(R.id.eventos_agregar);
+        BtnAgregar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getContext(), "Hola", Toast.LENGTH_SHORT).show();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.contenedor, Agregar_Evento.newInstance());
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+        });
 
     }
 

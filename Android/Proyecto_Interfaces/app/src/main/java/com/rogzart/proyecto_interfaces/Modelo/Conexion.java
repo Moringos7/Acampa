@@ -5,6 +5,8 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 
+import java.io.IOException;
+
 public class Conexion {
     private Context context;
     private String IpServer;
@@ -24,6 +26,22 @@ public class Conexion {
             networkInfo = connectivityManager.getNetworkInfo(mNetwork);
             if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {
                 return true;
+                ///Codigo añadido
+                ////
+                /*try {
+                    Process p = Runtime.getRuntime().exec("ping -c 1 www.google.com");
+                    int val = p.waitFor();
+                    boolean reachable = (val == 0);
+                    return reachable;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return false;*/
+                ////
+
+                //
             }
         }
         return false;

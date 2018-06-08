@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -30,6 +31,7 @@ import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.LogUser;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
 import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
+import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -47,6 +49,8 @@ public class ListaInventarioMain extends Fragment {
     private int resultadoE;
     private Button btnEliminar, btnGuardar, btnRestar,btnSumar;
     private LogUser ControlUser;
+    private OperacionesBaseDatos operador;
+    private ActualizacionBaseDatos Act;
     Bitmap bitmap;
     Uri ImageUrl;
     String Imagen;
@@ -70,11 +74,6 @@ public class ListaInventarioMain extends Fragment {
         return fragmento;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,6 +89,8 @@ public class ListaInventarioMain extends Fragment {
 
         super.onActivityCreated(state);
         ControlUser = LogUser.obtenerInstancia(getContext());
+        operador = OperacionesBaseDatos.obtenerInstancia(getContext());
+        Act = new ActualizacionBaseDatos(getContext());
 
         Nombre = getView().findViewById(R.id.detalles_inventario_nombre);
         cantidad = getView().findViewById(R.id.detalles_inventario_cantidad);
@@ -134,8 +135,6 @@ public class ListaInventarioMain extends Fragment {
                                                    EliminarProducto();
                                                }
 
-
-
                                            }
                                        }
         );
@@ -149,8 +148,6 @@ public class ListaInventarioMain extends Fragment {
                     TExistencia.setText(String.valueOf(resultadoE));
                     Toast.makeText(getContext(), "El valor de existencia no puede ser menor a 0", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
         btnSumar.setOnClickListener(new View.OnClickListener() {
@@ -173,7 +170,6 @@ public class ListaInventarioMain extends Fragment {
 
                                           @Override
                                           public void onClick(View v) {
-                                              Toast.makeText(getContext(),  "Guardar producto", Toast.LENGTH_SHORT).show();
                                               UpdateProducto();
                                           }
                                       }
@@ -233,14 +229,16 @@ public class ListaInventarioMain extends Fragment {
 
     private void EliminarProducto() {
 
-
-
         conexion.setRuta("WebService/Inventario/wsInventarioDelete.php");
         StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
+                        if(response.compareTo("Eliminado") == 0){
+                            HiloCargaLista x = new HiloCargaLista();
+                            x.execute();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -267,10 +265,6 @@ public class ListaInventarioMain extends Fragment {
         };
         VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
 
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.contenedor, ListaInventario.newInstance());
-        ft.addToBackStack(null);
-        ft.commit();
 
 
     }
@@ -282,6 +276,10 @@ public class ListaInventarioMain extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
+                        if(response.compareTo("Actualizado") == 0){
+                            HiloCargaLista x = new HiloCargaLista();
+                            x.execute();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -315,10 +313,64 @@ public class ListaInventarioMain extends Fragment {
             }
         };
         VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.contenedor, ListaInventario.newInstance());
-        ft.addToBackStack(null);
-        ft.commit();
 
+
+    }
+    void actualizaciones(){
+
+        operador.EliminarDatosTabla("voluntariofrecuente");
+        operador.EliminarDatosTabla("recoger");
+        operador.EliminarDatosTabla("gestioninventario");
+        operador.EliminarDatosTabla("comentarioam");
+        operador.EliminarDatosTabla("asignacion");
+        operador.EliminarDatosTabla("adultomayor");
+        operador.EliminarDatosTabla("problematica");
+        operador.EliminarDatosTabla("fotoalrededores");
+        operador.EliminarDatosTabla("scouter");
+        operador.EliminarDatosTabla("domicilio");
+        operador.EliminarDatosTabla("evento");
+        operador.EliminarDatosTabla("usuario");
+        operador.EliminarDatosTabla("inventario");
+        Act.ActualizacionInventario(getContext());
+        Act.ActualizacionUsuario(getContext());
+        Act.ActualizacionEvento(getContext());
+        Act.ActualizacionDomicilio(getContext());
+        Act.ActualizacionScouter(getContext());
+        Act.ActualizacionFotoAlrededores(getContext());
+        Act.ActualizacionProblematica(getContext());
+        Act.ActualizacionAdultoMayor(getContext());
+        Act.ActualizacionAsignacion(getContext());
+        Act.ActualizacionComentarioAM(getContext());
+        Act.ActualizacionGestionInventario(getContext());
+        Act.ActualizacionRecoger(getContext());
+        Act.ActualizacionVoluntarioFrecuente(getContext());
+    }
+    private class HiloCargaLista extends AsyncTask<Void, Void, Void> {
+
+        @Override protected void onPreExecute() {
+            //General.setVisibility(View.GONE);
+            //Cargando.setVisibility(View.VISIBLE);
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            actualizaciones();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.contenedor, ListaInventario.newInstance());
+            ft.addToBackStack(null);
+            ft.commit();
+
+        }
     }
 }
