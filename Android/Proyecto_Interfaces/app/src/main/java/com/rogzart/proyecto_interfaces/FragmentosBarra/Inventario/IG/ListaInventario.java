@@ -179,6 +179,7 @@ public class ListaInventario extends Fragment {
                                         }
 
         );
+
         btnrestar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

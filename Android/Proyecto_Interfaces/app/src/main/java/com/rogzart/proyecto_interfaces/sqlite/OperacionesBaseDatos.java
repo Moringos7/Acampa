@@ -378,6 +378,15 @@ public final class OperacionesBaseDatos {
         }
         return Existe;
     }
+    public boolean verificaConvivio(String Fecha){
+        boolean Existe = false;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM evento,tipoevento WHERE Fecha =  ? AND  FkTipoEvento = IdTipoEvento AND tipoevento.Nombre = ? ",new String[]{Fecha,"Convivio",});
+        if(c.moveToFirst()) {
+            Existe = true;
+        }
+        return Existe;
+    }
     /**Domicilio**/
     public void InsertarDomicilio(Domicilio x){
         SQLiteDatabase query = baseDatos.getWritableDatabase();

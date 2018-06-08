@@ -67,10 +67,8 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity
-            android:name=".EstadisticasMain">
-
-        </activity>
+        <activity android:name=".FragmentosBarra.Estadisticas.EstadisticasMain"></activity>
+        <activity android:name=".FragmentosBarra.Estadisticas.Estadisticas_Semestrales"></activity>
     </application>
 
 </manifest>

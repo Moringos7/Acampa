@@ -45,7 +45,7 @@
                 android:id="@+id/textView28"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:text="Promedio de voluntarios"
+                android:text="Secciones asistentes al servicio "
                 android:textSize="24sp" />
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/Grafica3"
@@ -53,6 +53,8 @@
                 android:layout_height="300dp"
                 android:layout_marginTop="20dp">
             </com.github.mikephil.charting.charts.PieChart>
+
+
         </LinearLayout>
     </ScrollView>
 
