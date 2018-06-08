@@ -203,6 +203,21 @@ public final class OperacionesBaseDatos {
         return miUbicacion;
     }
     /**TipoEvento**/
+    public ArrayList<TipoEvento> obtenerTiposEventos(ArrayList<Evento> eventos){
+        ArrayList<TipoEvento> tipos =  new ArrayList<TipoEvento>();
+        TipoEvento tipo;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        for(int i=0; i<eventos.size();i++){
+            Cursor c = query.rawQuery("SELECT * FROM tipoevento WHERE IdTipoEvento = ?",new String[]{String.valueOf(eventos.get(i).getFkTipoEvento())});
+            if(c.moveToFirst()) {
+                tipo = new TipoEvento();
+                tipo.setIdTipoEvento(c.getInt(1));
+                tipo.setNombre(c.getString(2));
+                tipos.add(tipo);
+            }
+        }
+        return tipos;
+    }
     public void InsertarTipoEvento(TipoEvento x){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
@@ -415,6 +430,26 @@ public final class OperacionesBaseDatos {
         }
         return list;
     }
+    public ArrayList<Evento> verificarEventos(String fecha) {
+        ArrayList<Evento> eventos = new ArrayList<Evento>();
+        Evento evento;
+        String[]parteFecha = fecha.split("-");
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM evento WHERE substr(Fecha,6,2) = ?", new String[]{parteFecha[1],});
+        if (c.moveToFirst()) {
+            do {
+                evento = new Evento();
+                evento.setIdEvento(c.getInt(1));
+                evento.setFecha(c.getString(2));
+                evento.setHora(c.getString(3));
+                evento.setLugar(c.getString(4));
+                evento.setInformacion(c.getString(5));
+                evento.setFkTipoEvento(c.getInt(6));
+                eventos.add(evento);
+            } while (c.moveToNext());
+        }
+        return eventos;
+    }
     public boolean verificarEventoServicio(String Fecha){
         boolean Existe = false;
         SQLiteDatabase query = baseDatos.getReadableDatabase();
@@ -435,15 +470,15 @@ public final class OperacionesBaseDatos {
         return Existe;
     }
     /**Domicilio**/
-    public void InsertarDomicilio(Domicilio x){
+    public void InsertarDomicilio(Domicilio evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(domicilio.Id,x.getIdDomicilio());
-        valores.put(domicilio.Numero,x.getNumero());
-        valores.put(domicilio.Calle,x.getCalle());
-        valores.put(domicilio.Colonia,x.getColonia());
-        valores.put(domicilio.Foto,x.getFoto());
-        valores.put(domicilio.FkUbicacion,x.getFkUbicacion());
+        valores.put(domicilio.Id,evento.getIdDomicilio());
+        valores.put(domicilio.Numero,evento.getNumero());
+        valores.put(domicilio.Calle,evento.getCalle());
+        valores.put(domicilio.Colonia,evento.getColonia());
+        valores.put(domicilio.Foto,evento.getFoto());
+        valores.put(domicilio.FkUbicacion,evento.getFkUbicacion());
         query.insert("domicilio",null,valores);
     }
     public Domicilio obtenerDomicilio(int Id){
@@ -479,13 +514,13 @@ public final class OperacionesBaseDatos {
         //return list;
     }
     /**Scouter**/
-    public void InsertarScouter(Scouter x){
+    public void InsertarScouter(Scouter evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(scouter.Id,x.getIdScouter());
-        valores.put(scouter.FechaInicio,x.getFechaInicio());
-        valores.put(scouter.FechaFinal,x.getFechaFinal());
-        valores.put(scouter.FkUsuario,x.getFkUsuario());
+        valores.put(scouter.Id,evento.getIdScouter());
+        valores.put(scouter.FechaInicio,evento.getFechaInicio());
+        valores.put(scouter.FechaFinal,evento.getFechaFinal());
+        valores.put(scouter.FkUsuario,evento.getFkUsuario());
         query.insert("scouter",null,valores);
     }
     public ArrayList<Scouter> LeerTablaScouter(){
@@ -561,12 +596,12 @@ public final class OperacionesBaseDatos {
         return tipoEvento;
     }
     /**FotoAlrededores**/
-    public void InsertarFotosAlrededores(FotoAlrededores x){
+    public void InsertarFotosAlrededores(FotoAlrededores evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(fotoalrededores.Id,x.getIdFotoAlrededores());
-        valores.put(fotoalrededores.Foto,x.getFoto());
-        valores.put(fotoalrededores.FkDomiilio,x.getFkDomicilio());
+        valores.put(fotoalrededores.Id,evento.getIdFotoAlrededores());
+        valores.put(fotoalrededores.Foto,evento.getFoto());
+        valores.put(fotoalrededores.FkDomiilio,evento.getFkDomicilio());
         query.insert("fotoalrededores",null,valores);
     }
     public void LeerTablaFotoAlrededores(){
@@ -601,15 +636,15 @@ public final class OperacionesBaseDatos {
         return list;
     }
     /**Problematica**/
-    public void InsertarProblematica(Problematica x){
+    public void InsertarProblematica(Problematica evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(problematica.Id,x.getIdProblematica());
-        valores.put(problematica.Fecha,x.getFecha());
-        valores.put(problematica.Nombre,x.getNombre());
-        valores.put(problematica.Sugerencia,x.getSugerencia());
-        valores.put(problematica.FkUsuario,x.getFkUsuario());
-        valores.put(problematica.FkTipoProblematica,x.getFkTipoProblematica());
+        valores.put(problematica.Id,evento.getIdProblematica());
+        valores.put(problematica.Fecha,evento.getFecha());
+        valores.put(problematica.Nombre,evento.getNombre());
+        valores.put(problematica.Sugerencia,evento.getSugerencia());
+        valores.put(problematica.FkUsuario,evento.getFkUsuario());
+        valores.put(problematica.FkTipoProblematica,evento.getFkTipoProblematica());
         query.insert("problematica",null,valores);
     }
     public void LeerTablaProblematica(){
@@ -631,17 +666,17 @@ public final class OperacionesBaseDatos {
         //return list;
     }
     /**AdultoMayor**/
-    public void InsertarAdultoMayor(AdultoMayor x){
+    public void InsertarAdultoMayor(AdultoMayor evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(adultomayor.Id,x.getIdAdultoMayor());
-        valores.put(adultomayor.Nombre,x.getNombre());
-        valores.put(adultomayor.ApellidoPaterno,x.getApellidoPaterno());
-        valores.put(adultomayor.ApellidoMaterno,x.getApellidoMaterno());
-        valores.put(adultomayor.Fotografia,x.getFotografia());
-        valores.put(adultomayor.Diabetico,x.getDiabetico());
-        valores.put(adultomayor.FkDependencia,x.getFkDependencia());
-        valores.put(adultomayor.FkDomicilio,x.getFkDomicilio());
+        valores.put(adultomayor.Id,evento.getIdAdultoMayor());
+        valores.put(adultomayor.Nombre,evento.getNombre());
+        valores.put(adultomayor.ApellidoPaterno,evento.getApellidoPaterno());
+        valores.put(adultomayor.ApellidoMaterno,evento.getApellidoMaterno());
+        valores.put(adultomayor.Fotografia,evento.getFotografia());
+        valores.put(adultomayor.Diabetico,evento.getDiabetico());
+        valores.put(adultomayor.FkDependencia,evento.getFkDependencia());
+        valores.put(adultomayor.FkDomicilio,evento.getFkDomicilio());
         query.insert("adultomayor",null,valores);
     }
     public ArrayList<AdultoMayor> LeerTablaAdultoMayor(){
@@ -683,14 +718,14 @@ public final class OperacionesBaseDatos {
         return adultoMayor;
     }
     /**Asignacion**/
-    public void InsertarAsignacion(Asignacion x){
+    public void InsertarAsignacion(Asignacion evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(asignacion.Id,x.getIdAsignacion());
-        valores.put(asignacion.Status,x.getStatus());
-        valores.put(asignacion.Fecha,x.getFecha());
-        valores.put(asignacion.FkUsuario,x.getFkUsuario());
-        valores.put(asignacion.FkAdultoMayor,x.getFkAdultoMayor());
+        valores.put(asignacion.Id,evento.getIdAsignacion());
+        valores.put(asignacion.Status,evento.getStatus());
+        valores.put(asignacion.Fecha,evento.getFecha());
+        valores.put(asignacion.FkUsuario,evento.getFkUsuario());
+        valores.put(asignacion.FkAdultoMayor,evento.getFkAdultoMayor());
         query.insert("asignacion",null,valores);
     }
     public void LeerTablaAsignacion(Context contexto){
@@ -734,13 +769,13 @@ public final class OperacionesBaseDatos {
         return list;
     }
     /**ComentarioAM**/
-    public void InsertarComentarioAM(ComentarioAM x){
+    public void InsertarComentarioAM(ComentarioAM evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(comentarioam.Id,x.getIdComentarioAM());
-        valores.put(comentarioam.Nombre,x.getNombre());
-        valores.put(comentarioam.Fecha,x.getFecha());
-        valores.put(comentarioam.FkAdultoMayor,x.getFkAdultoMayor());
+        valores.put(comentarioam.Id,evento.getIdComentarioAM());
+        valores.put(comentarioam.Nombre,evento.getNombre());
+        valores.put(comentarioam.Fecha,evento.getFecha());
+        valores.put(comentarioam.FkAdultoMayor,evento.getFkAdultoMayor());
         query.insert("comentarioam",null,valores);
     }
     public void LeerTablaComentarioAM(){
@@ -760,13 +795,13 @@ public final class OperacionesBaseDatos {
         //return list;
     }
     /**GestionInventario**/
-    public void InsertarGestionInventario(GestionInventario x){
+    public void InsertarGestionInventario(GestionInventario evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(gestioninventario.Id,x.getIdGestionInventario());
-        valores.put(gestioninventario.Fecha,x.getFecha());
-        valores.put(gestioninventario.FkScouter,x.getFkScouter());
-        valores.put(gestioninventario.FkInventario,x.getFkInventario());
+        valores.put(gestioninventario.Id,evento.getIdGestionInventario());
+        valores.put(gestioninventario.Fecha,evento.getFecha());
+        valores.put(gestioninventario.FkScouter,evento.getFkScouter());
+        valores.put(gestioninventario.FkInventario,evento.getFkInventario());
         query.insert("gestioninventario",null,valores);
     }
     public void LeerTablaGestionInventario(){
@@ -786,12 +821,12 @@ public final class OperacionesBaseDatos {
         //return list;
     }
     /**Recoger**/
-    public void InsertarRecoger(Recoger x){
+    public void InsertarRecoger(Recoger evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(recoger.Id,x.getIdRecoger());
-        valores.put(recoger.FkRScouter,x.getFkScouter());
-        valores.put(recoger.FkAsignacion,x.getFkAsignacion());
+        valores.put(recoger.Id,evento.getIdRecoger());
+        valores.put(recoger.FkRScouter,evento.getFkScouter());
+        valores.put(recoger.FkAsignacion,evento.getFkAsignacion());
         query.insert("recoger",null,valores);
     }
     public void LeerTablaRecoger(){
@@ -900,12 +935,12 @@ public final class OperacionesBaseDatos {
     }
     //
     /**VoluntarioFrecuente**/
-    public void InsertarVoluntarioFrecuente(VoluntarioFrecuente x){
+    public void InsertarVoluntarioFrecuente(VoluntarioFrecuente evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(voluntariofrecuente.Id,x.getIdVoluntarioFrecuente());
-        valores.put(voluntariofrecuente.FkUsuario,x.getFkUsuario());
-        valores.put(voluntariofrecuente.FkAdultoMayor,x.getFkAdultoMayor());
+        valores.put(voluntariofrecuente.Id,evento.getIdVoluntarioFrecuente());
+        valores.put(voluntariofrecuente.FkUsuario,evento.getFkUsuario());
+        valores.put(voluntariofrecuente.FkAdultoMayor,evento.getFkAdultoMayor());
         query.insert("voluntariofrecuente",null,valores);
     }
     public void LeerTablaVoluntarioFrecuente(){
@@ -986,7 +1021,7 @@ public final class OperacionesBaseDatos {
     public int asignacionesMes(String mes, String anio){
         int numero = 0;
         SQLiteDatabase query = baseDatos.getReadableDatabase();
-        Cursor c = query.rawQuery("SELECT COUNT(*) FROM asignacion,adultomayor WHERE substr(Fecha,1,4) = ?  AND substr(Fecha,6,2) = ? AND FkAdultoMayor = IdAdultoMayor",new String[]{anio,mes});
+        Cursor c = query.rawQuery("SELECT COUNT(DISTINCT(FkUsuario)) FROM asignacion,adultomayor WHERE substr(Fecha,1,4) = ?  AND substr(Fecha,6,2) = ? AND FkAdultoMayor = IdAdultoMayor",new String[]{anio,mes});
         if(c.moveToFirst()){
             numero = c.getInt(0);
         }
@@ -1063,7 +1098,6 @@ public final class OperacionesBaseDatos {
         }
         return pedazo;
     }
-
 
 
 }

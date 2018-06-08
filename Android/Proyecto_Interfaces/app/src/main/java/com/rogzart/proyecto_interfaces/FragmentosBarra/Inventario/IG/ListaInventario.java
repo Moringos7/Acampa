@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -66,24 +67,27 @@ import static android.app.Activity.RESULT_OK;
 public class ListaInventario extends Fragment {
     ArrayList<String> listainventario;
     Uri ImageUrl;
+    private Inventario inventario;
     SearchView buscador, buscadorE;
     ListView listaInventario, listaInventarioE;
     ScrollView scroll;
     ImageView ImagenProducto;
-    Button BtnGeneral, BtnExtras, ABtnGuardar, btnguardar;
-    EditText ANombre,AExistencia,ACantidad,ADescripcion, AComentario;
+    Button BtnGeneral, BtnExtras, ABtnGuardar, btnguardar, btnrestar,btnsumar;
+    EditText ANombre,ACantidad,ADescripcion, AComentario;
     Bitmap bitmap;
     CheckBox AExtra;
     FloatingActionButton botonAgregar, botonRegresar;
-    TextView resultados,resultadosE;
+    TextView resultados,resultadosE,AExistencia;
     Conexion conexion, conexionE;
     String Imagen;
     private JsonObjectRequest jsonObjectRequest;
     private LogUser ControlUser;
     private int cuenta, cuentaE;
+    private int resultadoE=0;
     private static final int PICK_IMAGE = 100;
     LinearLayout layoutG, layoutE, layoutT, layoutA;
     OperacionesBaseDatos operador;
+    private ActualizacionBaseDatos Act;
 
     public static ListaInventario newInstance() {
         ListaInventario fragmento = new ListaInventario();
@@ -106,14 +110,17 @@ public class ListaInventario extends Fragment {
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
         ControlUser = LogUser.obtenerInstancia(getContext());
+        Act = new ActualizacionBaseDatos(getContext());
         AComentario = (EditText) getView().findViewById(R.id.agregar_producto_comentario);
         ABtnGuardar = (Button) getView().findViewById(R.id.agregar_producto_btnguardar);
         ACantidad = (EditText) getView().findViewById(R.id.agregar_producto_cantidad);
         ADescripcion = (EditText) getView().findViewById(R.id.agregar_producto_descripcion);
-        AExistencia = (EditText) getView().findViewById(R.id.agregar_producto_existencia);
+        AExistencia = (TextView) getView().findViewById(R.id.agregar_producto_existencia);
         AExtra = (CheckBox) getView().findViewById(R.id.agregar_producto_extra);
         ImagenProducto = (ImageView) getView().findViewById(R.id.agregar_producto_imagen);
         ANombre = (EditText) getView().findViewById(R.id.agregar_producto_nombre);
+        btnrestar= (Button) getView().findViewById(R.id.agregar_producto_btnRestarExistencia);
+        btnsumar = (Button) getView().findViewById(R.id.agregar_producto_btnSumarExistencia);
         botonRegresar = (FloatingActionButton) getView().findViewById(R.id.boton_regresar);
         BtnGeneral = (Button) getView().findViewById(R.id.list_inventario_general_btnG);
         BtnExtras = (Button) getView().findViewById(R.id.list_inventario_general_btnE);
@@ -124,8 +131,8 @@ public class ListaInventario extends Fragment {
         buscador = (SearchView) getView().findViewById(R.id.list_inventario_general_buscador);
         buscadorE = (SearchView) getView().findViewById(R.id.buscadorExtras);
         botonAgregar = (FloatingActionButton) getView().findViewById(R.id.list_inventario_general_agregar);
+        AExistencia.setText(String.valueOf(resultadoE));
 
-        new ActualizacionBaseDatos(getContext()).VolcarBasedeDatos();
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         layoutG = getView().findViewById(R.id.LinearLGeneral);
         layoutT = getView().findViewById(R.id.inventario_general_layout_general);
@@ -166,10 +173,34 @@ public class ListaInventario extends Fragment {
                                                     Toast.makeText(getContext(), "Verifique su conexion a Internet", Toast.LENGTH_SHORT).show();
                                                 }
 
+
+
                                             }
                                         }
 
         );
+        btnrestar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(resultadoE>0){
+                    resultadoE--;
+                    AExistencia.setText(String.valueOf(resultadoE));
+                }else{
+                    AExistencia.setText(String.valueOf(resultadoE));
+                    Toast.makeText(getContext(), "El valor de existencia no puede ser menor a 0", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+        btnsumar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resultadoE++;
+                AExistencia.setText(String.valueOf(resultadoE));
+
+            }
+        });
 
         ImagenProducto.setOnClickListener(new View.OnClickListener() {
 
@@ -208,6 +239,8 @@ public class ListaInventario extends Fragment {
                                            @Override
                                            public void onClick(View v) {
                                                NuevoProducto();
+
+
                                            }
                                        }
         );
@@ -237,6 +270,7 @@ public class ListaInventario extends Fragment {
         return imagenString;
     }
 
+
     private void NuevoProducto() {
 
 
@@ -247,7 +281,10 @@ public class ListaInventario extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(getContext(),  response, Toast.LENGTH_SHORT).show();
-
+                        if(response.compareTo("Insertado") == 0){
+                            HiloCargaLista x = new HiloCargaLista();
+                            x.execute();
+                        }
                     }
                 },
                 new Response.ErrorListener()
@@ -378,6 +415,7 @@ public class ListaInventario extends Fragment {
         listaInventario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                    @Override
                                                    public void onItemClick(AdapterView<?> adapterView, View view, int x, long l) {
+
                                                        Inventario inventario1 = (Inventario) adapterView.getItemAtPosition(x);
                                                        Bundle bolsa = new Bundle();
                                                        bolsa.putSerializable("articulo", inventario1);
@@ -391,6 +429,65 @@ public class ListaInventario extends Fragment {
 
                                                }
         );
+    }
+
+    void actualizaciones(){
+
+        operador.EliminarDatosTabla("voluntariofrecuente");
+        operador.EliminarDatosTabla("recoger");
+        operador.EliminarDatosTabla("gestioninventario");
+        operador.EliminarDatosTabla("comentarioam");
+        operador.EliminarDatosTabla("asignacion");
+        operador.EliminarDatosTabla("adultomayor");
+        operador.EliminarDatosTabla("problematica");
+        operador.EliminarDatosTabla("fotoalrededores");
+        operador.EliminarDatosTabla("scouter");
+        operador.EliminarDatosTabla("domicilio");
+        operador.EliminarDatosTabla("evento");
+        operador.EliminarDatosTabla("usuario");
+        operador.EliminarDatosTabla("inventario");
+        Act.ActualizacionInventario(getContext());
+        Act.ActualizacionUsuario(getContext());
+        Act.ActualizacionEvento(getContext());
+        Act.ActualizacionDomicilio(getContext());
+        Act.ActualizacionScouter(getContext());
+        Act.ActualizacionFotoAlrededores(getContext());
+        Act.ActualizacionProblematica(getContext());
+        Act.ActualizacionAdultoMayor(getContext());
+        Act.ActualizacionAsignacion(getContext());
+        Act.ActualizacionComentarioAM(getContext());
+        Act.ActualizacionGestionInventario(getContext());
+        Act.ActualizacionRecoger(getContext());
+        Act.ActualizacionVoluntarioFrecuente(getContext());
+    }
+    private class HiloCargaLista extends AsyncTask<Void, Void, Void> {
+
+        @Override protected void onPreExecute() {
+
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            actualizaciones();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            /*layoutT.setVisibility(View.VISIBLE);
+            scroll.setVisibility(View.GONE);
+            */
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.contenedor, ListaInventario.newInstance());
+            ft.addToBackStack(null);
+            ft.commit();
+
+        }
     }
 }
 

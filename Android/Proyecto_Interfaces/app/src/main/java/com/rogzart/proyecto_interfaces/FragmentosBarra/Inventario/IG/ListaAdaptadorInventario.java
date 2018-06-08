@@ -70,6 +70,7 @@ public class ListaAdaptadorInventario extends BaseAdapter implements Filterable 
 
         nombre.setText(Cosas.get(position).getProducto());
         existencia.setText(String.valueOf(Cosas.get(position).getExistencia()));
+
         int valor = (int) (1/Cosas.get(position).getCantidad());
         if(valor <= 1){
             cantidad.setText(String.valueOf((int)Cosas.get(position).getCantidad()));

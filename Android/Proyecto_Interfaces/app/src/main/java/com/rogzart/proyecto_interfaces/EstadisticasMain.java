@@ -31,16 +31,21 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EstadisticasMain extends AppCompatActivity {
 
     private static String TAG = "EstadisticasMain";
-    private float[] yData = {88.5f, 11.5f};
-    private String[] xData = {"Entregadas", "No Entregadas"};
-    PieChart pieChart,piechart2;
+    private float PAsignacionesM;
+    private int []datos;
+    private int manada,tropa,comunidad,clan,dirigente,civil;
+    private float UsuariosFuera;
+    private float PAsignaciones,PFaltantes;
+    PieChart pieChart,piechart2, piechart3;
     private OperacionesBaseDatos operador;
 
     @Override
@@ -49,113 +54,197 @@ public class EstadisticasMain extends AppCompatActivity {
         operador = OperacionesBaseDatos.obtenerInstancia(getApplicationContext());
         setContentView(R.layout.activity_estadisticas_main);
         //Primera PieChart
-        int Asignaciones = operador.promedioVoluntariosMes("06", "2018");
-        int Total = operador.contarAdultoMayor();
-        //Numero de asignaciones al mes
-        int AsignacionesMes = operador.asignacionesMes("06", "2018");
+        double Asignaciones = operador.promedioVoluntariosMes("06", "2018");
+        Toast.makeText(getApplicationContext(), "Asignaciones: "+Asignaciones, Toast.LENGTH_SHORT).show();
+        double Total = operador.contarAdultoMayor();
+        Toast.makeText(getApplicationContext(), "Total: "+Total, Toast.LENGTH_SHORT).show();
+        double y= ((float)(Asignaciones / Total));
 
-        //Usuarios
-        int usuarios = operador.numeroUsuarios();
+        PAsignaciones = (float) ((y)*100);
+        Toast.makeText(getApplicationContext(), "PAsignaciones: "+PAsignaciones, Toast.LENGTH_SHORT).show();
+        PFaltantes = (100 - PAsignaciones);
+        Toast.makeText(getApplicationContext(), "PFaltantes: : "+PFaltantes, Toast.LENGTH_SHORT).show();
+        //Segunda PieChart
+        double AsignacionesMes = operador.asignacionesMes("06", "2018");
+        double usuarios = operador.numeroUsuarios();
+        double x = ((float)(AsignacionesMes/usuarios));
+        PAsignacionesM = (float) ((x)*100);
 
-        float PAsignacionesM = ((AsignacionesMes/usuarios)*100);
-        float UsuariosFuera= ((100-PAsignacionesM));
+        UsuariosFuera= (100 - PAsignacionesM);
 
-        float PAsignaciones = ((Asignaciones / Total) * 100);
-        float PFaltantes = (100 - PAsignaciones);
+        ArrayList<Usuario> Usuarios = new ArrayList<Usuario>();
+        manada = 0;
+        tropa = 0;
+        comunidad = 0;
+        clan = 0;
+        civil = 0;
+        Usuarios = operador.usuariosAsignacion("06", "2018");
+        for (int i = 0; i<Usuarios.size(); i++){
+            int datos = Usuarios.get(i).getFkSeccion();
+            switch (datos){
+                case 1:
+                    manada++;
+                    break;
+                case 2:
+                    tropa++;
+                    break;
+                case 3:
+                    comunidad++;
+                    break;
+                case 4:
+                    clan++;
+                    break;
+                case 5:
+                    dirigente++;
+                    break;
+                case 6:
+                    civil++;
+                    break;
+            }
+        }
+        // Toast.makeText(getApplicationContext(), "Usuarios mensual: " + Usuarios.size(), Toast.LENGTH_SHORT).show();
+
+
+        //Semestrales
+        //Select Usuarios
+        Usuarios = operador.usuariosActivos();
+
+
+
         Log.d(TAG, "onCreate: starting to create chart");
 
         pieChart = (PieChart) findViewById(R.id.Grafica1);
+        piechart2=(PieChart) findViewById(R.id.Grafica2);
+        piechart3=(PieChart) findViewById(R.id.Grafica3);
         pieChart.setRotationEnabled(true);
         pieChart.setUsePercentValues(true);
-        piechart2=(PieChart) findViewById(R.id.Grafica2);
         piechart2.setRotationEnabled(true);
         piechart2.setUsePercentValues(true);
-        //pieChart.setHoleColor(Color.BLUE);
-        //pieChart.setCenterTextColor(Color.BLACK);
+        piechart3.setRotationEnabled(true);
+        piechart3.setUsePercentValues(true);
+        // pieChart.setHoleColor(Color.BLUE);
+        pieChart.setCenterTextColor(Color.BLACK);
         pieChart.setHoleRadius(40f);
         pieChart.animateXY(1500, 1500);
         piechart2.setHoleRadius(40f);
         piechart2.animateXY(1500,1500);
-        //pieChart.setTransparentCircleAlpha(0);
-        //pieChart.setCenterText("Despensas");
-        //pieChart.setCenterTextSize(10);
-        // pieChart.setDrawEntryLabels(true);
-        //pieChart.setEntryLabelTextSize(20);
+        piechart3.setCenterTextColor(Color.BLACK);
+        piechart3.setHoleRadius(40f);
+        piechart3.animateXY(1500, 1500);
+        pieChart.setTransparentCircleAlpha(0);
+        pieChart.setCenterText("Despensas");
+        piechart2.setTransparentCircleAlpha(0);
+        piechart2.setCenterText("Usuarios");
+        piechart3.setTransparentCircleAlpha(0);
+        piechart3.setCenterText("Sección");
+        pieChart.setCenterTextSize(10);
+        pieChart.setDrawEntryLabels(true);
+        pieChart.setEntryLabelTextSize(10);
+        piechart3.setCenterTextSize(10);
+        piechart3.setDrawEntryLabels(true);
+        piechart3.setEntryLabelTextSize(10);
         //More options just check out the documentation!
+        // Toast.makeText(getApplicationContext(), ""+PAsignacionesM, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), ""+UsuariosFuera, Toast.LENGTH_SHORT).show();
 
         addDataSet1(PAsignaciones,PFaltantes);
         addDataSet2(PAsignacionesM,UsuariosFuera);
+        addDataSet3(manada,tropa,comunidad,clan,dirigente,civil);
 
 
     }
     private void addDataSet1(float asignaciones, float totales) {
         Log.d(TAG, "addDataSet started");
-            ArrayList<PieEntry> yEntrys = new ArrayList<PieEntry>();
-        yEntrys.add(new PieEntry(asignaciones,0));
-        yEntrys.add(new PieEntry(totales,1));
 
+        List<PieEntry> entries = new ArrayList<>();
 
-        ArrayList<String> xEntrys = new ArrayList<String>();
-        xEntrys.add("Despensas entregadas");
-        xEntrys.add("Despensas no entregadas ");
-
-
-        //create the data set
-        PieDataSet pieDataSet1 = new PieDataSet(yEntrys, "Despensas Entregadas");
-
-        //add colors to dataset
-        ArrayList<Integer> colors1 = new ArrayList<>();
-        colors1.add(Color.YELLOW);
-        colors1.add(Color.RED);
-        pieDataSet1.setSliceSpace(3f);
-        pieDataSet1.setColors(colors1);
-
-
-        //add legend to chart
-        Legend legend = pieChart.getLegend();
-        legend.setForm(Legend.LegendForm.CIRCLE);
-        legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
+        entries.add(new PieEntry(asignaciones, "Entregadas"));
+        entries.add(new PieEntry(totales,"No Entregadas"));
+        PieDataSet set = new PieDataSet(entries, null);
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.BLUE);
+        colors.add(Color.LTGRAY);
 
         //create pie data object
-        PieData data = new PieData(pieDataSet1);
-        pieChart.setData(data);
+        PieData data1 = new PieData(set);
+        set.setColors(colors);
+        pieChart.setData(data1);
         pieChart.highlightValues(null);
         pieChart.invalidate();
 
     }
     private void addDataSet2(float asignacionesM, float usuarios) {
         Log.d(TAG, "addDataSet started");
-        ArrayList<PieEntry> valy = new ArrayList<PieEntry>();
-        valy.add(new PieEntry(asignacionesM,0));
-        valy.add(new PieEntry(usuarios,1));
 
+        List<PieEntry> entries = new ArrayList<>();
 
-        ArrayList<String> valx = new ArrayList<String>();
-        valx.add("Usuarios con Asignación");
-        valx.add("Usuarios No Asignados ");
-
-
-        //create the data set
-        PieDataSet pieDataSet2 = new PieDataSet(valy, "Asignaciones realizadas");
-
-        //add colors to dataset
-        ArrayList<Integer> colors2 = new ArrayList<>();
-        colors2.add(Color.GREEN);
-        colors2.add(Color.RED);
-        pieDataSet2.setSliceSpace(3f);
-        pieDataSet2.setColors(colors2);
-
-
-        //add legend to chart
-        Legend legend2 = piechart2.getLegend();
-        legend2.setForm(Legend.LegendForm.CIRCLE);
-        legend2.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
+        entries.add(new PieEntry(asignacionesM, "Asistentes"));
+        entries.add(new PieEntry(usuarios,"No asistentes"));
+        PieDataSet set = new PieDataSet(entries, null);
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.BLUE);
+        colors.add(Color.LTGRAY);
 
         //create pie data object
-        PieData data2 = new PieData(pieDataSet2);
-        piechart2.setData(data2);
+        PieData data1 = new PieData(set);
+        set.setColors(colors);
+        piechart2.setData(data1);
         piechart2.highlightValues(null);
         piechart2.invalidate();
+
+    }
+    private void addDataSet3(int seccion1,int seccion2, int seccion3, int seccion4, int seccion5, int seccion6) {
+        Log.d(TAG, "addDataSet started");
+
+        List<PieEntry> entries = new ArrayList<>();
+        ArrayList<Integer> colors = new ArrayList<>();
+        /*entries.add(new PieEntry(seccion1, "Manada"));
+        entries.add(new PieEntry(seccion2,"Tropa"));
+        entries.add(new PieEntry(seccion3,"comunidad"));
+        entries.add(new PieEntry(seccion4,"clan"));
+        entries.add(new PieEntry(seccion5,"dirigente"));
+        entries.add(new PieEntry(seccion6,"civil"));
+
+
+        colors.add(Color.YELLOW);
+        colors.add(Color.GREEN);
+        colors.add(Color.BLUE);
+        colors.add(Color.RED);
+        colors.add(Color.BLUE);
+        colors.add(Color.GRAY);
+        */
+        if(seccion1>0.00){
+            entries.add(new PieEntry(seccion1, "Manada"));
+            colors.add(Color.YELLOW);
+        }
+        if(seccion2>0.00){
+            entries.add(new PieEntry(seccion2,"Tropa"));
+            colors.add(Color.GREEN);
+        }
+        if(seccion3>0.00){
+            entries.add(new PieEntry(seccion3,"comunidad"));
+            colors.add(Color.BLUE);
+        }
+        if (seccion4>0.00){
+            entries.add(new PieEntry(seccion4,"clan"));
+            colors.add(Color.RED);
+        }
+        if(seccion5>0.00){
+            entries.add(new PieEntry(seccion5,"dirigente"));
+            colors.add(Color.BLUE);
+        }
+        if(seccion6>0.00){
+            entries.add(new PieEntry(seccion6,"civil"));
+            colors.add(Color.GRAY);
+        }
+        PieDataSet set = new PieDataSet(entries, null);
+
+        //create pie data object
+        PieData data1 = new PieData(set);
+        set.setColors(colors);
+        piechart3.setData(data1);
+        piechart3.highlightValues(null);
+        piechart3.invalidate();
 
     }
 }

@@ -3,9 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/BarraMiPerfil"
-        android:title="Mi Perfil" />
-    <item
         android:id="@+id/BarraActualizar"
         android:title="Actualizar" />
     <item

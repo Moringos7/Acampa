@@ -7,6 +7,9 @@
         android:id="@+id/menuVoluntario"
         android:visible="false">
         <item
+            android:id="@+id/nav_Principal"
+            android:title="Menu Principal"/>
+        <item
             android:id="@+id/nav_Asignacion"
             android:title="Asignación Adultos Mayores" />
         <item

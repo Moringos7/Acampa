@@ -21,7 +21,21 @@
             android:id="@+id/Boton_grafica"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Grafica" />
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="100dp"
+            android:text="Mensuales"
+            android:theme="@style/RaisedButton"/>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="30dp"
+            android:text="Semestrales"
+            android:theme="@style/RaisedButton"/>
     </LinearLayout>
 
     <LinearLayout

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FragmentosBarra.Inventario.Menu_Inventario">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:paddingTop="120dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Inventario General"
+            android:gravity="center"
+            android:textSize="35sp"
+            android:textColor="#000"
+            android:textStyle="bold"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="Inventario"
+            android:id="@+id/btnInventario"
+            android:layout_marginBottom="10dp"
+            android:theme="@style/RaisedButton"
+            android:textColor="#fff"/>
+
+        <Button
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="Lista Rápida"
+            android:id="@+id/btnListaRapida"
+            android:layout_marginBottom="10dp"
+            android:theme="@style/RaisedButton"
+            android:textColor="#fff"/>
+
+    </LinearLayout>
+
+</FrameLayout>
