@@ -74,7 +74,7 @@ public class AsignacionAdultoMayorUsuario extends Fragment {
         FechaActual = generarFecha();
         ControlUser = LogUser.obtenerInstancia(getContext());
         mUsuario = ControlUser.getUser();
-        if(operador.verificarEventoServicio(generarFecha())){
+        if(!operador.verificarEventoServicio(generarFecha())){
             if(VerificarAsignaciones()){
                 Bundle bolsa = new Bundle();
                 bolsa.putSerializable("AdultosMayores",Asignados);
@@ -159,7 +159,7 @@ public class AsignacionAdultoMayorUsuario extends Fragment {
             new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext());
             new ActualizacionBaseDatos(getContext()).ActualizacionRecoger(getContext());
             try {
-                Thread.sleep(5000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

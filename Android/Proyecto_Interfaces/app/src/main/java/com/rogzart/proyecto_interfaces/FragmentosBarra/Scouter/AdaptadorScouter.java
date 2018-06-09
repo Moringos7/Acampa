@@ -43,14 +43,12 @@ public class AdaptadorScouter extends BaseAdapter implements Filterable{
     private Conexion conexion;
     private CustomFilter filter;
     private ArrayList<Usuario> filterList;
-    private Administracion_Scouter yo;
 
-    public AdaptadorScouter(ArrayList<Usuario> user,Context contexto,Administracion_Scouter yo){
+    public AdaptadorScouter(ArrayList<Usuario> user,Context contexto){
         this.user = user;
         this.contexto = contexto;
         this.conexion = new Conexion(contexto);
         this.filterList = user;
-        this.yo = yo;
     }
 
     @Override
@@ -113,36 +111,37 @@ public class AdaptadorScouter extends BaseAdapter implements Filterable{
                 if(LogUser.obtenerInstancia(contexto).getCoordinador() >0){
                     conexion.setRuta("WebService/Scouter/wsScouterDelete.php");
                     if(LogUser.obtenerInstancia(contexto).getUser().getIdUsuario() != user.get(position).getIdUsuario() ){
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
-                                new Response.Listener<String>()
-                                {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        Toast.makeText(contexto, ""+response, Toast.LENGTH_SHORT).show();
-                                        if(response.compareTo("Eliminado") == 0){
-                                            FragmentTransaction ft = ((Activity) contexto).getFragmentManager().beginTransaction();
-                                            ft.replace(R.id.contenedor, Administracion_Scouter.newInstance());
-                                            ft.commit();
+                        if(conexion.isConnected()) {
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            Toast.makeText(contexto, "" + response, Toast.LENGTH_SHORT).show();
+                                            if (response.compareTo("Eliminado") == 0) {
+                                                FragmentTransaction ft = ((Activity) contexto).getFragmentManager().beginTransaction();
+                                                ft.replace(R.id.contenedor, Administracion_Scouter.newInstance());
+                                                ft.commit();
+                                            }
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(contexto, "" + error, Toast.LENGTH_SHORT).show();
                                         }
                                     }
-                                },
-                                new Response.ErrorListener()
-                                {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Toast.makeText(contexto, ""+error, Toast.LENGTH_SHORT).show();
-                                    }
+                            ) {
+                                @Override
+                                protected Map<String, String> getParams() {
+                                    Map<String, String> params = new HashMap<String, String>();
+                                    params.put("FkUsuario", Integer.toString(user.get(position).getIdUsuario()));
+                                    return params;
                                 }
-                        ) {
-                            @Override
-                            protected Map<String, String> getParams()
-                            {
-                                Map<String, String>  params = new HashMap<String, String>();
-                                params.put("FkUsuario", Integer.toString(user.get(position).getIdUsuario()));
-                                return params;
-                            }
-                        };
-                        VolleySingleton.getInstance(contexto).addToRequestQueue(stringRequest);
+                            };
+                            VolleySingleton.getInstance(contexto).addToRequestQueue(stringRequest);
+                        }else{
+                            Toast.makeText(contexto, "Verifica tu conexion", Toast.LENGTH_SHORT).show();
+                        }
                     }else{
                         Toast.makeText(contexto, "No puedes eliminarte a ti mismo", Toast.LENGTH_SHORT).show();
                     }

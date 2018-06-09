@@ -1,6 +1,7 @@
 package com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos;
 
 import android.app.FragmentTransaction;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
@@ -9,15 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Scouter.Administracion_Scouter;
+import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Evento;
 import com.rogzart.proyecto_interfaces.Modelo.Inventario;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.LogUser;
+import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import java.util.ArrayList;
@@ -31,9 +35,12 @@ public class ListaEventos extends Fragment {
     FloatingActionButton AgregarEvento;
     SearchView BuscadorEventos;
     private OperacionesBaseDatos operador;
-    private LogUser ControlUser;
     private int cuenta;
     private FloatingActionButton BtnAgregar;
+    private ActualizacionBaseDatos Act;
+    private HiloCargaLista Hilo;
+    private ProgressBar cargando;
+    private Conexion conexion;
 
     public ListaEventos(){
 
@@ -52,14 +59,23 @@ public class ListaEventos extends Fragment {
 
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
-        ControlUser = LogUser.obtenerInstancia(getContext());
         ListEventos = (ListView) getView().findViewById(R.id.eventos_lista);
+        Conexion conexion = new Conexion(getContext());
+        Act = new ActualizacionBaseDatos(getContext());
         AgregarEvento = (FloatingActionButton) getView().findViewById(R.id.eventos_agregar);
         BuscadorEventos = (SearchView) getView().findViewById(R.id.eventos_buscador);
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
-        CargarListaEventos();
+        cargando = getView().findViewById(R.id.progressBarE);
+        if(conexion.isConnected()) {
+            Hilo = new HiloCargaLista();
+            Hilo.execute();
+        }else{
+            CargarListaEventos();
+        }
+
 
     }
+
 
     private void CargarListaEventos() {
         ArrayList<Evento> arrayList = operador.LeerTablaEvento();
@@ -80,22 +96,6 @@ public class ListaEventos extends Fragment {
                 return false;
             }
         });
-        ListEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int x, long l) {
-                /*Evento evento = (Evento) adapterView.getItemAtPosition(x);
-                Bundle bolsa = new Bundle();
-                bolsa.putSerializable("casos", evento);
-
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.contenedor, ListaEventosMain.newInstance(bolsa));
-                transaction.addToBackStack(null);
-                transaction.commit();*/
-            }
-
-
-        }
-        );
 
         BtnAgregar = getView().findViewById(R.id.eventos_agregar);
         BtnAgregar.setOnClickListener(new View.OnClickListener() {
@@ -110,22 +110,34 @@ public class ListaEventos extends Fragment {
         });
 
     }
-
-    private String generarFecha(){
-        String Fecha;
-        Calendar c = Calendar.getInstance();
-        int Dia = c.get(Calendar.DAY_OF_MONTH);
-        int Mes = c.get(Calendar.MONTH)+1;
-        int Anio = c.get(Calendar.YEAR);
-        String decenaD = "";
-        String decenaM = "";
-        if(Mes < 10){
-            decenaM = "0";
-        }
-        if(Dia < 10){
-            decenaD = "0";
-        }
-        Fecha = String.valueOf(Anio)+"-"+decenaM+String.valueOf(Mes)+"-"+decenaD+String.valueOf(Dia);
-        return Fecha;
+    void actualizaciones(){
+        operador.EliminarDatosTabla("evento");
+        Act.ActualizacionEvento(getContext());
     }
+    private class HiloCargaLista extends AsyncTask<Void, Void, Void> {
+
+        @Override protected void onPreExecute() {
+
+            cargando.setVisibility(View.VISIBLE);
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            actualizaciones();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            CargarListaEventos();
+            cargando.setVisibility(View.GONE);
+
+        }
+    }
+
 }

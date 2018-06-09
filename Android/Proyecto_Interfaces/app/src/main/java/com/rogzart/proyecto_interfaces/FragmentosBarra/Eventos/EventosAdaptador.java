@@ -1,5 +1,7 @@
 package com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos;
 
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaAdaptadorInventario;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Scouter.Administracion_Scouter;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Evento;
 import com.rogzart.proyecto_interfaces.Modelo.TipoEvento;
@@ -91,34 +94,41 @@ public class EventosAdaptador extends BaseAdapter implements Filterable {
             @Override
             public void onClick(View v) {
                 conexion.setRuta("WebService/Evento/wsEventoDelete.php");
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
-                        new Response.Listener<String>()
-                        {
-                            @Override
-                            public void onResponse(String response) {
-                                Toast.makeText(contexto, ""+response, Toast.LENGTH_SHORT).show();
-                                if(response.compareTo("Eliminado") == 0){
-                                    ///P
+                if(conexion.isConnected()){
+
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
+                            new Response.Listener<String>()
+                            {
+                                @Override
+                                public void onResponse(String response) {
+                                    Toast.makeText(contexto, ""+response, Toast.LENGTH_SHORT).show();
+                                    if(response.compareTo("Eliminado") == 0){
+                                        FragmentTransaction ft = ((Activity) contexto).getFragmentManager().beginTransaction();
+                                        ft.replace(R.id.contenedor, ListaEventos.newInstance());
+                                        ft.commit();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener()
+                            {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(contexto, ""+error, Toast.LENGTH_SHORT).show();
                                 }
                             }
-                        },
-                        new Response.ErrorListener()
+                    ) {
+                        @Override
+                        protected Map<String, String> getParams()
                         {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(contexto, ""+error, Toast.LENGTH_SHORT).show();
-                            }
+                            Map<String, String>  params = new HashMap<String, String>();
+                            params.put("idevento", Integer.toString(Cosas.get(position).getIdEvento()));
+                            return params;
                         }
-                ) {
-                    @Override
-                    protected Map<String, String> getParams()
-                    {
-                        Map<String, String>  params = new HashMap<String, String>();
-                        params.put("idevento", Integer.toString(Cosas.get(position).getIdEvento()));
-                        return params;
-                    }
-                };
-                VolleySingleton.getInstance(contexto).addToRequestQueue(stringRequest);
+                    };
+                    VolleySingleton.getInstance(contexto).addToRequestQueue(stringRequest);
+                }else{
+                    Toast.makeText(contexto, "Verifica tu conexion", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

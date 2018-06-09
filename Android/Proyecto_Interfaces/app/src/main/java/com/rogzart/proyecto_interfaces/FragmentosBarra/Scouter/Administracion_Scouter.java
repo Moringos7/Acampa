@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,18 +40,21 @@ import java.util.Map;
 
 public class Administracion_Scouter extends Fragment implements View.OnClickListener {
 
-    private static Administracion_Scouter yo;
+
     private FloatingActionButton btnScouter;
    private ListView ListG;
    private OperacionesBaseDatos operador;
+   private  ActualizacionBaseDatos Act;
    private TextView Resultado;
    private ArrayList<Usuario> ListaScouters;
    private String s;
    private SearchView mSearchView;
    private int Cuenta;
-   //private HiloCargaLista Hilo;
+   private HiloCargaLista Hilo;
    private boolean Repite;
    private boolean Cambiar;
+   private Conexion conexion;
+   private ProgressBar cargando;
     public Administracion_Scouter() {
 
     }
@@ -58,7 +62,7 @@ public class Administracion_Scouter extends Fragment implements View.OnClickList
     //btnAgregarScouter
     public static Administracion_Scouter newInstance() {
         Administracion_Scouter fragment = new Administracion_Scouter();
-        yo = fragment;
+
         return fragment;
     }
     @Override
@@ -69,16 +73,22 @@ public class Administracion_Scouter extends Fragment implements View.OnClickList
     }
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
+        conexion = new Conexion(getContext());
         Cuenta = 0;
+        Act = new ActualizacionBaseDatos(getContext());
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         btnScouter = getView().findViewById(R.id.btnAgregarScouter);
         btnScouter.setOnClickListener(this);
         Resultado = getView().findViewById(R.id.ResulScouter);
         Repite = true;
         Cambiar = false;
-        /*Hilo = new HiloCargaLista();
-        Hilo.execute();*/
-        cargarLista();
+        cargando = getView().findViewById(R.id.progressBarS);
+        if(conexion.isConnected()) {
+            Hilo = new HiloCargaLista();
+            Hilo.execute();
+        }else{
+            cargarLista();
+        }
 
     }
     @Override
@@ -90,16 +100,16 @@ public class Administracion_Scouter extends Fragment implements View.OnClickList
 
     }
 
-    public void cargarLista(){
+    public void cargarLista() {
         mSearchView = getView().findViewById(R.id.idSearchScouter);
         ListG = getView().findViewById(R.id.ListaScouter);
         ListaScouters = operador.obtenerScoutersActivos();
         s = "s";
-        if(ListaScouters.size() == 1){
+        if (ListaScouters.size() == 1) {
             s = "";
         }
-        Resultado.setText("Resultado"+s+" "+ListaScouters.size());
-        final AdaptadorScouter adaptadorScouter = new AdaptadorScouter(ListaScouters,getContext(),yo);
+        Resultado.setText("Resultado" + s + " " + ListaScouters.size());
+        final AdaptadorScouter adaptadorScouter = new AdaptadorScouter(ListaScouters, getContext());
         ListG.setAdapter(adaptadorScouter);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -113,87 +123,31 @@ public class Administracion_Scouter extends Fragment implements View.OnClickList
                 return false;
             }
         });
-        /*if(Hilo.getStatus() == AsyncTask.Status.RUNNING){
-            DetenerHilo();
-        }
-        Hilo = new HiloCargaLista();
-        Hilo.execute();*/
+
     }
-    /*@Override
-    public void onPause() {
-        super.onPause();
-        DetenerHilo();
+    void actualizaciones(){
+        operador.EliminarDatosTabla("recoger");
+        operador.EliminarDatosTabla("gestioninventario");
+        operador.EliminarDatosTabla("asignacion");
+        operador.EliminarDatosTabla("scouter");
+        Act.ActualizacionScouter(getContext());
+        Act.ActualizacionAsignacion(getContext());
+        Act.ActualizacionGestionInventario(getContext());
+        Act.ActualizacionRecoger(getContext());
     }
-    void DetenerHilo(){
-        if(Hilo != null){
-            Hilo.cancel(true);
-        }
-    }*/
+    private class HiloCargaLista extends AsyncTask<Void, Void, Void> {
 
-    /*private class HiloCargaLista extends AsyncTask<Void, Void, Void> {
-
-        private Conexion conexion;
-        private StringRequest stringRequest;
-
-        private int i = 0;
         @Override protected void onPreExecute() {
-            conexion = new Conexion(getContext());
-            conexion.setRuta("WebService/Scouter/wsScouterContar.php");
-            stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
-                    new Response.Listener<String>()
-                    {
-                        @Override
-                        public void onResponse(String response) {
-                            //Toast.makeText(getContext(), ""+response, Toast.LENGTH_SHORT).show();
-                            Toast.makeText(getContext(), "--"+i, Toast.LENGTH_SHORT).show();
-                            int dato = Integer.parseInt(response);
-                            if(Cuenta == dato){
-                                Repite = true;
-                                Cambiar = false;
-                            }else{
-                                Repite = false;
-                                Cambiar = true;
-                                Cuenta = dato;
-                            }
-                        }
-                    },
-                    new Response.ErrorListener()
-                    {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getContext(), ""+error, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-            ) {
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String>  params = new HashMap<String, String>();
-                    params.put("Cuenta",Integer.toString(Cuenta));
-                    return params;
-                }
-            };
+            cargando.setVisibility(View.VISIBLE);
         }
         @Override
         protected Void doInBackground(Void... voids) {
 
-            while(Repite){
-                VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
-                if(isCancelled()){
-                    break;
-                }
-                if(Cambiar){
-                    i++;
-                    operador.EliminarDatosTabla("scouter");
-                    new ActualizacionBaseDatos(getContext()).ActualizacionScouter(getContext());
-                    Cambiar = false;
-                }
-                try{
-                    Thread.sleep(5000);}
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return null;
+            actualizaciones();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             return null;
         }
@@ -201,14 +155,8 @@ public class Administracion_Scouter extends Fragment implements View.OnClickList
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             cargarLista();
+            cargando.setVisibility(View.GONE);
+
         }
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-
-    }*/
-
-
-
+    }
 }
