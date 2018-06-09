@@ -18,9 +18,9 @@
         <item
             android:id="@+id/nav_Info"
             android:title="Informacion Adultos Mayores" />
-        <item
+        <!--<item
             android:id="@+id/nav_Sugerencias"
-            android:title="Sugerencias" />
+            android:title="Sugerencias" />-->
     </group>
     <group android:checkableBehavior="single"
         android:id="@+id/menuScouter"

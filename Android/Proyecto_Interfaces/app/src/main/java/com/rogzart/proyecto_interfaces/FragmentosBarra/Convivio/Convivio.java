@@ -86,10 +86,7 @@ public class Convivio extends Fragment {
             }else{
                 AlertaScouter.show();
             }
-
         }
-
-
     }
     private void configurarDialogs(){
         AlertaEvento = new AlertDialog.Builder(getContext());

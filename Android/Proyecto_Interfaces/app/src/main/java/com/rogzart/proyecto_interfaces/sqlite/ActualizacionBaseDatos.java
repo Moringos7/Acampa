@@ -420,6 +420,7 @@ public class ActualizacionBaseDatos {
                         mScouter.setFechaFinal(jsonObject.optString("FechaFinal"));
                         mScouter.setFkUsuario(jsonObject.optInt("FkUsuario"));
                         Insert.InsertarScouter(mScouter);
+                        //Toast.makeText(context, "Inserté: "+mScouter.getFkUsuario(), Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     Toast.makeText(context, "Fallo Sincroniacion: " +e.getMessage(), Toast.LENGTH_LONG).show();

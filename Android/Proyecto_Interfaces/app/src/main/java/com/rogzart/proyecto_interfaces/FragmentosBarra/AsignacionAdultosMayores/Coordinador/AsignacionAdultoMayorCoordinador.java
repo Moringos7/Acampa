@@ -45,6 +45,7 @@ import java.util.Map;
 public class AsignacionAdultoMayorCoordinador extends Fragment {
 
     private AlertDialog.Builder AlertaEvento;
+    private AlertDialog.Builder AlertaFin;
     private boolean EventoDisponible;
     private boolean Activado;
     private OperacionesBaseDatos operador;
@@ -144,6 +145,20 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                 cancelar();
             }
         });
+
+
+
+        AlertaFin = new AlertDialog.Builder(getContext());
+        AlertaFin.setTitle("Fin de Asignaciones");
+        AlertaFin.setMessage("Ha terminado de Asignar a todos los adultos mayores");
+        AlertaFin.setCancelable(false);
+        AlertaFin.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                Intent intent = new Intent(getContext(), Barra_desplegable.class);
+                getActivity().finish();
+                startActivityForResult(intent, 0);
+            }
+        });
     }
 
     private void agendar(){
@@ -187,8 +202,11 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                 }
             }
         }
+        if(arrayList.size() == 0){
+            listaG.setVisibility(View.GONE);
+        }
         ListaAdaptadorAsignacionAdultoMayor miLista = new ListaAdaptadorAsignacionAdultoMayor(arrayList, getContext(),FechaActual,Selecciones);
-        LinearprogressBar.setVisibility(View.GONE);
+        //LinearprogressBar.setVisibility(View.GONE);
         listaG.setAdapter(miLista);
         Asignaciones();
     }
@@ -201,6 +219,12 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         NumAdultosMayores = AdultosMayores.size() - Asignados.size();
         ContadorAsignados.setText(String.valueOf(NumAdultosMayores));
         ContadorAsignados.setVisibility(View.VISIBLE);
+        if(NumAdultosMayores == 0){
+            AlertaFin.show();
+            DetenerHilos();
+        }else{
+            LinearprogressBar.setVisibility(View.VISIBLE);
+        }
     }
     private void DetenerHilos(){
         Activado = false;
@@ -261,6 +285,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                     Toast.makeText(getContext(), "Fallo Conexion", Toast.LENGTH_SHORT).show();
                 }
             });
+
         }
         @Override
         protected Void doInBackground(Void... voids) {
@@ -300,5 +325,6 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         }
 
     }
+
 }
 

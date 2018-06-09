@@ -82,7 +82,7 @@ public class SolicitarAsignacion extends Fragment {
                             LayoutPeticion.setVisibility(View.VISIBLE);
                             myHiloP.execute();
                         }else{
-                            Toast.makeText(getContext(), "Error: "+response, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Error: "+response, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(getContext(), Barra_desplegable.class);
                             getActivity().finish();
                             startActivityForResult(intent, 0);
@@ -93,7 +93,7 @@ public class SolicitarAsignacion extends Fragment {
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getContext(), ""+error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), ""+error, Toast.LENGTH_LONG).show();
                     }
                 }
         ) {

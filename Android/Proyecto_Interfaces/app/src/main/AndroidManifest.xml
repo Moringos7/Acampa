@@ -35,8 +35,8 @@
         <activity
             android:name=".Barra_desplegable"
             android:label="Acampa"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ActivitysConexion.Conexion_Exitosa" />
         <activity android:name=".ActivitysConexion.ErrorPeticion" />
         <activity
@@ -58,17 +58,15 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-         <meta-data
-        android:name="com.google.android.gms.version"
-        android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
-        <activity
-            android:name=".EstadisticasMain">
-
-        </activity>
+            android:label="@string/title_activity_maps" />
+        <activity android:name=".FragmentosBarra.Estadisticas.EstadisticasMain"></activity>
+        <activity android:name=".FragmentosBarra.Estadisticas.Estadisticas_Semestrales"></activity>
     </application>
-
 
 </manifest>

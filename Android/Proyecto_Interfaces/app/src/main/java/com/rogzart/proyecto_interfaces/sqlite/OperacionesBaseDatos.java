@@ -433,19 +433,26 @@ public final class OperacionesBaseDatos {
     public ArrayList<Evento> verificarEventos(String fecha) {
         ArrayList<Evento> eventos = new ArrayList<Evento>();
         Evento evento;
+        String []fechaTabla;
+        int dia,diaActual;
         String[]parteFecha = fecha.split("-");
+        diaActual = Integer.parseInt(parteFecha[2]);
         SQLiteDatabase query = baseDatos.getReadableDatabase();
         Cursor c = query.rawQuery("SELECT * FROM evento WHERE substr(Fecha,6,2) = ?", new String[]{parteFecha[1],});
         if (c.moveToFirst()) {
             do {
-                evento = new Evento();
-                evento.setIdEvento(c.getInt(1));
-                evento.setFecha(c.getString(2));
-                evento.setHora(c.getString(3));
-                evento.setLugar(c.getString(4));
-                evento.setInformacion(c.getString(5));
-                evento.setFkTipoEvento(c.getInt(6));
-                eventos.add(evento);
+                fechaTabla = c.getString(2).split("-");
+                dia = Integer.parseInt(fechaTabla[2]);
+                if(dia >= diaActual){
+                    evento = new Evento();
+                    evento.setIdEvento(c.getInt(1));
+                    evento.setFecha(c.getString(2));
+                    evento.setHora(c.getString(3));
+                    evento.setLugar(c.getString(4));
+                    evento.setInformacion(c.getString(5));
+                    evento.setFkTipoEvento(c.getInt(6));
+                    eventos.add(evento);
+                }
             } while (c.moveToNext());
         }
         return eventos;

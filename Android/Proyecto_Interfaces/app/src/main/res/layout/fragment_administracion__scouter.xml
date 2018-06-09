@@ -40,6 +40,13 @@
             android:textSize="17sp"
             android:paddingBottom="5dp"/>
 
+        <ProgressBar
+            android:id="@+id/progressBarS"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
         <ListView
             android:id="@+id/ListaScouter"
             android:layout_width="match_parent"

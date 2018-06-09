@@ -1,6 +1,7 @@
 package com.rogzart.proyecto_interfaces;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -35,16 +36,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private final LatLng Plaza_Principal = new LatLng(20.141053, -103.728672);
-    private final LatLng Patricia_Gonzalez_Martinez  = new LatLng(20.142085712792106, -103.72972363168708);
-    private final LatLng Manuel_Alvarez_Figueroa = new LatLng(20.142386141478696, -103.73019386684086);
-    private final LatLng Ramiro_Perez_Chavez = new LatLng(20.142131421109774, -103.72994536046644);
-    private final LatLng Facundo_Cabral_Ramiro = new LatLng(20.14085736092522, -103.73204441725716);
-    private final LatLng Emiliano_Sanchez = new LatLng(20.14300087813121, -103.72702715194674);
-    private final LatLng Luis_Reyes_Martinez = new LatLng(20.134919736573494, -103.72940407548322);
-    private final LatLng Joel_Partida_Dominguez = new LatLng(20.135362833793494, -103.73079345975293);
-    private final LatLng Daniel_Rodriguez_Olmos = new LatLng(20.134010855768565, -103.72865686742534);
-    private final LatLng Juan_Hernandez_Meza = new LatLng(20.141900196836566, -103.72355458357544);
-    private final LatLng Carlos_Meza_Rolfos = new LatLng(20.14014967111393, -103.72413166982767);
     private ArrayList<Mapa> ListaPrincipal;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -179,30 +170,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void moveCamera(View view) {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(Plaza_Principal));
     }
-
-    public void animateCamera(View view) {
-        if (mMap.getMyLocation() != null)
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(mMap.getMyLocation().getLatitude(),
-                            mMap.getMyLocation().getLongitude()), 15));
-    }
-    private GeoApiContext getGeoContext() {
-        GeoApiContext geoApiContext = new GeoApiContext();
-        return geoApiContext.setQueryRateLimit(3).setApiKey(getString(R.string.google_maps_key)).setConnectTimeout(1, TimeUnit.SECONDS).setReadTimeout(1, TimeUnit.SECONDS).setWriteTimeout(1, TimeUnit.SECONDS);
+    public void volver(View view){
+        Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
+        finish();
+        startActivityForResult(intent, 0);
     }
 
 
-    /*private void addMarkersToMap(DirectionsResult results, GoogleMap nMap) {
-        nMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0].startLocation.lat,results.routes[0].legs[0].startLocation.lng)).title(results.routes[0].legs[0].startAddress));
-        nMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0].endLocation.lat,results.routes[0].legs[0].endLocation.lng)).title(results.routes[0].legs[0].startAddress).snippet(getEndLocationTitle(results)));
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
+        finish();
+        startActivityForResult(intent, 0);
     }
-
-    private String getEndLocationTitle(DirectionsResult results) {
-        return  "Time :"+ results.routes[0].legs[0].duration.humanReadable + " Distance :" + results.routes[0].legs[0].distance.humanReadable;
-    }*/
-    private void addPolyline(DirectionsResult results, GoogleMap mapa) {
-        List<LatLng> decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.getEncodedPath());
-        mapa.addPolyline(new PolylineOptions().addAll(decodedPath));
-    }
-
 }
