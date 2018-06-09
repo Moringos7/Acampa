@@ -39,7 +39,8 @@ import java.util.Map;
 
 public class Administracion_Scouter extends Fragment implements View.OnClickListener {
 
-   private FloatingActionButton btnScouter;
+    private static Administracion_Scouter yo;
+    private FloatingActionButton btnScouter;
    private ListView ListG;
    private OperacionesBaseDatos operador;
    private TextView Resultado;
@@ -57,6 +58,7 @@ public class Administracion_Scouter extends Fragment implements View.OnClickList
     //btnAgregarScouter
     public static Administracion_Scouter newInstance() {
         Administracion_Scouter fragment = new Administracion_Scouter();
+        yo = fragment;
         return fragment;
     }
     @Override
@@ -97,7 +99,7 @@ public class Administracion_Scouter extends Fragment implements View.OnClickList
             s = "";
         }
         Resultado.setText("Resultado"+s+" "+ListaScouters.size());
-        final AdaptadorScouter adaptadorScouter = new AdaptadorScouter(ListaScouters,getContext());
+        final AdaptadorScouter adaptadorScouter = new AdaptadorScouter(ListaScouters,getContext(),yo);
         ListG.setAdapter(adaptadorScouter);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

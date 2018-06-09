@@ -33,6 +33,7 @@ import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -139,7 +140,7 @@ public class Agregar_Evento extends Fragment {
                     }
 
                 }else{
-                    Toast.makeText(getContext(), "Datos Incorrectos", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "Datos Incorrectos", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -147,31 +148,81 @@ public class Agregar_Evento extends Fragment {
 
     }
     public boolean verificaciones(){
-        boolean CheckVerificacion = true;
+        boolean CheckVerificacion = true,CheckDiaPosterior = true;
         Boolean CheckFecha = true;
-        String[] ArregloFecha;
+        String[] ArregloFecha,ArregloFechaActual;
         String Dia,Mes,Anio;
-        ////////
+        int diaActual,mesActual,anioActual;
         try {
             SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
             formatoFecha.setLenient(false);
             formatoFecha.parse(String.valueOf(Fecha.getText()));
+
         } catch (ParseException e) {
             CheckFecha = false;
             CheckVerificacion = false;
             Toast.makeText(getContext(), "Fecha No valida", Toast.LENGTH_SHORT).show();
         }
+
         if(CheckFecha) {
             ArregloFecha = String.valueOf(Fecha.getText()).split("/");
             Dia = ArregloFecha[0];
             Mes = ArregloFecha[1];
             Anio = ArregloFecha[2];
-            FechaCorrecta = "" + Anio + "-" + Mes + "-" + Dia;
-        }
-        ///////
-        HoraCorrecta = String.valueOf(Hora.getText());
+            int dia = Integer.parseInt(Dia);
+            int mes = Integer.parseInt(Mes);
+            int anio = Integer.parseInt(Anio);
 
-        /////
+            ArregloFechaActual = String.valueOf(generarFecha()).split("-");
+            diaActual = Integer.parseInt(ArregloFechaActual[2]);
+            mesActual = Integer.parseInt(ArregloFechaActual[1]);
+            anioActual = Integer.parseInt(ArregloFechaActual[0]);
+
+            if(anio < anioActual){
+                CheckVerificacion = false;
+                CheckDiaPosterior = false;
+            }else if(mes == mesActual){
+                if(dia < diaActual ){
+                    CheckVerificacion = false;
+                    CheckDiaPosterior = false;
+                }else{
+                    FechaCorrecta = "" + Anio + "-" + Mes + "-" + Dia;
+                }
+            }else if(mes < mesActual){
+                CheckVerificacion = false;
+                CheckDiaPosterior = false;
+            }else{
+                FechaCorrecta = "" + Anio + "-" + Mes + "-" + Dia;
+            }
+            if(!CheckDiaPosterior){
+                Toast.makeText(getContext(), "Ingrese Fecha Posterior a la actual", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        String hora = String.valueOf(Hora.getText());
+        if(hora.length() < 4){
+            Toast.makeText(getContext(), "Formato Incorreto Hora", Toast.LENGTH_SHORT).show();
+            CheckVerificacion = false;
+        }else{
+            String []partesHora = hora.split(":");
+            int Horas = Integer.parseInt(partesHora[0]);
+            int Minutos = Integer.parseInt(partesHora[1]);
+            if(Horas > 23 || Horas <0){
+                Toast.makeText(getContext(), "Formato Incorreto Hora [Hora]", Toast.LENGTH_SHORT).show();
+                CheckVerificacion = false;
+            }else if(Minutos > 59 || Minutos < 0){
+                Toast.makeText(getContext(), "Formato Incorreto Hora [Minutos]", Toast.LENGTH_SHORT).show();
+                CheckVerificacion = false;
+            }else {
+                HoraCorrecta = hora;
+            }
+        }
+        String lugar = String.valueOf(Lugar.getText());
+        if(lugar.length() == 0){
+            CheckVerificacion = false;
+            Toast.makeText(getContext(), "Ingrese Lugar", Toast.LENGTH_SHORT).show();
+        }
+
         if(TipoEvento.getSelectedItem().toString().compareTo("Servicio") == 0){
             FkTipoEvento = 1;
         }else if (TipoEvento.getSelectedItem().toString().compareTo("Convivio") == 0){
@@ -179,10 +230,27 @@ public class Agregar_Evento extends Fragment {
         }else{
             CheckVerificacion = false;
         }
-
-
         return CheckVerificacion;
     }
+    private String generarFecha(){
+        String Fecha;
+        Calendar c = Calendar.getInstance();
+        int Dia = c.get(Calendar.DAY_OF_MONTH);
+        int Mes = c.get(Calendar.MONTH)+1;
+        int Anio = c.get(Calendar.YEAR);
+        String decenaD = "";
+        String decenaM = "";
+        if(Mes < 10){
+            decenaM = "0";
+        }
+        if(Dia < 10){
+            decenaD = "0";
+        }
+        Fecha = String.valueOf(Anio)+"-"+decenaM+String.valueOf(Mes)+"-"+decenaD+String.valueOf(Dia);
+        return Fecha;
+    }
+
+
     public void actualizaciones(){
         operador.EliminarDatosTabla("voluntariofrecuente");
         operador.EliminarDatosTabla("recoger");
@@ -235,6 +303,4 @@ public class Agregar_Evento extends Fragment {
 
         }
     }
-
-
 }

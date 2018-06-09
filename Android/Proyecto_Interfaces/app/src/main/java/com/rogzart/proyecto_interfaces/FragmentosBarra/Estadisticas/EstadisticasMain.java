@@ -1,6 +1,7 @@
 package com.rogzart.proyecto_interfaces.FragmentosBarra.Estadisticas;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.rogzart.proyecto_interfaces.Barra_desplegable;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Estadisticas.Estadisticas;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -20,6 +22,7 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -292,5 +295,10 @@ public class EstadisticasMain extends AppCompatActivity {
         }
         Fecha = String.valueOf(Anio) + "-" + decenaM + String.valueOf(Mes) + "-" + decenaD + String.valueOf(Dia);
         return Fecha;
+    }
+    public void volver(View view){
+        Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
+        finish();
+        startActivityForResult(intent, 0);
     }
 }

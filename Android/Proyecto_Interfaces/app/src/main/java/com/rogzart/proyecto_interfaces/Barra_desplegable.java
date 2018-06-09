@@ -51,10 +51,12 @@ public class Barra_desplegable extends AppCompatActivity
     private LogUser ControlUser;
     private ActualizacionBaseDatos Act;
     private MenuItem ITEM;
+    private HiloActualizacion myHilo;
     //private HiloConexion hiloConexion;
     private AlertDialog.Builder AlertaConexion;
     private LinearLayout LayoutPrincipal;
     private ListView ListaG;
+    private TextView textNovedad;
     private OperacionesBaseDatos operador;
     private boolean Conectado = true;
 
@@ -70,6 +72,7 @@ public class Barra_desplegable extends AppCompatActivity
         configurarDialogs();
         LayoutPrincipal = findViewById(R.id.LayoutPrincipal);
         ListaG = findViewById(R.id.ListaNovedades);
+        textNovedad = findViewById(R.id.SIN_NOVEDAD);
         verificarNovedades();
         /*ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
@@ -162,8 +165,20 @@ public class Barra_desplegable extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         ITEM = item;
-        HiloActualizacion myHilo = new HiloActualizacion();
-        myHilo.execute();
+        if(item.getItemId() == R.id.nav_Asignacion){
+            seleccionFragments(ITEM);
+        }else{
+            if(myHilo ==  null){
+                myHilo = new HiloActualizacion();
+                myHilo.execute();
+            }else{
+                myHilo.cancel(true);
+                myHilo = null;
+                myHilo = new HiloActualizacion();
+                myHilo.execute();
+            }
+        }
+
         return true;
     }
     public void actualizar(){
@@ -180,22 +195,22 @@ public class Barra_desplegable extends AppCompatActivity
 
     public void verificarNovedades(){
 
-
         ArrayList<Evento> eventos = operador.verificarEventos(generarFecha());
         ArrayList<TipoEvento> tipoEventos = operador.obtenerTiposEventos(eventos);
         ArrayList<Notificacion> notificaciones = new ArrayList<Notificacion>();
         Notificacion mNotificacion;
-
         for(int i = 0;i<eventos.size();i++){
             mNotificacion = new Notificacion();
             mNotificacion.setEvento(eventos.get(i));
             mNotificacion.setTipoEvento(tipoEventos.get(i));
             notificaciones.add(mNotificacion);
         }
-
-        AdaptadorNotificacion miAdaptador = new AdaptadorNotificacion(notificaciones,getApplicationContext());
-        ListaG.setAdapter(miAdaptador);
-        //Toast.makeText(this, ""+notificaciones.size(), Toast.LENGTH_SHORT).show();
+        if(notificaciones.size() == 0){
+            textNovedad.setVisibility(View.VISIBLE);
+        }else{
+            AdaptadorNotificacion miAdaptador = new AdaptadorNotificacion(notificaciones,getApplicationContext());
+            ListaG.setAdapter(miAdaptador);
+        }
     }
 
     public void seleccionFragments(MenuItem item){
@@ -219,6 +234,9 @@ public class Barra_desplegable extends AppCompatActivity
                 ft.commit();
             }else {
                 Toast.makeText(this, "Verifica tu conexion a Internet", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
+                finish();
+                startActivityForResult(intent,0);
             }
         }else if(id == R.id.nav_Ruta){
             getFragmentManager().beginTransaction().replace(R.id.contenedor,new LocalizacionLugares()).commit();
@@ -311,7 +329,7 @@ public class Barra_desplegable extends AppCompatActivity
                     Act.VolcarBasedeDatos();
                     Act.ActualizarBasedeDatos(getApplicationContext());
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

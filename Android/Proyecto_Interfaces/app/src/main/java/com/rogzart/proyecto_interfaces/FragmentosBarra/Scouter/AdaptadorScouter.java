@@ -1,5 +1,7 @@
 package com.rogzart.proyecto_interfaces.FragmentosBarra.Scouter;
 
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -21,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.AU.ListaAdaptadorUsuario;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.LR.Lista_Rapida;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Seccion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
@@ -40,12 +43,14 @@ public class AdaptadorScouter extends BaseAdapter implements Filterable{
     private Conexion conexion;
     private CustomFilter filter;
     private ArrayList<Usuario> filterList;
+    private Administracion_Scouter yo;
 
-    public AdaptadorScouter(ArrayList<Usuario> user,Context contexto){
+    public AdaptadorScouter(ArrayList<Usuario> user,Context contexto,Administracion_Scouter yo){
         this.user = user;
         this.contexto = contexto;
         this.conexion = new Conexion(contexto);
         this.filterList = user;
+        this.yo = yo;
     }
 
     @Override
@@ -115,7 +120,9 @@ public class AdaptadorScouter extends BaseAdapter implements Filterable{
                                     public void onResponse(String response) {
                                         Toast.makeText(contexto, ""+response, Toast.LENGTH_SHORT).show();
                                         if(response.compareTo("Eliminado") == 0){
-
+                                            FragmentTransaction ft = ((Activity) contexto).getFragmentManager().beginTransaction();
+                                            ft.replace(R.id.contenedor, Administracion_Scouter.newInstance());
+                                            ft.commit();
                                         }
                                     }
                                 },

@@ -64,7 +64,7 @@ public class ListaEventos extends Fragment {
     private void CargarListaEventos() {
         ArrayList<Evento> arrayList = operador.LeerTablaEvento();
         cuenta = arrayList.size();
-        Toast.makeText(getContext(), "" + arrayList.size(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "" + arrayList.size(), Toast.LENGTH_SHORT).show();
         final EventosAdaptador miLista = new EventosAdaptador(arrayList, getContext());
         ListEventos.setAdapter(miLista);
 

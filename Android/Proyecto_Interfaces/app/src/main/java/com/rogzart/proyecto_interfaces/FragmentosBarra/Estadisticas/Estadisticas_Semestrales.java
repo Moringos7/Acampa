@@ -1,9 +1,11 @@
 package com.rogzart.proyecto_interfaces.FragmentosBarra.Estadisticas;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.rogzart.proyecto_interfaces.Barra_desplegable;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
@@ -31,7 +34,7 @@ public class Estadisticas_Semestrales extends AppCompatActivity {
     PieChart pieChart, piechart2, piechart3;
     private float PAsignacionesS;
     private int RAsignacionesTotal;
-    TextView DatoMes1, DatoMes2, DatoMes3, DatoMes4, DatoMes5, DatoMes6, Mes1, Mes2, Mes3, Mes4, Mes5, Mes6, DatoTotal, Total1,PeriodoMes1,PeriodoMes2,Periodoaño;
+    TextView DatoMes1, DatoMes2, DatoMes3, DatoMes4, DatoMes5, DatoMes6, Mes1, Mes2, Mes3, Mes4, Mes5, Mes6, DatoTotal, Total1, PeriodoMes1, PeriodoMes2, Periodoaño;
 
     private float AsistentesEnero, AsistentesFebrero, AsistentesMarzo, AsistentesAbril, AsistentesMayo, AsistentesJunio;
     private float FaltantesEnero, FaltantesFebrero, FaltantesMarzo, FaltantesAbril, FaltantesMayo, FaltantesJunio;
@@ -40,48 +43,48 @@ public class Estadisticas_Semestrales extends AppCompatActivity {
     private String string = generarFecha();
     private String[] datos = string.split("-");
 
-    private String anio, mes, dia,Periodomes1,Periodomes6,PrimerMesDato;
+    private String anio, mes, dia, Periodomes1, Periodomes6, PrimerMesDato;
     private OperacionesBaseDatos operador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_estadisticas__semestrales);
-        PeriodoMes1=(TextView) findViewById(R.id.TPeriodo1);
-        PeriodoMes2= (TextView) findViewById(R.id.TPeriodo2);
-        Periodoaño= (TextView) findViewById(R.id.TAño);
+        PeriodoMes1 = (TextView) findViewById(R.id.TPeriodo1);
+        PeriodoMes2 = (TextView) findViewById(R.id.TPeriodo2);
+        Periodoaño = (TextView) findViewById(R.id.TAño);
         operador = OperacionesBaseDatos.obtenerInstancia(getApplicationContext());
         anio = datos[0];
-        Periodomes1=datos[1];
+        Periodomes1 = datos[1];
         //Toast.makeText(this, "Mes: "+Periodomes1, Toast.LENGTH_SHORT).show();
 
-        if(Periodomes1.compareTo("01") == 0){
+        if (Periodomes1.compareTo("01") == 0) {
             PeriodoMes1.setText("Enero ");
 
             PeriodoMes2.setText("Agosto -");
         }
-        if(Periodomes1.compareTo("02") == 0){
+        if (Periodomes1.compareTo("02") == 0) {
             PeriodoMes1.setText("Febrero");
 
             PeriodoMes2.setText("Septiembre -");
         }
-        if(Periodomes1.compareTo("03") == 0){
+        if (Periodomes1.compareTo("03") == 0) {
             PeriodoMes1.setText("Marzo");
 
             PeriodoMes2.setText("Octubre -");
 
         }
-        if(Periodomes1.compareTo("04") == 0 ){
+        if (Periodomes1.compareTo("04") == 0) {
             PeriodoMes1.setText("Abril");
 
             PeriodoMes2.setText("Noviembre -");
         }
-        if(Periodomes1.compareTo("05") == 0){
+        if (Periodomes1.compareTo("05") == 0) {
             PeriodoMes1.setText("Mayo");
 
             PeriodoMes2.setText("Diciembre -");
         }
-        if(Periodomes1.compareTo("06") == 0){
+        if (Periodomes1.compareTo("06") == 0) {
             PeriodoMes1.setText("Junio");
 
             PeriodoMes2.setText("Enero -");
@@ -98,12 +101,11 @@ public class Estadisticas_Semestrales extends AppCompatActivity {
         int AsignacionesAbril = operador.promedioVoluntariosMes(mes, anio);
         int AsignacionesMayo = operador.promedioVoluntariosMes(mes, anio);
         int AsignacionesJunio = operador.promedioVoluntariosMes(mes, anio);
-        int SumaEntregada= (AsignacionesEnero+AsignacionesFebrero+AsignacionesMarzo+AsignacionesAbril+AsignacionesMayo+AsignacionesJunio);
+        int SumaEntregada = (AsignacionesEnero + AsignacionesFebrero + AsignacionesMarzo + AsignacionesAbril + AsignacionesMayo + AsignacionesJunio);
 
         int Total = operador.contarAdultoMayor();
-        int AdultosSemestrales=(Total*6);
-        int NoEntregada= (AdultosSemestrales-SumaEntregada);
-
+        int AdultosSemestrales = (Total * 6);
+        int NoEntregada = (AdultosSemestrales - SumaEntregada);
 
 
         double DivisionEnero = ((float) (AsignacionesEnero / Total));
@@ -235,7 +237,7 @@ public class Estadisticas_Semestrales extends AppCompatActivity {
         piechart2.setCenterTextSize(20);
         piechart3.setCenterTextSize(20);
 
-        DatosGrafica1(SumaEntregada,NoEntregada);
+        DatosGrafica1(SumaEntregada, NoEntregada);
         DatosGrafica2(AsistentesEnero, AsistentesFebrero, AsistentesMarzo, AsistentesAbril, AsistentesMayo, AsistentesJunio, NoAcudieronEnero, NoAcudieronFebrero, NoAcudieronMarzo, NoAcudieronAbril, NoAcudieronMayo, NoAcudieronJunio);
         DatosGrafica3(manada, tropa, comunidad, clan, dirigente, civil);
 
@@ -286,7 +288,7 @@ public class Estadisticas_Semestrales extends AppCompatActivity {
         //create pie data object
         PieData data1 = new PieData(set);
         set.setColors(colors);
-       // piechart2.setData(data1);
+        // piechart2.setData(data1);
         piechart2.highlightValues(null);
         piechart2.invalidate();
     }
@@ -348,7 +350,6 @@ public class Estadisticas_Semestrales extends AppCompatActivity {
     }
 
 
-
     private String generarFecha() {
         String Fecha;
         Calendar c = Calendar.getInstance();
@@ -365,6 +366,11 @@ public class Estadisticas_Semestrales extends AppCompatActivity {
         }
         Fecha = String.valueOf(Anio) + "-" + decenaM + String.valueOf(Mes) + "-" + decenaD + String.valueOf(Dia);
         return Fecha;
+    }
+    public void volver(View view){
+        Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
+        finish();
+        startActivityForResult(intent, 0);
     }
 }
 

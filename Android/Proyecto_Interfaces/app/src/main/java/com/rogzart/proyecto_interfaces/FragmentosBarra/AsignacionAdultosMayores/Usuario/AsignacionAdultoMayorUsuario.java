@@ -1,6 +1,9 @@
 package com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Usuario;
 
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -15,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.rogzart.proyecto_interfaces.Barra_desplegable;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.MenuAdministrar;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Coordinador.AsignacionAdultoMayorCoordinador;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
@@ -41,6 +45,7 @@ import javax.xml.transform.ErrorListener;
 public class AsignacionAdultoMayorUsuario extends Fragment {
 
     private StringRequest stringRequest;
+    private AlertDialog.Builder AlertaEvento;
     private Conexion conexion;
     private String FechaActual;
     private LogUser ControlUser;
@@ -69,27 +74,41 @@ public class AsignacionAdultoMayorUsuario extends Fragment {
         FechaActual = generarFecha();
         ControlUser = LogUser.obtenerInstancia(getContext());
         mUsuario = ControlUser.getUser();
-        if(VerificarAsignaciones()){
-            Bundle bolsa = new Bundle();
-            bolsa.putSerializable("AdultosMayores",Asignados);
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(R.id.contenedor, AdultosMayoresAsignados.newInstance(bolsa));
-            ft.addToBackStack(null);
-            ft.commit();
-        }else{
-            if(!conexion.isConnected()){
-                Toast.makeText(getContext(), "Sin Asignaciones,Conectate a Internet", Toast.LENGTH_SHORT).show();
+        if(operador.verificarEventoServicio(generarFecha())){
+            if(VerificarAsignaciones()){
+                Bundle bolsa = new Bundle();
+                bolsa.putSerializable("AdultosMayores",Asignados);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.contenedor, AdultosMayoresAsignados.newInstance(bolsa));
+                ft.addToBackStack(null);
+                ft.commit();
             }else{
-                myHiloC = new HiloRecargarAsignacion();
-                myHiloC.execute();
+                if(!conexion.isConnected()){
+                    Toast.makeText(getContext(), "Sin Asignaciones,Conectate a Internet", Toast.LENGTH_SHORT).show();
+                }else{
+                    myHiloC = new HiloRecargarAsignacion();
+                    myHiloC.execute();
+                }
             }
+        }else{
+            configurarDialogs();
+            AlertaEvento.show();
         }
     }
+    private void configurarDialogs() {
+        AlertaEvento = new AlertDialog.Builder(getContext());
+        AlertaEvento.setTitle("Servicio No Agendado");
+        AlertaEvento.setMessage("Contacte al Coordinador del Servicio");
+        AlertaEvento.setCancelable(false);
+        AlertaEvento.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                getActivity().finish();
+                Intent intent = new Intent(getContext(), Barra_desplegable.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+    }
 
-    /*private boolean ActualizarAsignacion(){
-        operador.EliminarDatosTabla("asignacion");
-         return (new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext()));
-    }*/
     private String generarFecha(){
         String Fecha;
         int Dia = c.get(Calendar.DAY_OF_MONTH);
