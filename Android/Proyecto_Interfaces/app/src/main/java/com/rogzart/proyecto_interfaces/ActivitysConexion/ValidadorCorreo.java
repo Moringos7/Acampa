@@ -29,6 +29,7 @@ public class ValidadorCorreo extends AppCompatActivity {
         setContentView(R.layout.empty);
         String Asunto = getIntent().getExtras().getString("Asunto");
         conexion = new Conexion(getApplicationContext());
+
         Map<String, String> params = new HashMap();
         params.put("asunto",Asunto);
         params.put("correo",getIntent().getExtras().getString("Correo"));
@@ -59,21 +60,24 @@ public class ValidadorCorreo extends AppCompatActivity {
                         if(errorRegister){
                             finish();
                             Intent intent = new Intent(getApplicationContext(), ErrorPeticion.class);
-                            intent.putExtra("Mensaje1", "Verifique su conexión a Internet");
-                            intent.putExtra("Mensaje2" , "Intentelo más tarde");
+                            //intent.putExtra("Mensaje1", "Verifique su conexión a Internet");
+                            //intent.putExtra("Mensaje2" , "Intentelo más tarde");
+                            Toast.makeText(ValidadorCorreo.this, "errorRegister", Toast.LENGTH_SHORT).show();
                             startActivityForResult(intent, 0);
 
                         }else if(maxNumber){
                             finish();
                             Intent intent = new Intent(getApplicationContext(), ErrorPeticion.class);
-                            intent.putExtra("Mensaje1", "Verifique su conexión a Internet");
-                            intent.putExtra("Mensaje2" , "Intentelo más tarde");
+                            //intent.putExtra("Mensaje1", "Verifique su conexión a Internet");
+                            //intent.putExtra("Mensaje2" , "Intentelo más tarde");
+                            Toast.makeText(ValidadorCorreo.this, "maxNumber", Toast.LENGTH_SHORT).show();
                             startActivityForResult(intent, 0);
                         }else{
                             finish();
                             Intent intent = new Intent(getApplicationContext(), ErrorPeticion.class);
-                            intent.putExtra("Mensaje1", "Verifique su conexión a Internet");
-                            intent.putExtra("Mensaje2" , "Intentelo más tarde");
+                            //intent.putExtra("Mensaje1", "Verifique su conexión a Internet");
+                            //intent.putExtra("Mensaje2" , "Intentelo más tarde");
+                            Toast.makeText(ValidadorCorreo.this, "Default", Toast.LENGTH_SHORT).show();
                             startActivityForResult(intent, 0);
                         }
                     }

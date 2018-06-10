@@ -1,6 +1,8 @@
 package com.rogzart.proyecto_interfaces.InterfacesLogin;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +16,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.rogzart.proyecto_interfaces.ActivitysConexion.ValidadorCorreo;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaInventario;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.VoluntarioFrecuente.AsignarVoluntarioFrecuente;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
@@ -83,25 +88,59 @@ public class RecuperacionPassword extends AppCompatActivity {
                 vDia = Dia.getSelectedItem().toString();
                 vMes = Mes.getSelectedItem().toString();
                 anio = Anio.getText().toString();
+                Fecha = anio + "-" + vMes + "-" + vDia;
                 if(!conexion.isConnected()){
                     Toast.makeText(RecuperacionPassword.this, "Verifica tu conexion a Internet", Toast.LENGTH_SHORT).show();
                 }else{
-                    //Verificacion correo y nombre
                     if(!checkFecha()){
                         Toast.makeText(getApplicationContext(), "Fecha No valida", Toast.LENGTH_SHORT).show();
                     }else {
-                        Fecha = anio + "-" + vMes + "-" + vDia;
-                        Intent intent = new Intent(getApplicationContext(), ValidadorCorreo.class);
-                        intent.putExtra("Asunto","Recuperacion");
-                        intent.putExtra("Correo", correo);
-                        intent.putExtra("Nombre",nombre);
-                        intent.putExtra("Fecha",Fecha);
-                        finish();
-                        startActivityForResult(intent, 0);
+                        checkGeneral();
                     }
                 }
             }
         });
+    }
+    public void checkGeneral(){
+        conexion.setRuta("WebService/Password/wsPasswordCheck.php");
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.compareTo("Si") == 0){
+                            Intent intent = new Intent(getApplicationContext(), ValidadorCorreo.class);
+                            intent.putExtra("Asunto","Recuperacion");
+                            intent.putExtra("Correo", correo);
+                            intent.putExtra("Nombre",nombre);
+                            intent.putExtra("Fecha",Fecha);
+                            finish();
+                            startActivityForResult(intent, 0);
+                        }else{
+                            Toast.makeText(RecuperacionPassword.this, "Datos Incorrectos", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(RecuperacionPassword.this, ""+error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("Fecha",Fecha);
+                params.put("Nombre", nombre);
+                params.put("Correo", correo);
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+
     }
     public boolean checkFecha(){
         boolean check = true;

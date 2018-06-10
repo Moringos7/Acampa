@@ -7,18 +7,26 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.VoluntarioFrecuente.AsignarVoluntarioFrecuente;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class AdministrarUsuario extends Fragment {
@@ -30,6 +38,7 @@ public class AdministrarUsuario extends Fragment {
     private ImageView imagen;
     private String NombreSeccion;
     private int ColorSeccion[];
+    private Button BTN;
     ImageRequest imageRequest;
     public AdministrarUsuario(){
 
@@ -66,18 +75,15 @@ public class AdministrarUsuario extends Fragment {
         ApellidoP = (EditText) getView().findViewById(R.id.administar_apellidoP_usuario);
         ApellidoM = (EditText) getView().findViewById(R.id.administar_apellidoM_usuario);
         Correo = (EditText) getView().findViewById(R.id.administar_correo_usuario);
-        TvSeccion = (TextView) getView().findViewById(R.id.administrar_seccion_usuario);
         checkBox = (CheckBox) getView().findViewById(R.id.administar_checkscout_usuario);
         imagen = (ImageView) getView().findViewById(R.id.imagen);
-        Conexion conexion = new Conexion(getContext());
+        BTN = getView().findViewById(R.id.BTNReinicio);
+        final Conexion conexion = new Conexion(getContext());
 
         Nombre.setText(miUsuario.getNombre());
         ApellidoP.setText(miUsuario.getApellidoPaterno());
         ApellidoM.setText(miUsuario.getApellidoMaterno());
         Correo.setText(miUsuario.getCorreo());
-        if(miUsuario.getScout() == 1){
-            checkBox.setChecked(true);
-        }
 
         conexion.setRuta("WebService/"+miUsuario.getFotografia());
         imageRequest = new ImageRequest(conexion.getRuta(), new Response.Listener<Bitmap>() {
@@ -92,5 +98,82 @@ public class AdministrarUsuario extends Fragment {
             }
         });
         VolleySingleton.getInstance(getContext()).addToRequestQueue(imageRequest);
+        conexion.setRuta("WebService/Password/wsPasswordVerificaRecuperacion.php");
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.compareTo("Validar") == 0) {
+                            BTN.setVisibility(View.VISIBLE);
+                        }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getContext(), ""+error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("IdUsuario",Integer.toString(miUsuario.getIdUsuario()));
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
+
+
+
+
+
+
+
+        BTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(conexion.isConnected()){
+                    conexion.setRuta("WebService/Password/wsPasswordUpdateIntentos.php ");
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
+                            new Response.Listener<String>()
+                            {
+                                @Override
+                                public void onResponse(String response) {
+                                    if(response.compareTo("Actualizado") == 0){
+                                        Toast.makeText(getContext(), "Actualizado", Toast.LENGTH_SHORT).show();
+                                        BTN.setVisibility(View.GONE);
+                                    }else{
+                                        Toast.makeText(getContext(), "Intentelo más tarde", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener()
+                            {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(getContext(), ""+error, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                    ) {
+                        @Override
+                        protected Map<String, String> getParams()
+                        {
+                            Map<String, String>  params = new HashMap<String, String>();
+                            params.put("FkUsuario",Integer.toString(miUsuario.getIdUsuario()));
+                            return params;
+                        }
+                    };
+                    VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
+                }else {
+                    Toast.makeText(getContext(), "Verifica tu conexion", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
     }
 }

@@ -102,6 +102,7 @@ public class ListaAdministrarUsuario extends Fragment{
                 ListaUsuarios();
             }
         });
+
         //Método de botón No Registrado
         NoRegistrado.setOnClickListener(new View.OnClickListener() {
             @Override

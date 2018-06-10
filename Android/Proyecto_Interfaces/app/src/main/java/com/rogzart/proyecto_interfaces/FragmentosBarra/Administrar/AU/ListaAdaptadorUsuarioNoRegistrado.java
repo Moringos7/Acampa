@@ -1,5 +1,7 @@
 package com.rogzart.proyecto_interfaces.FragmentosBarra.Administrar.AU;
 
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,11 +24,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.rogzart.proyecto_interfaces.ActivitysConexion.ValidadorCorreo;
 import com.rogzart.proyecto_interfaces.Barra_desplegable;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.VoluntarioFrecuente.AsignarVoluntarioFrecuente;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Seccion;
 import com.rogzart.proyecto_interfaces.Modelo.Usuario;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
+import com.rogzart.proyecto_interfaces.sqlite.ActualizacionBaseDatos;
 import com.rogzart.proyecto_interfaces.sqlite.OperacionesBaseDatos;
 
 import org.json.JSONArray;
@@ -47,12 +51,14 @@ public class ListaAdaptadorUsuarioNoRegistrado extends BaseAdapter {
     private OperacionesBaseDatos operador;
     private ListaAdaptadorUsuario.CustomFilter filter;
     private ArrayList<Usuario> filterList;
+    private ActualizacionBaseDatos Act;
     public ListaAdaptadorUsuarioNoRegistrado
             (ArrayList<Usuario> datos, Context contexto)
     {
         this.datos = datos;
         this.contexto = contexto;
         this.filterList = datos;
+        Act = new ActualizacionBaseDatos(contexto);
     }
 
 
@@ -133,26 +139,72 @@ public class ListaAdaptadorUsuarioNoRegistrado extends BaseAdapter {
                 Intent intent = new Intent(contexto, ValidadorCorreo.class);
                 intent.putExtra("Asunto","Aceptado");
                 intent.putExtra("Correo",datos.get(position).getCorreo());
-                //Toast.makeText(contexto, ""+datos.get(position).getCorreo(), Toast.LENGTH_SHORT).show();
+                v.setVisibility(View.GONE);
                 contexto.startActivity(intent);
             }
         });
         btnEliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Map<String, String> params = new HashMap();
-                params.put("idusuario",String.valueOf(datos.get(position).getIdUsuario()));
-                JSONObject obj = new JSONObject(params);
-                conexion.setRuta("WebService/Usuario/wsUsuarioDelete.php");
-                StringRequest stringRequest = new StringRequest((Request.Method.POST, conexion.getRuta(), obj,
+                if(conexion.isConnected()){
 
+                    conexion.setRuta("WebService/Usuario/wsUsuarioDelete.php");
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
+                            new Response.Listener<String>()
+                            {
+                                @Override
+                                public void onResponse(String response) {
+                                    if(response.compareTo("Eliminado") == 0){
+                                        Toast.makeText(contexto, response, Toast.LENGTH_SHORT).show();
+                                        actualizar();
+                                        FragmentTransaction ft = ((Activity) contexto).getFragmentManager().beginTransaction();
+                                        ft.replace(R.id.contenedor, ListaAdministrarUsuario.newInstance());
+                                        ft.addToBackStack(null);
+                                        ft.commit();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener()
+                            {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(contexto, ""+error, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                    ) {
+                        @Override
+                        protected Map<String, String> getParams()
+                        {
+                            Map<String, String>  params = new HashMap<String, String>();
+                            params.put("IdUsuario",Integer.toString(datos.get(position).getIdUsuario()));
+                            return params;
+                        }
+                    };
+                    VolleySingleton.getInstance(contexto).addToRequestQueue(stringRequest);
 
-                VolleySingleton.getInstance(contexto).addToRequestQueue(stringRequest);*/
+                }else{
+                    Toast.makeText(contexto, "Verifique su Conexion", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         return V;
+    }
+    void actualizar(){
+        operador.EliminarDatosTabla("voluntariofrecuente");
+        operador.EliminarDatosTabla("recoger");
+        operador.EliminarDatosTabla("gestioninventario");
+        operador.EliminarDatosTabla("asignacion");
+        operador.EliminarDatosTabla("problematica");
+        operador.EliminarDatosTabla("scouter");
+        operador.EliminarDatosTabla("usuario");
+        Act.ActualizacionUsuario(contexto);
+        Act.ActualizacionScouter(contexto);
+        Act.ActualizacionProblematica(contexto);
+        Act.ActualizacionAsignacion(contexto);
+        Act.ActualizacionGestionInventario(contexto);
+        Act.ActualizacionRecoger(contexto);
+        Act.ActualizacionVoluntarioFrecuente(contexto);
     }
 
 }
