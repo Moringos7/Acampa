@@ -67,8 +67,6 @@ public class signup extends AppCompatActivity implements View.OnClickListener {
     private JsonObjectRequest jsonObjectRequest;
     private Conexion conexion;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -87,8 +85,6 @@ public class signup extends AppCompatActivity implements View.OnClickListener {
             ApellidoMaterno = findViewById(R.id.RegistroApellidoMaterno);
             Scout = findViewById(R.id.RegistroScout);
             Correo = findViewById(R.id.RegistroCorreo);
-
-
     }
     void Registro(){
         String Dia,Mes,Anio;
@@ -164,8 +160,7 @@ public class signup extends AppCompatActivity implements View.OnClickListener {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            //Toast.makeText(signup.this, ""+error, Toast.LENGTH_LONG).show();
-                            Toast.makeText(getApplicationContext(), "Fallo Conexion al Servidor", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(signup.this, ""+error, Toast.LENGTH_LONG).show();
                         }
                     });
                     VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
