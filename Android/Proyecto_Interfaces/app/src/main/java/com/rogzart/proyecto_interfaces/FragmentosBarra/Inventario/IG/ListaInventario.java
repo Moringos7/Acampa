@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -66,6 +67,7 @@ import static android.app.Activity.RESULT_OK;
 public class ListaInventario extends Fragment {
     ArrayList<String> listainventario;
     Uri ImageUrl;
+    private Inventario inventario;
     SearchView buscador, buscadorE;
     ListView listaInventario, listaInventarioE;
     ScrollView scroll;
@@ -85,6 +87,7 @@ public class ListaInventario extends Fragment {
     private static final int PICK_IMAGE = 100;
     LinearLayout layoutG, layoutE, layoutT, layoutA;
     OperacionesBaseDatos operador;
+    private ActualizacionBaseDatos Act;
 
     public static ListaInventario newInstance() {
         ListaInventario fragmento = new ListaInventario();
@@ -107,6 +110,7 @@ public class ListaInventario extends Fragment {
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
         ControlUser = LogUser.obtenerInstancia(getContext());
+        Act = new ActualizacionBaseDatos(getContext());
         AComentario = (EditText) getView().findViewById(R.id.agregar_producto_comentario);
         ABtnGuardar = (Button) getView().findViewById(R.id.agregar_producto_btnguardar);
         ACantidad = (EditText) getView().findViewById(R.id.agregar_producto_cantidad);
@@ -129,10 +133,6 @@ public class ListaInventario extends Fragment {
         botonAgregar = (FloatingActionButton) getView().findViewById(R.id.list_inventario_general_agregar);
         AExistencia.setText(String.valueOf(resultadoE));
 
-        new ActualizacionBaseDatos(getContext()).VolcarBasedeDatos();
-        while(!new ActualizacionBaseDatos(getContext()).ActualizarBasedeDatos(getContext())){
-
-        }
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         layoutG = getView().findViewById(R.id.LinearLGeneral);
         layoutT = getView().findViewById(R.id.inventario_general_layout_general);
@@ -179,7 +179,6 @@ public class ListaInventario extends Fragment {
                                         }
 
         );
-
         btnrestar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -240,8 +239,7 @@ public class ListaInventario extends Fragment {
                                            @Override
                                            public void onClick(View v) {
                                                NuevoProducto();
-                                               layoutT.setVisibility(View.VISIBLE);
-                                               scroll.setVisibility(View.GONE);
+
 
                                            }
                                        }
@@ -283,7 +281,10 @@ public class ListaInventario extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(getContext(),  response, Toast.LENGTH_SHORT).show();
-
+                        if(response.compareTo("Insertado") == 0){
+                            HiloCargaLista x = new HiloCargaLista();
+                            x.execute();
+                        }
                     }
                 },
                 new Response.ErrorListener()
@@ -414,19 +415,79 @@ public class ListaInventario extends Fragment {
         listaInventario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                    @Override
                                                    public void onItemClick(AdapterView<?> adapterView, View view, int x, long l) {
-            Inventario inventario1 = (Inventario) adapterView.getItemAtPosition(x);
-            Bundle bolsa = new Bundle();
-            bolsa.putSerializable("articulo", inventario1);
 
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.contenedor, ListaInventarioMain.newInstance(bolsa));
-            transaction.addToBackStack(null);
-            transaction.commit();
-            }
+                                                       Inventario inventario1 = (Inventario) adapterView.getItemAtPosition(x);
+                                                       Bundle bolsa = new Bundle();
+                                                       bolsa.putSerializable("articulo", inventario1);
+
+                                                       FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                                       transaction.replace(R.id.contenedor, ListaInventarioMain.newInstance(bolsa));
+                                                       transaction.addToBackStack(null);
+                                                       transaction.commit();
+                                                   }
 
 
-            }
+                                               }
         );
+    }
+
+    void actualizaciones(){
+
+        operador.EliminarDatosTabla("voluntariofrecuente");
+        operador.EliminarDatosTabla("recoger");
+        operador.EliminarDatosTabla("gestioninventario");
+        operador.EliminarDatosTabla("comentarioam");
+        operador.EliminarDatosTabla("asignacion");
+        operador.EliminarDatosTabla("adultomayor");
+        operador.EliminarDatosTabla("problematica");
+        operador.EliminarDatosTabla("fotoalrededores");
+        operador.EliminarDatosTabla("scouter");
+        operador.EliminarDatosTabla("domicilio");
+        operador.EliminarDatosTabla("evento");
+        operador.EliminarDatosTabla("usuario");
+        operador.EliminarDatosTabla("inventario");
+        Act.ActualizacionInventario(getContext());
+        Act.ActualizacionUsuario(getContext());
+        Act.ActualizacionEvento(getContext());
+        Act.ActualizacionDomicilio(getContext());
+        Act.ActualizacionScouter(getContext());
+        Act.ActualizacionFotoAlrededores(getContext());
+        Act.ActualizacionProblematica(getContext());
+        Act.ActualizacionAdultoMayor(getContext());
+        Act.ActualizacionAsignacion(getContext());
+        Act.ActualizacionComentarioAM(getContext());
+        Act.ActualizacionGestionInventario(getContext());
+        Act.ActualizacionRecoger(getContext());
+        Act.ActualizacionVoluntarioFrecuente(getContext());
+    }
+    private class HiloCargaLista extends AsyncTask<Void, Void, Void> {
+
+        @Override protected void onPreExecute() {
+
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            actualizaciones();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            /*layoutT.setVisibility(View.VISIBLE);
+            scroll.setVisibility(View.GONE);
+            */
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.contenedor, ListaInventario.newInstance());
+            ft.addToBackStack(null);
+            ft.commit();
+
+        }
     }
 }
 

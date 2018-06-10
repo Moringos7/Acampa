@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FragmentosBarra.InformacionAdultoMayor.busqueda_informacion_adulto_mayor">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_gravity="center"
+      android:orientation="vertical">
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Informacion Adultos Mayores"
+          android:textColor="#000"
+          android:gravity="center"
+          android:paddingTop="20dp"
+          android:textSize="25sp"/>
+      <SearchView
+          android:id="@+id/searchAdultoMayor"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/nResultados"
+          android:text="n Resultados"
+          android:textSize="20dp"
+          android:textColor="#838383"
+          android:gravity="center"/>
+
+      <ListView
+          android:id="@+id/lista_adulto_mayor"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+      </ListView>
+  </LinearLayout>
+
+</FrameLayout>

@@ -14,6 +14,7 @@ import com.rogzart.proyecto_interfaces.Modelo.Evento;
 import com.rogzart.proyecto_interfaces.Modelo.FotoAlrededores;
 import com.rogzart.proyecto_interfaces.Modelo.GestionInventario;
 import com.rogzart.proyecto_interfaces.Modelo.Inventario;
+import com.rogzart.proyecto_interfaces.Modelo.Mapa;
 import com.rogzart.proyecto_interfaces.Modelo.Problematica;
 import com.rogzart.proyecto_interfaces.Modelo.Recoger;
 import com.rogzart.proyecto_interfaces.Modelo.Scouter;
@@ -121,16 +122,6 @@ public final class OperacionesBaseDatos {
         }
         return seccion;
     }
-    public TipoEvento ObtenerTipoEvento(int IdTipoEvento){
-        TipoEvento tipoEvento = new TipoEvento();
-        SQLiteDatabase query = baseDatos.getReadableDatabase();
-        Cursor c = query.rawQuery("SELECT * FROM tipoevento WHERE IdTipoEvento = "+IdTipoEvento,null);
-        if(c.moveToFirst()) {
-            tipoEvento.setIdTipoEvento(c.getInt(1));
-            tipoEvento.setNombre(c.getString(2));
-        }
-        return tipoEvento;
-    }
     /**Ubicacion**/
     public void InsertarUbcacion(Ubicacion x){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
@@ -139,6 +130,40 @@ public final class OperacionesBaseDatos {
         valores.put(ubicacion.Longitud,x.getLongitud());
         valores.put(ubicacion.Latitud,x.getLatitud());
         query.insert("ubicacion",null,valores);
+    }
+    public ArrayList<Mapa> obtenerUbicacionesyAdultosMayores(){
+        //
+        ArrayList<Mapa> List = new ArrayList<Mapa>();
+        AdultoMayor adultoMayor;
+        Ubicacion ubicacion;
+        Mapa mapa;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT adultomayor.*,ubicacion.* FROM adultomayor,domicilio,ubicacion WHERE IdDomicilio = FkDomicilio AND FkUbicacion = IdUbicacion",null);
+        if(c.moveToFirst()) {
+            do {
+                //procrasti
+                adultoMayor = new AdultoMayor();
+                adultoMayor.setIdAdultoMayor(c.getInt(1));
+                adultoMayor.setNombre(c.getString(2));
+                adultoMayor.setApellidoPaterno(c.getString(3));
+                adultoMayor.setApellidoMaterno(c.getString(4));
+                adultoMayor.setFotografia(c.getString(5));
+                adultoMayor.setDiabetico(c.getInt(6));
+                adultoMayor.setFkDependencia(c.getInt(7));
+                adultoMayor.setFkDomicilio(c.getInt(8));
+                //9
+                ubicacion = new Ubicacion();
+                ubicacion.setIdUbicacion(c.getInt(10));
+                ubicacion.setLongitud(c.getDouble(11));
+                ubicacion.setLatitud(c.getDouble(12));
+                //Creando Mapa
+                mapa = new Mapa();
+                mapa.setAdultoMayor(adultoMayor);
+                mapa.setUbicacion(ubicacion);
+                List.add(mapa);
+            } while (c.moveToNext());
+        }
+        return List;
     }
     public void LeerTablaUbicacion(){
         //List<Seccion> list;
@@ -155,7 +180,44 @@ public final class OperacionesBaseDatos {
         }
         //return list;
     }
+    public Ubicacion obtenerUbicacionPorID(int Id){
+        Ubicacion mUbicacion = new Ubicacion();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM ubicacion WHERE IdUbicacion = ? ",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()) {
+            mUbicacion.setIdUbicacion(c.getInt(1));
+            mUbicacion.setLongitud(c.getDouble(2));
+            mUbicacion.setLatitud(c.getDouble(3));
+        }
+        return mUbicacion;
+    }
+    public Ubicacion obtenerUdicacionPorAdultoMayor(AdultoMayor adultoMayor){
+        Ubicacion miUbicacion = new Ubicacion();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT ubicacion.* FROM ubicacion,domicilio,adultomayor WHERE IdUbicacion = FkUbicacion AND IdDomicilio = FkDomicilio AND IdAdultoMayor = ?",new String[]{String.valueOf(adultoMayor.getIdAdultoMayor())});
+        if(c.moveToFirst()) {
+            miUbicacion.setIdUbicacion(c.getInt(1));
+            miUbicacion.setLongitud(c.getDouble(2));
+            miUbicacion.setLatitud(c.getDouble(3));
+        }
+        return miUbicacion;
+    }
     /**TipoEvento**/
+    public ArrayList<TipoEvento> obtenerTiposEventos(ArrayList<Evento> eventos){
+        ArrayList<TipoEvento> tipos =  new ArrayList<TipoEvento>();
+        TipoEvento tipo;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        for(int i=0; i<eventos.size();i++){
+            Cursor c = query.rawQuery("SELECT * FROM tipoevento WHERE IdTipoEvento = ?",new String[]{String.valueOf(eventos.get(i).getFkTipoEvento())});
+            if(c.moveToFirst()) {
+                tipo = new TipoEvento();
+                tipo.setIdTipoEvento(c.getInt(1));
+                tipo.setNombre(c.getString(2));
+                tipos.add(tipo);
+            }
+        }
+        return tipos;
+    }
     public void InsertarTipoEvento(TipoEvento x){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
@@ -350,26 +412,52 @@ public final class OperacionesBaseDatos {
         query.insert("evento",null,valores);
     }
     public ArrayList<Evento> LeerTablaEvento(){
-        ArrayList <Evento> lista = new ArrayList<Evento>();
+        ArrayList<Evento> list = new ArrayList<Evento>();
         Evento x;
-        //List<Seccion> list;
         SQLiteDatabase query = baseDatos.getReadableDatabase();
         Cursor c = query.rawQuery("SELECT * FROM evento",null);
         if(c.moveToFirst()) {
             do {
-                x= new Evento();
+                x = new Evento();
                 x.setIdEvento(c.getInt(1));
                 x.setFecha(c.getString(2));
                 x.setHora(c.getString(3));
                 x.setLugar(c.getString(4));
                 x.setInformacion(c.getString(5));
                 x.setFkTipoEvento(c.getInt(6));
-                lista.add(x);
+                list.add(x);
             } while (c.moveToNext());
         }
-        return lista;
+        return list;
     }
-    public boolean verificarEvento(String Fecha){
+    public ArrayList<Evento> verificarEventos(String fecha) {
+        ArrayList<Evento> eventos = new ArrayList<Evento>();
+        Evento evento;
+        String []fechaTabla;
+        int dia,diaActual;
+        String[]parteFecha = fecha.split("-");
+        diaActual = Integer.parseInt(parteFecha[2]);
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM evento WHERE substr(Fecha,6,2) = ?", new String[]{parteFecha[1],});
+        if (c.moveToFirst()) {
+            do {
+                fechaTabla = c.getString(2).split("-");
+                dia = Integer.parseInt(fechaTabla[2]);
+                if(dia >= diaActual){
+                    evento = new Evento();
+                    evento.setIdEvento(c.getInt(1));
+                    evento.setFecha(c.getString(2));
+                    evento.setHora(c.getString(3));
+                    evento.setLugar(c.getString(4));
+                    evento.setInformacion(c.getString(5));
+                    evento.setFkTipoEvento(c.getInt(6));
+                    eventos.add(evento);
+                }
+            } while (c.moveToNext());
+        }
+        return eventos;
+    }
+    public boolean verificarEventoServicio(String Fecha){
         boolean Existe = false;
         SQLiteDatabase query = baseDatos.getReadableDatabase();
         Cursor c = query.rawQuery("SELECT * FROM evento,tipoevento WHERE Fecha =  ? AND  FkTipoEvento = IdTipoEvento AND tipoevento.Nombre = ? ",new String[]{Fecha,"Servicio",});
@@ -378,26 +466,41 @@ public final class OperacionesBaseDatos {
         }
         return Existe;
     }
-    public boolean verificaConvivio(String Fecha){
+    public boolean verificarEventoConvivio(String FechaP){
         boolean Existe = false;
+        String[]parteFecha = FechaP.split("-");
         SQLiteDatabase query = baseDatos.getReadableDatabase();
-        Cursor c = query.rawQuery("SELECT * FROM evento,tipoevento WHERE Fecha =  ? AND  FkTipoEvento = IdTipoEvento AND tipoevento.Nombre = ? ",new String[]{Fecha,"Convivio",});
+        Cursor c = query.rawQuery("SELECT * FROM evento,tipoevento WHERE substr(Fecha,1,4) = ? AND substr(Fecha,6,2) = ? AND FkTipoEvento = IdTipoEvento AND tipoevento.Nombre = ? ",new String[]{parteFecha[0],parteFecha[1],"Convivio",});
         if(c.moveToFirst()) {
             Existe = true;
         }
         return Existe;
     }
     /**Domicilio**/
-    public void InsertarDomicilio(Domicilio x){
+    public void InsertarDomicilio(Domicilio evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(domicilio.Id,x.getIdDomicilio());
-        valores.put(domicilio.Numero,x.getNumero());
-        valores.put(domicilio.Calle,x.getCalle());
-        valores.put(domicilio.Colonia,x.getColonia());
-        valores.put(domicilio.Foto,x.getFoto());
-        valores.put(domicilio.FkUbicacion,x.getFkUbicacion());
+        valores.put(domicilio.Id,evento.getIdDomicilio());
+        valores.put(domicilio.Numero,evento.getNumero());
+        valores.put(domicilio.Calle,evento.getCalle());
+        valores.put(domicilio.Colonia,evento.getColonia());
+        valores.put(domicilio.Foto,evento.getFoto());
+        valores.put(domicilio.FkUbicacion,evento.getFkUbicacion());
         query.insert("domicilio",null,valores);
+    }
+    public Domicilio obtenerDomicilio(int Id){
+        Domicilio mDomicilio = new Domicilio();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM domicilio WHERE IdDomicilio = ? ",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()) {
+            mDomicilio.setIdDomicilio(c.getInt(1));
+            mDomicilio.setNumero(c.getInt(2));
+            mDomicilio.setCalle(c.getString(3));
+            mDomicilio.setColonia(c.getString(4));
+            mDomicilio.setFoto(c.getString(5));
+            mDomicilio.setFkUbicacion(c.getInt(6));
+        }
+        return mDomicilio;
     }
     public void LeerTablaDomicilio(){
         //List<Seccion> list;
@@ -418,38 +521,94 @@ public final class OperacionesBaseDatos {
         //return list;
     }
     /**Scouter**/
-    public void InsertarScouter(Scouter x){
+    public void InsertarScouter(Scouter evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(scouter.Id,x.getIdScouter());
-        valores.put(scouter.FechaInicio,x.getFechaInicio());
-        valores.put(scouter.FechaFinal,x.getFechaFinal());
-        valores.put(scouter.FkUsuario,x.getFkUsuario());
+        valores.put(scouter.Id,evento.getIdScouter());
+        valores.put(scouter.FechaInicio,evento.getFechaInicio());
+        valores.put(scouter.FechaFinal,evento.getFechaFinal());
+        valores.put(scouter.FkUsuario,evento.getFkUsuario());
         query.insert("scouter",null,valores);
     }
-    public void LeerTablaScouter(){
-        //List<Scouter> list = new ArrayList<Scouter>();
-        Scouter x = new Scouter();
+    public ArrayList<Scouter> LeerTablaScouter(){
+        ArrayList<Scouter> list = new ArrayList<Scouter>();
+        Scouter x;
         SQLiteDatabase query = baseDatos.getReadableDatabase();
         Cursor c = query.rawQuery("SELECT * FROM scouter",null);
         if(c.moveToFirst()) {
             do {
+                x = new Scouter();
                 x.setIdScouter(c.getInt(1));
                 x.setFechaInicio(c.getString(2));
                 x.setFechaFinal(c.getString(3));
                 x.setFkUsuario(c.getInt(4));
-                //list.add(x);
+                list.add(x);
             } while (c.moveToNext());
         }
-        //return list;
+        return list;
+    }
+    public ArrayList<Usuario> obtenerScoutersActivos(){
+        ArrayList<Usuario> List = new ArrayList<Usuario>();
+        Usuario user;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT usuario.* FROM usuario,scouter WHERE IdUsuario = FkUsuario",null);
+        if(c.moveToFirst()) {
+            do {
+                user = new Usuario();
+                user.setIdUsuario(c.getInt(1));
+                user.setNombre(c.getString(2));
+                user.setApellidoPaterno(c.getString(3));
+                user.setApellidoMaterno(c.getString(4));
+                user.setCorreo(c.getString(5));
+                user.setFotografia(c.getString(6));
+                user.setFechaNacimiento(c.getString(7));
+                user.setScout(c.getInt(8));
+                user.setFkSeccion(c.getInt(9));
+                List.add(user);
+            } while (c.moveToNext());
+        }
+        return List;
+    }
+
+    public ArrayList<Usuario> obtenerUsuariosnoScouters(){
+        ArrayList<Usuario> list = new ArrayList<Usuario>();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Usuario x;
+        Cursor c = query.rawQuery("Select usuario.* FROM  usuario Left Outer Join scouter ON  IdUsuario = FkUsuario where scouter.IdScouter is null",null);
+        if(c.moveToFirst()) {
+            do {
+                x = new Usuario();
+                x.setIdUsuario(c.getInt(1));
+                x.setNombre(c.getString(2));
+                x.setApellidoPaterno(c.getString(3));
+                x.setApellidoMaterno(c.getString(4));
+                x.setCorreo(c.getString(5));
+                x.setFotografia(c.getString(6));
+                x.setFechaNacimiento(c.getString(7));
+                x.setScout(c.getInt(8));
+                x.setFkSeccion(c.getInt(9));
+                list.add(x);
+            } while (c.moveToNext());
+        }
+        return list;
+    }
+    public TipoEvento ObtenerTipoEvento(int IdTipoEvento){
+        TipoEvento tipoEvento = new TipoEvento();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM tipoevento WHERE IdTipoEvento = "+IdTipoEvento,null);
+        if(c.moveToFirst()) {
+            tipoEvento.setIdTipoEvento(c.getInt(1));
+            tipoEvento.setNombre(c.getString(2));
+        }
+        return tipoEvento;
     }
     /**FotoAlrededores**/
-    public void InsertarFotosAlrededores(FotoAlrededores x){
+    public void InsertarFotosAlrededores(FotoAlrededores evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(fotoalrededores.Id,x.getIdFotoAlrededores());
-        valores.put(fotoalrededores.Foto,x.getFoto());
-        valores.put(fotoalrededores.FkDomiilio,x.getFkDomicilio());
+        valores.put(fotoalrededores.Id,evento.getIdFotoAlrededores());
+        valores.put(fotoalrededores.Foto,evento.getFoto());
+        valores.put(fotoalrededores.FkDomiilio,evento.getFkDomicilio());
         query.insert("fotoalrededores",null,valores);
     }
     public void LeerTablaFotoAlrededores(){
@@ -467,16 +626,32 @@ public final class OperacionesBaseDatos {
         }
         //return list;
     }
+    public ArrayList<FotoAlrededores> obtenerFotoAlredoresporIdDomicilio(int Id){
+        ArrayList<FotoAlrededores> list = new ArrayList<FotoAlrededores>();
+        FotoAlrededores foto;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM fotoalrededores WHERE FkDomicilio = ?",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()) {
+            do {
+                foto = new FotoAlrededores();
+                foto.setIdFotoAlrededores(c.getInt(1));
+                foto.setFoto(c.getString(2));
+                foto.setFkDomicilio(c.getInt(3));
+                list.add(foto);
+            } while (c.moveToNext());
+        }
+        return list;
+    }
     /**Problematica**/
-    public void InsertarProblematica(Problematica x){
+    public void InsertarProblematica(Problematica evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(problematica.Id,x.getIdProblematica());
-        valores.put(problematica.Fecha,x.getFecha());
-        valores.put(problematica.Nombre,x.getNombre());
-        valores.put(problematica.Sugerencia,x.getSugerencia());
-        valores.put(problematica.FkUsuario,x.getFkUsuario());
-        valores.put(problematica.FkTipoProblematica,x.getFkTipoProblematica());
+        valores.put(problematica.Id,evento.getIdProblematica());
+        valores.put(problematica.Fecha,evento.getFecha());
+        valores.put(problematica.Nombre,evento.getNombre());
+        valores.put(problematica.Sugerencia,evento.getSugerencia());
+        valores.put(problematica.FkUsuario,evento.getFkUsuario());
+        valores.put(problematica.FkTipoProblematica,evento.getFkTipoProblematica());
         query.insert("problematica",null,valores);
     }
     public void LeerTablaProblematica(){
@@ -498,17 +673,17 @@ public final class OperacionesBaseDatos {
         //return list;
     }
     /**AdultoMayor**/
-    public void InsertarAdultoMayor(AdultoMayor x){
+    public void InsertarAdultoMayor(AdultoMayor evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(adultomayor.Id,x.getIdAdultoMayor());
-        valores.put(adultomayor.Nombre,x.getNombre());
-        valores.put(adultomayor.ApellidoPaterno,x.getApellidoPaterno());
-        valores.put(adultomayor.ApellidoMaterno,x.getApellidoMaterno());
-        valores.put(adultomayor.Fotografia,x.getFotografia());
-        valores.put(adultomayor.Diabetico,x.getDiabetico());
-        valores.put(adultomayor.FkDependencia,x.getFkDependencia());
-        valores.put(adultomayor.FkDomicilio,x.getFkDomicilio());
+        valores.put(adultomayor.Id,evento.getIdAdultoMayor());
+        valores.put(adultomayor.Nombre,evento.getNombre());
+        valores.put(adultomayor.ApellidoPaterno,evento.getApellidoPaterno());
+        valores.put(adultomayor.ApellidoMaterno,evento.getApellidoMaterno());
+        valores.put(adultomayor.Fotografia,evento.getFotografia());
+        valores.put(adultomayor.Diabetico,evento.getDiabetico());
+        valores.put(adultomayor.FkDependencia,evento.getFkDependencia());
+        valores.put(adultomayor.FkDomicilio,evento.getFkDomicilio());
         query.insert("adultomayor",null,valores);
     }
     public ArrayList<AdultoMayor> LeerTablaAdultoMayor(){
@@ -550,14 +725,14 @@ public final class OperacionesBaseDatos {
         return adultoMayor;
     }
     /**Asignacion**/
-    public void InsertarAsignacion(Asignacion x){
+    public void InsertarAsignacion(Asignacion evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(asignacion.Id,x.getIdAsignacion());
-        valores.put(asignacion.Status,x.getStatus());
-        valores.put(asignacion.Fecha,x.getFecha());
-        valores.put(asignacion.FkUsuario,x.getFkUsuario());
-        valores.put(asignacion.FkAdultoMayor,x.getFkAdultoMayor());
+        valores.put(asignacion.Id,evento.getIdAsignacion());
+        valores.put(asignacion.Status,evento.getStatus());
+        valores.put(asignacion.Fecha,evento.getFecha());
+        valores.put(asignacion.FkUsuario,evento.getFkUsuario());
+        valores.put(asignacion.FkAdultoMayor,evento.getFkAdultoMayor());
         query.insert("asignacion",null,valores);
     }
     public void LeerTablaAsignacion(Context contexto){
@@ -601,13 +776,13 @@ public final class OperacionesBaseDatos {
         return list;
     }
     /**ComentarioAM**/
-    public void InsertarComentarioAM(ComentarioAM x){
+    public void InsertarComentarioAM(ComentarioAM evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(comentarioam.Id,x.getIdComentarioAM());
-        valores.put(comentarioam.Nombre,x.getNombre());
-        valores.put(comentarioam.Fecha,x.getFecha());
-        valores.put(comentarioam.FkAdultoMayor,x.getFkAdultoMayor());
+        valores.put(comentarioam.Id,evento.getIdComentarioAM());
+        valores.put(comentarioam.Nombre,evento.getNombre());
+        valores.put(comentarioam.Fecha,evento.getFecha());
+        valores.put(comentarioam.FkAdultoMayor,evento.getFkAdultoMayor());
         query.insert("comentarioam",null,valores);
     }
     public void LeerTablaComentarioAM(){
@@ -627,13 +802,13 @@ public final class OperacionesBaseDatos {
         //return list;
     }
     /**GestionInventario**/
-    public void InsertarGestionInventario(GestionInventario x){
+    public void InsertarGestionInventario(GestionInventario evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(gestioninventario.Id,x.getIdGestionInventario());
-        valores.put(gestioninventario.Fecha,x.getFecha());
-        valores.put(gestioninventario.FkScouter,x.getFkScouter());
-        valores.put(gestioninventario.FkInventario,x.getFkInventario());
+        valores.put(gestioninventario.Id,evento.getIdGestionInventario());
+        valores.put(gestioninventario.Fecha,evento.getFecha());
+        valores.put(gestioninventario.FkScouter,evento.getFkScouter());
+        valores.put(gestioninventario.FkInventario,evento.getFkInventario());
         query.insert("gestioninventario",null,valores);
     }
     public void LeerTablaGestionInventario(){
@@ -653,12 +828,12 @@ public final class OperacionesBaseDatos {
         //return list;
     }
     /**Recoger**/
-    public void InsertarRecoger(Recoger x){
+    public void InsertarRecoger(Recoger evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(recoger.Id,x.getIdRecoger());
-        valores.put(recoger.FkRScouter,x.getFkScouter());
-        valores.put(recoger.FkAsignacion,x.getFkAsignacion());
+        valores.put(recoger.Id,evento.getIdRecoger());
+        valores.put(recoger.FkRScouter,evento.getFkScouter());
+        valores.put(recoger.FkAsignacion,evento.getFkAsignacion());
         query.insert("recoger",null,valores);
     }
     public void LeerTablaRecoger(){
@@ -676,13 +851,103 @@ public final class OperacionesBaseDatos {
         }
         //return list;
     }
+    public ArrayList<AdultoMayor> obtenerAdultosMayoresConvivio(String FechaP){
+        ArrayList<AdultoMayor> list = new ArrayList<AdultoMayor>();
+        String[]parteFecha = FechaP.split("-");
+        AdultoMayor x;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT adultomayor.* FROM adultomayor,asignacion,recoger WHERE IdAdultoMayor = FkAdultoMayor AND IdAsignacion = FkAsignacion AND FkScouter Is NULL AND   substr(asignacion.Fecha,1,4) = ? AND substr(asignacion.Fecha,6,2) = ? ",new String[]{parteFecha[0],parteFecha[1]});
+        if(c.moveToFirst()) {
+            do {
+                x = new AdultoMayor();
+                x.setIdAdultoMayor(c.getInt(1));
+                x.setNombre(c.getString(2));
+                x.setApellidoPaterno(c.getString(3));
+                x.setApellidoMaterno(c.getString(4));
+                x.setFotografia(c.getString(5));
+                x.setDiabetico(c.getInt(6));
+                x.setFkDependencia(c.getInt(7));
+                x.setFkDomicilio(c.getInt(8));
+                list.add(x);
+            } while (c.moveToNext());
+        }
+        return  list;
+    }
+    public ArrayList<AdultoMayor> obtenerAdultosMayoresConvivioAsignados(int id, String FechaP){
+        ArrayList<AdultoMayor> list = new ArrayList<AdultoMayor>();
+        String[]parteFecha = FechaP.split("-");
+        AdultoMayor x;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT adultomayor.* FROM adultomayor,asignacion,recoger WHERE " +
+                "IdAdultoMayor = FkAdultoMayor AND " +
+                "IdAsignacion = FkAsignacion AND " +
+                "FkScouter = ? AND  " +
+                "substr(asignacion.Fecha,1,4) = ? AND "+
+                "substr(asignacion.Fecha,6,2) = ?",new String[]{Integer.toString(id),parteFecha[0],parteFecha[1]});
+        if(c.moveToFirst()) {
+            do {
+                x = new AdultoMayor();
+                x.setIdAdultoMayor(c.getInt(1));
+                x.setNombre(c.getString(2));
+                x.setApellidoPaterno(c.getString(3));
+                x.setApellidoMaterno(c.getString(4));
+                x.setFotografia(c.getString(5));
+                x.setDiabetico(c.getInt(6));
+                x.setFkDependencia(c.getInt(7));
+                x.setFkDomicilio(c.getInt(8));
+                list.add(x);
+            } while (c.moveToNext());
+        }
+        return  list;
+    }
+    public String obtenerIdentificadoresAsignaciones(String Fecha, ArrayList<AdultoMayor> Adulto){
+        String ID = "";
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        for(int i = 0;i<Adulto.size();i++ ){
+            Cursor c = query.rawQuery("SELECT IdRecoger FROM recoger,asignacion,adultomayor " +
+                    "WHERE FkAsignacion = IdAsignacion "+
+                    "AND Fecha = ? "+
+                    "AND IdAdultoMayor = FkAdultoMayor "+
+                    "AND IdAdultoMayor = ?",new String[]{Fecha,Integer.toString(Adulto.get(i).getIdAdultoMayor())});
+            if(c.moveToFirst()) {
+                String id = "";
+                id = c.getString(0);
+                ID += "-"+id;
+            }
+        }
+        return ID;
+    }
+    public String obtenerIdentificadorAsignacionAdultoMayor(String Fecha,int IdAdulto){
+        String Id = "";
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT IdAsignacion FROM asignacion,adultomayor WHERE IdAdultoMayor = FkAdultoMayor AND " +
+                "IdAdultoMayor = ? AND " +
+                "Fecha = ?; ",new String[]{Integer.toString(IdAdulto),Fecha});
+        if(c.moveToFirst()) {
+            Id = c.getString(0);
+        }
+        return Id;
+    }
+    public boolean verificarExistenciaAdultoMayorRecoger(String FechaP, int IdAdulto){
+        boolean Existe = false;
+        String[]parteFecha = FechaP.split("-");
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT FkAsignacion FROM recoger,asignacion WHERE FkAsignacion = IdAsignacion AND" +
+                " substr(Fecha,6,2) = ? AND substr(Fecha,1,4) = ? AND" +
+                " FkAdultoMayor = ? ",new String[]{parteFecha[1],parteFecha[0],Integer.toString(IdAdulto),});
+        if(c.moveToFirst()) {
+            Existe = true;
+        }
+        return Existe;
+    }
+    //
     /**VoluntarioFrecuente**/
-    public void InsertarVoluntarioFrecuente(VoluntarioFrecuente x){
+    public void InsertarVoluntarioFrecuente(VoluntarioFrecuente evento){
         SQLiteDatabase query = baseDatos.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put(voluntariofrecuente.Id,x.getIdVoluntarioFrecuente());
-        valores.put(voluntariofrecuente.FkUsuario,x.getFkUsuario());
-        valores.put(voluntariofrecuente.FkAdultoMayor,x.getFkAdultoMayor());
+        valores.put(voluntariofrecuente.Id,evento.getIdVoluntarioFrecuente());
+        valores.put(voluntariofrecuente.FkUsuario,evento.getFkUsuario());
+        valores.put(voluntariofrecuente.FkAdultoMayor,evento.getFkAdultoMayor());
         query.insert("voluntariofrecuente",null,valores);
     }
     public void LeerTablaVoluntarioFrecuente(){
@@ -700,6 +965,23 @@ public final class OperacionesBaseDatos {
             } while (c.moveToNext());
         }
         //return list;
+    }
+    public Usuario obtenerVoluntarioFrecuente(int Id){
+        Usuario mUsuario = new Usuario();
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT usuario.* FROM usuario,voluntariofrecuente WHERE FkUsuario = IdUsuario AND FkAdultoMayor = ?",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()){
+            mUsuario.setIdUsuario(c.getInt(1));
+            mUsuario.setNombre(c.getString(2));
+            mUsuario.setApellidoPaterno(c.getString(3));
+            mUsuario.setApellidoMaterno(c.getString(4));
+            mUsuario.setCorreo(c.getString(5));
+            mUsuario.setFotografia(c.getString(6));
+            mUsuario.setFechaNacimiento(c.getString(7));
+            mUsuario.setScout(c.getInt(8));
+            mUsuario.setFkSeccion(c.getInt(9));
+        }
+        return mUsuario;
     }
     public ArrayList<AdultoMayor> obtenerAdultosMayoresPorVoluntarioFrecuente(int Id){
         ArrayList<AdultoMayor> list = new ArrayList<AdultoMayor>();
@@ -823,7 +1105,6 @@ public final class OperacionesBaseDatos {
         }
         return pedazo;
     }
-
 
 
 }

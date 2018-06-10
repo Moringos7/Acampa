@@ -3,12 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/BarraMiPerfil"
-        android:title="Mi Perfil" />
-    <item
         android:id="@+id/BarraActualizar"
         android:title="Actualizar" />
     <item
         android:id="@+id/BarraCerrarSesion"
         android:title="Cerrar Sesion" />
+    <!--<item
+        android:id="@+id/olo"
+        android:icon="@drawable/user"
+        android:title="configu"
+        app:showAsAction="always"
+        />-->
+
 </menu>

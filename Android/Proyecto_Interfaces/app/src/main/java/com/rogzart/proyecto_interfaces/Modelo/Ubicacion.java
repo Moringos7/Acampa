@@ -1,6 +1,8 @@
 package com.rogzart.proyecto_interfaces.Modelo;
 
-public class Ubicacion {
+import java.io.Serializable;
+
+public class Ubicacion implements Serializable{
     private int IdUbicacion;
     private double Longitud;
     private double Latitud;

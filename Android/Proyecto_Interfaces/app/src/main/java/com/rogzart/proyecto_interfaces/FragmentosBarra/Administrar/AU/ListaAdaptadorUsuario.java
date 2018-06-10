@@ -46,7 +46,6 @@ public class ListaAdaptadorUsuario extends BaseAdapter implements Filterable{
 
     @Override
     public int getCount() {
-
         return datos.size();
     }
 

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".FragmentosBarra.Eventos.Agregar_Evento">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:id="@+id/layoutActualizandoEvento"
+        android:visibility="gone"        >
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actualizando"
+            android:gravity="center"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layoutEventoGeneral"
+        >
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="30dp"
+                    android:textColor="#000"
+                    android:textSize="25sp"
+                    android:text="Agregar Evento"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="30dp"
+                    android:gravity="center"
+                    android:layout_marginTop="30dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:text="Fecha"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="#000"
+                        android:theme="@style/EditText"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:text="Hora"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="#000"
+                        android:theme="@style/EditText"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <EditText
+                        android:id="@+id/IdFechaEvento"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:ems="10"
+                        android:hint="@string/formato_fecha"
+                        android:gravity="center"
+                        android:inputType="date"
+                        android:theme="@style/EditText"/>
+
+                    <EditText
+                        android:id="@+id/IdHoraEvento"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="hh:mm"
+                        android:inputType="time"
+                        android:theme="@style/EditText" />
+                </LinearLayout>
+                <EditText
+                    android:id="@+id/IdLugarEvento"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="30dp"
+                    android:hint="Lugar"
+                    android:inputType="text"
+                    android:theme="@style/EditText"/>
+
+                <EditText
+                    android:id="@+id/IdInformacionEvento"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="30dp"
+                    android:hint="Informacion"
+                    android:inputType="text"
+                    android:theme="@style/EditText"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo Evento"
+                    android:paddingTop="30dp"
+                    android:textColor="#000"
+                    android:textSize="20sp"
+                    android:gravity="center"/>
+                <Spinner
+                    android:id="@+id/spinnerTipoEvento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/btnAgregarEvento"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="40dp"
+                    android:text="Agregar"
+                    android:textColor="#fff"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:theme="@style/RaisedButton" />
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</FrameLayout>

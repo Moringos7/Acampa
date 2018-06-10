@@ -45,16 +45,15 @@ import java.util.Map;
 public class AsignacionAdultoMayorCoordinador extends Fragment {
 
     private AlertDialog.Builder AlertaEvento;
+    private AlertDialog.Builder AlertaFin;
     private boolean EventoDisponible;
     private boolean Activado;
     private OperacionesBaseDatos operador;
-    private Calendar c = Calendar.getInstance();
     private String FechaActual;
     private ListView listaG;
     private Boolean A;
     private HiloCargaLista myHiloC;
     public int NumeroPeticiones;
-    private int posicion;
     private ArrayList<SeleccionAM> Selecciones;
     private LinearLayout LinearprogressBar;
     private TextView ContadorAsignados;
@@ -79,18 +78,21 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
 
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
+
         configurarDialogs();
         LinearprogressBar = getView().findViewById(R.id.progressBarAsignacion);
         ContadorAsignados = getView().findViewById(R.id.ContadorAsignados);
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         FechaActual = generarFecha();
         NumeroPeticiones = 0;
-        EventoDisponible = operador.verificarEvento(FechaActual);
+
+        EventoDisponible = operador.verificarEventoServicio(FechaActual);
         if(!EventoDisponible){
             AlertaEvento.show();
+        }else {
+            configurarHilos();
         }
-        LinearprogressBar.setVisibility(View.VISIBLE);
-        configurarHilos();
+        //LinearprogressBar.setVisibility(View.VISIBLE);
         ////Botones de Administracion
         LinearLayout Botones = getView().findViewById(R.id.layoutBotones);
         Botones.setVisibility(View.VISIBLE);
@@ -131,7 +133,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     private void configurarDialogs(){
         AlertaEvento = new AlertDialog.Builder(getContext());
         AlertaEvento.setTitle("Servicio No agendado");
-        AlertaEvento.setMessage("Necesita agendar un servicio o convivio antes de Asignar Adultos Mayores, ¿Desea agendar uno?");
+        AlertaEvento.setMessage("Necesita agendar un Servicio antes de Asignar Adultos Mayores, ¿Desea agendar uno?");
         AlertaEvento.setCancelable(false);
         AlertaEvento.setPositiveButton("Agendar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
@@ -141,6 +143,20 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         AlertaEvento.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
                 cancelar();
+            }
+        });
+
+
+
+        AlertaFin = new AlertDialog.Builder(getContext());
+        AlertaFin.setTitle("Fin de Asignaciones");
+        AlertaFin.setMessage("Ha terminado de Asignar a todos los adultos mayores");
+        AlertaFin.setCancelable(false);
+        AlertaFin.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                Intent intent = new Intent(getContext(), Barra_desplegable.class);
+                getActivity().finish();
+                startActivityForResult(intent, 0);
             }
         });
     }
@@ -177,6 +193,8 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     public void cargarLista(){
         listaG = getView().findViewById(R.id.listaAsigancionCoordinador);
         ArrayList<UsuarioAsignacion> arrayList = operador.LeerUsuariosAsignacion(FechaActual);
+        //Toast.makeText(getContext(), ""+arrayList.size(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), ""+FechaActual, Toast.LENGTH_SHORT).show();
         for(UsuarioAsignacion usuario : arrayList){
             for(SeleccionAM regirsto : Selecciones){
                 if(regirsto.getIdentificador() == usuario.getIdUsuario()){
@@ -184,8 +202,11 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                 }
             }
         }
+        if(arrayList.size() == 0){
+            listaG.setVisibility(View.GONE);
+        }
         ListaAdaptadorAsignacionAdultoMayor miLista = new ListaAdaptadorAsignacionAdultoMayor(arrayList, getContext(),FechaActual,Selecciones);
-        LinearprogressBar.setVisibility(View.GONE);
+        //LinearprogressBar.setVisibility(View.GONE);
         listaG.setAdapter(miLista);
         Asignaciones();
     }
@@ -198,10 +219,18 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         NumAdultosMayores = AdultosMayores.size() - Asignados.size();
         ContadorAsignados.setText(String.valueOf(NumAdultosMayores));
         ContadorAsignados.setVisibility(View.VISIBLE);
+        if(NumAdultosMayores == 0){
+            AlertaFin.show();
+            DetenerHilos();
+        }else{
+            LinearprogressBar.setVisibility(View.VISIBLE);
+        }
     }
     private void DetenerHilos(){
         Activado = false;
-        myHiloC.cancel(true);
+        if(myHiloC != null){
+            myHiloC.cancel(true);
+        }
     }
     private void configurarHilos(){
         NumeroPeticiones = 0;
@@ -256,6 +285,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                     Toast.makeText(getContext(), "Fallo Conexion", Toast.LENGTH_SHORT).show();
                 }
             });
+
         }
         @Override
         protected Void doInBackground(Void... voids) {
@@ -264,10 +294,12 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
             while(Salir){
                 VolleySingleton.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
                 if(A){
+                   operador.EliminarDatosTabla("recoger");
                    operador.EliminarDatosTabla("asignacion");
-                   new ActualizacionBaseDatos(getContext()).VolcarBasedeDatos();
                    new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext());
-                   Salir = false;
+                    new ActualizacionBaseDatos(getContext()).ActualizacionRecoger(getContext());
+
+                    Salir = false;
                    A = false;
                 }
                 if(isCancelled()){
@@ -293,5 +325,6 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         }
 
     }
+
 }
 

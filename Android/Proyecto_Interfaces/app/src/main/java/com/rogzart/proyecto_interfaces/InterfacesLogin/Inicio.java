@@ -29,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -119,6 +120,7 @@ public class Inicio extends AppCompatActivity{
 
                                             }else{
                                                 ControlUser.userLogin(user, x, y);
+                                                ControlUser.setFechaLogin(generarFecha());
                                                 Intent intent = new Intent(getApplicationContext(), Barra_desplegable.class);
                                                 finish();
                                                 startActivityForResult(intent, 0);
@@ -161,7 +163,23 @@ public class Inicio extends AppCompatActivity{
             }
         });
     }
-
+    private String generarFecha(){
+        String Fecha;
+        Calendar c = Calendar.getInstance();
+        int Dia = c.get(Calendar.DAY_OF_MONTH);
+        int Mes = c.get(Calendar.MONTH)+1;
+        int Anio = c.get(Calendar.YEAR);
+        String decenaD = "";
+        String decenaM = "";
+        if(Mes < 10){
+            decenaM = "0";
+        }
+        if(Dia < 10){
+            decenaD = "0";
+        }
+        Fecha = String.valueOf(Anio)+"-"+decenaM+String.valueOf(Mes)+"-"+decenaD+String.valueOf(Dia);
+        return Fecha;
+    }
 
     private boolean isEmailValid(String email) {
         boolean message = false;

@@ -57,14 +57,14 @@ public class Estadisticas extends Fragment {
         btnMensuales.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean existeServicio= operador.verificarEvento(generarFecha());
-               // if(!existeServicio ) {
-                    configurarDialogs();
-                    //Toast.makeText(getContext(), "No hay datos de Servicio, se activarán las estadisticas mensuales un dia despues del evento", Toast.LENGTH_SHORT).show();
+                boolean existeServicio= operador.verificarEventoServicio(generarFecha());
+                // if(!existeServicio ) {
+                configurarDialogs();
+                //Toast.makeText(getContext(), "No hay datos de Servicio, se activarán las estadisticas mensuales un dia despues del evento", Toast.LENGTH_SHORT).show();
                 //}else{
-                    //Toast.makeText(getContext(), "Fecha"+generarFecha(), Toast.LENGTH_SHORT).show();
-                    Intent mensuales = new Intent(getActivity(), EstadisticasMain.class);
-                    getActivity().startActivity(mensuales);
+                //Toast.makeText(getContext(), "Fecha"+generarFecha(), Toast.LENGTH_SHORT).show();
+                Intent mensuales = new Intent(getActivity(), EstadisticasMain.class);
+                getActivity().startActivity(mensuales);
                 //}
 
             }
@@ -72,15 +72,15 @@ public class Estadisticas extends Fragment {
         btnSemestrales.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean existeConvivio= operador.verificaConvivio(generarFechaConvivio());
+                boolean existeConvivio= operador.verificarEventoConvivio(generarFechaConvivio());
                 //if(!existeConvivio ) {
-                    configurarDialogs();
-                    //Toast.makeText(getContext(), "Fecha"+generarFechaConvivio(), Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(getContext(), "No hay datos de Convivio, se activarán las estadisticas mensuales un dia despues del evento", Toast.LENGTH_SHORT).show();
+                configurarDialogs();
+                //Toast.makeText(getContext(), "Fecha"+generarFechaConvivio(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "No hay datos de Convivio, se activarán las estadisticas mensuales un dia despues del evento", Toast.LENGTH_SHORT).show();
                 //}else{
 
-                    Intent semestrales = new Intent(getActivity(), Estadisticas_Semestrales.class);
-                    getActivity().startActivity(semestrales);
+                Intent semestrales = new Intent(getActivity(), Estadisticas_Semestrales.class);
+                getActivity().startActivity(semestrales);
                 //}
 
 
@@ -96,7 +96,7 @@ public class Estadisticas extends Fragment {
 
         // Despensas entregadas mensuales
         int Asignaciones = operador.promedioVoluntariosMes("06", "2018");
-       // Toast.makeText(getContext(), ""+Asignaciones, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getContext(), ""+Asignaciones, Toast.LENGTH_SHORT).show();
         //Despensas totales mensuales
         int Total = operador.contarAdultoMayor();
         //Toast.makeText(getContext(), ""+Total, Toast.LENGTH_SHORT).show();
@@ -129,13 +129,13 @@ public class Estadisticas extends Fragment {
                 aceptar();
             }
         });
-            }
+    }
 
-        private void aceptar(){
-            getActivity().finish();
-            Intent intent = new Intent(getContext(),Barra_desplegable.class);
-            startActivityForResult(intent, 0);
-        }
+    private void aceptar(){
+        getActivity().finish();
+        Intent intent = new Intent(getContext(),Barra_desplegable.class);
+        startActivityForResult(intent, 0);
+    }
 
 
     private String generarFecha() {

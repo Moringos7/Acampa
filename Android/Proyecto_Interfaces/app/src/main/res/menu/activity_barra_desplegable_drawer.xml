@@ -2,21 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
+    //tools:showIn="navigation_view"
     <group android:checkableBehavior="single"
         android:id="@+id/menuVoluntario"
         android:visible="false">
+        <item
+            android:id="@+id/nav_Principal"
+            android:title="Menu Principal"/>
         <item
             android:id="@+id/nav_Asignacion"
             android:title="Asignación Adultos Mayores" />
         <item
             android:id="@+id/nav_Ruta"
-            android:title="Trazado de Ruta" />
+            android:title="Localizacion de Lugares" />
         <item
             android:id="@+id/nav_Info"
             android:title="Informacion Adultos Mayores" />
-        <item
+        <!--<item
             android:id="@+id/nav_Sugerencias"
-            android:title="Sugerencias" />
+            android:title="Sugerencias" />-->
     </group>
     <group android:checkableBehavior="single"
         android:id="@+id/menuScouter"

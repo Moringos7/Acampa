@@ -54,6 +54,7 @@
                 android:padding="10dp"
                 android:text="Trazar Ruta"
                 android:textColor="#fff"
+                android:textAllCaps="false"
                 android:textSize="20sp" />
 
         </LinearLayout>

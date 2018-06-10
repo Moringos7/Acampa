@@ -9,7 +9,6 @@ public class Evento implements Serializable{
     private String Lugar;
     private String Informacion;
     private Integer FkTipoEvento;
-    private String nombre;
     public Evento(){
 
     }
@@ -53,7 +52,6 @@ public class Evento implements Serializable{
     public void setInformacion(String informacion) {
         Informacion = informacion;
     }
-
 
     public Integer getFkTipoEvento() { return FkTipoEvento;
     }
