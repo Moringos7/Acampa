@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.InformacionAdultoMayor.AdaptadorInformacionAdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.R;
@@ -25,14 +28,17 @@ import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
 
 import java.util.ArrayList;
 
-public class ListaAdaptadorAsignacionIndividual extends BaseAdapter {
+public class ListaAdaptadorAsignacionIndividual extends BaseAdapter implements Filterable{
     private ArrayList<AdultoMayor> adultomayor;
     private ArrayList<AdultoMayor> Frecuentes;
     private Context contexto;
+    private CustomFilter filter;
+    private ArrayList<AdultoMayor> filterList;
     public ListaAdaptadorAsignacionIndividual(ArrayList<AdultoMayor> adultomayor,ArrayList<AdultoMayor> Frecuentes,Context contexto){
         this.adultomayor = adultomayor;
         this.contexto = contexto;
         this.Frecuentes = Frecuentes;
+        this.filterList = adultomayor;
     }
     @Override
     public int getCount() {
@@ -121,6 +127,53 @@ public class ListaAdaptadorAsignacionIndividual extends BaseAdapter {
         ImageView imagen;
         CheckBox check;
         AdultoMayor adultoMayor;
+    }
+
+    @Override
+    public Filter getFilter() {
+        if(filter == null){
+            filter = new CustomFilter();
+        }
+        return filter;
+    }
+
+
+
+    class CustomFilter extends Filter{
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+            if(constraint != null && constraint.length() > 0){
+                constraint = constraint.toString().toUpperCase();
+                ArrayList<AdultoMayor> filters = new ArrayList<AdultoMayor>();
+                AdultoMayor a = new AdultoMayor();
+                for(int i=0; i<filterList.size();i++){
+                    String Nombre = filterList.get(i).getNombre()+" "+filterList.get(i).getApellidoPaterno()+" "+filterList.get(i).getApellidoMaterno();
+                    Nombre.replace('á','a');
+                    Nombre.replace('é','e');
+                    Nombre.replace('í','i');
+                    Nombre.replace('ó','o');
+                    Nombre.replace('u','ú');
+                    if(Nombre.toUpperCase().contains(constraint)){
+                        a = filterList.get(i);
+                        filters.add(a);
+                    }
+                }
+                results.count = filters.size();
+                results.values = filters;
+            }else {
+                results.count = filterList.size();
+                results.values = filterList;
+            }
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            adultomayor = (ArrayList<AdultoMayor>) results.values;
+            notifyDataSetChanged();
+        }
     }
 }
 

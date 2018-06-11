@@ -24,7 +24,7 @@ public class Conexion {
         ///Codigo añadido
 
         try {
-            Process p = Runtime.getRuntime().exec("ping -c 1 35.196.37.188");
+            Process p = Runtime.getRuntime().exec("ping -c 1 www.google.com");
             int val = p.waitFor();
             boolean reachable = (val == 0);
             return reachable;

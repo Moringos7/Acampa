@@ -832,6 +832,23 @@ public final class OperacionesBaseDatos {
         valores.put(comentarioam.FkAdultoMayor,evento.getFkAdultoMayor());
         query.insert("comentarioam",null,valores);
     }
+    public ArrayList<ComentarioAM> obtenerComentarioAdultoMayor(int Id){
+        ArrayList<ComentarioAM> Lista = new ArrayList<ComentarioAM>();
+        ComentarioAM comentario;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM comentarioam WHERE FkAdultoMayor = ?",new String[]{String.valueOf(Id)});
+        if(c.moveToFirst()) {
+            do {
+                comentario = new ComentarioAM();
+                comentario.setIdComentarioAM(c.getInt(1));
+                comentario.setNombre(c.getString(2));
+                comentario.setFecha(c.getString(3));
+                comentario.setFkAdultoMayor(c.getInt(4));
+                Lista.add(comentario);
+            } while (c.moveToNext());
+        }
+        return Lista;
+    }
     public void LeerTablaComentarioAM(){
         //List<AdultoMayor> list = new Array List<AdultoMayor>();
         ComentarioAM x = new ComentarioAM();

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import com.rogzart.proyecto_interfaces.Adultos.Adultos;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.VoluntarioFrecuente.AsignarVoluntarioFrecuente;
 import com.rogzart.proyecto_interfaces.MapsActivity;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
+import com.rogzart.proyecto_interfaces.Modelo.ComentarioAM;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Domicilio;
 import com.rogzart.proyecto_interfaces.Modelo.FotoAlrededores;
@@ -59,13 +61,14 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
     private AdultoMayor AdultoMayor;
     private ActualizacionBaseDatos Act;
     private AlertDialog.Builder Alerta;
+    private ListView Comentarios;
     private Domicilio Domicilio;
     private Ubicacion Ubicacion;
     private OperacionesBaseDatos operador;
     private MapView mMapView;
     private GoogleMap mGoogleMap;
     private LatLng latLng;
-    private TextView InfoDependencia,Info,Nombre,Apellidos,Diabetico,Calle,Colonia,VoluntarioFrecuente,TextDespensa;
+    private TextView InfoDependencia,Info,Nombre,Apellidos,Diabetico,Calle,Colonia,VoluntarioFrecuente,TextDespensa,NumeroComentario;
     private TextView Nivel1,Nivel2,Nivel3;
     private ImageView Fotografia,FotografiaDomicilio;
     private Boolean Visible = false;
@@ -317,7 +320,18 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
     }
     void configurarComentarios(){
 
+        NumeroComentario = getView().findViewById(R.id.Comentarios);
+        ArrayList<ComentarioAM> comentarios = operador.obtenerComentarioAdultoMayor(AdultoMayor.getIdAdultoMayor());
+        NumeroComentario.setText("Comentarios: "+comentarios.size());
+
+        RecyclerView Comentarios =  getView().findViewById(R.id.ListaComentarios);
+        Comentarios.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        Comentarios.setAdapter(new AdaptadorComentarios(comentarios,getContext()));
+
+
+
     }
+
     void configurarBotonConvivio(){
         LayoutExiste = getView().findViewById(R.id.LayoutAgregado);
         Convivio = getView().findViewById(R.id.LayoutConvivio);

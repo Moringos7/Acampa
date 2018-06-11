@@ -2,6 +2,7 @@ package com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,6 +47,8 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
 
     private AlertDialog.Builder AlertaEvento;
     private AlertDialog.Builder AlertaFin;
+    private AlertDialog.Builder AlertaSalir;
+    private AlertDialog.Builder AlertaSalir2;
     private boolean EventoDisponible;
     private boolean Activado;
     private OperacionesBaseDatos operador;
@@ -57,6 +60,8 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     private ArrayList<SeleccionAM> Selecciones;
     private LinearLayout LinearprogressBar;
     private TextView ContadorAsignados;
+    private Button BtnSalir;
+    private int Size;
 
 
 
@@ -82,6 +87,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         configurarDialogs();
         LinearprogressBar = getView().findViewById(R.id.progressBarAsignacion);
         ContadorAsignados = getView().findViewById(R.id.ContadorAsignados);
+        BtnSalir = getView().findViewById(R.id.btnSalir);
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         FechaActual = generarFecha();
         NumeroPeticiones = 0;
@@ -95,6 +101,21 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
 
         }
         //LinearprogressBar.setVisibility(View.VISIBLE);
+
+        BtnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Size > 0){
+                    AlertaSalir.show();
+                }else{
+                    DetenerHilos();
+                    Intent intent = new Intent(getContext(), Barra_desplegable.class);
+                    getActivity().finish();
+                    startActivityForResult(intent, 0);
+                }
+            }
+        });
+
         ////Botones de Administracion
         LinearLayout Botones = getView().findViewById(R.id.layoutBotones);
         Botones.setVisibility(View.GONE);
@@ -158,6 +179,37 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                 startActivityForResult(intent, 0);
             }
         });
+        AlertaSalir = new AlertDialog.Builder(getContext());
+        AlertaSalir.setTitle("Asignaciones Pendientes");
+        AlertaSalir.setMessage("Aun quedan Adultos Mayores por Asignar ¿Estas seguro? ");
+        AlertaSalir.setCancelable(false);
+        AlertaSalir.setPositiveButton("Salir", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                AlertaSalir2.show();
+            }
+        });
+        AlertaSalir.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+
+            }
+        });
+        AlertaSalir2 = new AlertDialog.Builder(getContext());
+        AlertaSalir2.setTitle("¿Esta Seguro?");
+        AlertaSalir2.setCancelable(false);
+        AlertaSalir2.setPositiveButton("Salir", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                DetenerHilos();
+                Intent intent = new Intent(getContext(), Barra_desplegable.class);
+                getActivity().finish();
+                startActivityForResult(intent, 0);
+            }
+        });
+        AlertaSalir2.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+
+            }
+        });
+
     }
 
     private void agendar(){
@@ -192,6 +244,7 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
     public void cargarLista(){
         listaG = getView().findViewById(R.id.listaAsigancionCoordinador);
         ArrayList<UsuarioAsignacion> arrayList = operador.LeerUsuariosAsignacion(FechaActual);
+        Size = arrayList.size();
         //Toast.makeText(getContext(), ""+arrayList.size(), Toast.LENGTH_SHORT).show();
         //Toast.makeText(getContext(), ""+FechaActual, Toast.LENGTH_SHORT).show();
         for(UsuarioAsignacion usuario : arrayList){

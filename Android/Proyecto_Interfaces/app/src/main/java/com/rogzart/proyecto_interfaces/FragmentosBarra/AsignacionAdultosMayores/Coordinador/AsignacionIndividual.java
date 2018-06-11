@@ -92,10 +92,6 @@ public class AsignacionIndividual extends Fragment implements View.OnClickListen
         Nombre.setText(usuario.getNombre() + " " + usuario.getApellidoPaterno() + " " + usuario.getApellidoMaterno());
         cargarImagenUsuario();
         cargarListaAdultosMayores();
-
-
-
-
     }
 
     @Override
@@ -201,8 +197,20 @@ public class AsignacionIndividual extends Fragment implements View.OnClickListen
         arrayListFinal.clear();
         arrayListFinal = arrayListFrecuentesVerificados;
         arrayListFinal.addAll(arrayListNoFrecuentesVerificados);
-        ListaAdaptadorAsignacionIndividual miLista = new ListaAdaptadorAsignacionIndividual(arrayListFinal,Frecuentes,getContext());
+        final ListaAdaptadorAsignacionIndividual miLista = new ListaAdaptadorAsignacionIndividual(arrayListFinal,Frecuentes,getContext());
         Lista.setAdapter(miLista);
+        Busqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+               return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                miLista.getFilter().filter(query);
+                return false;
+            }
+        });
     }
 
     @Override

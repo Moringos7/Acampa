@@ -1,7 +1,9 @@
 package com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Usuario;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -44,8 +47,10 @@ public class SolicitarAsignacion extends Fragment {
     private Usuario usuario;
     private Boolean Activado;
     private HiloPeticion myHiloP;
-    OperacionesBaseDatos operador;
+    private OperacionesBaseDatos operador;
     private ArrayList<AdultoMayor> Asignados;
+    private Button BtnSalir;
+    private AlertDialog.Builder AlertaSalir;
 
 
     @SuppressLint("ValidFragment")
@@ -68,6 +73,8 @@ public class SolicitarAsignacion extends Fragment {
         super.onActivityCreated(state);
         LayoutPeticion = getView().findViewById(R.id.linearLayoutPeticion);
         //Toast.makeText(getContext(), ""+FechaActual, Toast.LENGTH_LONG).show();
+        BtnSalir = getView().findViewById(R.id.btnSalir);
+        configurarDialogs();
         conexion = new Conexion(getContext());
         operador =  OperacionesBaseDatos.obtenerInstancia(getContext());
         conexion.setRuta("WebService/Asignacion/wsAsignacionCreate.php");
@@ -80,6 +87,7 @@ public class SolicitarAsignacion extends Fragment {
                         if(response.compareTo("Solicitud Enviada") == 0){
                             Toast.makeText(getContext(), ""+response, Toast.LENGTH_SHORT).show();
                             LayoutPeticion.setVisibility(View.VISIBLE);
+                            BtnSalir.setVisibility(View.VISIBLE);
                             myHiloP.execute();
                         }else{
                             Toast.makeText(getContext(), "Error: "+response, Toast.LENGTH_LONG).show();
@@ -108,8 +116,34 @@ public class SolicitarAsignacion extends Fragment {
             }
         };
         VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
-    }
 
+        BtnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertaSalir.show();
+                
+            }
+        });
+    }
+    public void configurarDialogs(){
+        AlertaSalir = new AlertDialog.Builder(getContext());
+        AlertaSalir.setTitle("¿Seguro que desea Salir?");
+        AlertaSalir.setMessage("No perderá su asignación");
+        AlertaSalir.setCancelable(false);
+        AlertaSalir.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                myHiloP.cancel(true);
+                Intent intent = new Intent(getContext(), Barra_desplegable.class);
+                getActivity().finish();
+                startActivityForResult(intent, 0);
+            }
+        });
+        AlertaSalir.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                
+            }
+        });
+    }
     @Override
     public void onPause() {
         super.onPause();
