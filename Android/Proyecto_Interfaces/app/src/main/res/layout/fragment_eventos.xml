@@ -21,11 +21,6 @@
            android:text="Eventos"
            android:textSize="24sp" />
 
-        <SearchView
-            android:id="@+id/eventos_buscador"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
         <ListView
             android:id="@+id/eventos_lista"
             android:layout_width="wrap_content"

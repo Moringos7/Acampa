@@ -624,7 +624,7 @@ public class Estadisticas_Semestrales extends AppCompatActivity{
 
     private void DatosGrafica2(float asistentes1, float asistentes2, float asistentes3, float asistentes4, float asistentes5, float asistentes6, float noAcudieron1, float noAcudieron2, float noAcudieron3, float noAcudieron4, float noAcudieron5, float noAcudieron6) {
         Log.d(TAG, "addDataSet started");
-        Toast.makeText(this, "NoAsistentesEnero"+noAcudieron1, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "NoAsistentesEnero"+noAcudieron1, Toast.LENGTH_SHORT).show();
         ArrayList<BarEntry> grupo1 = new ArrayList<>();
 
         grupo1.add(new BarEntry(0, asistentes6));
@@ -664,7 +664,7 @@ public class Estadisticas_Semestrales extends AppCompatActivity{
         colors.add(Color.GREEN);
 
         ArrayList<Integer> colors2 = new ArrayList<>();
-        colors.add(Color.GRAY);
+        colors2.add(Color.GRAY);
         set1.setColors(colors);
         Legend l = barchart2.getLegend();
         l.setFormSize(10f);
@@ -680,7 +680,7 @@ public class Estadisticas_Semestrales extends AppCompatActivity{
         barchart2.setData(data1);
         barchart2.groupBars(0f,0.06f,0.02f);
         barchart2.setFitBars(true);
-        set2.setColors(colors);
+        set2.setColors(colors2);
     }
 
     private void DatosGrafica3(int manada, int tropa, int comunidad, int clan, int dirigente, int civil) {

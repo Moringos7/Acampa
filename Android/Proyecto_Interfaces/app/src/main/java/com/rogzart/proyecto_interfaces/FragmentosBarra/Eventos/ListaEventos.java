@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Scouter.Administracion_Scouter;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Evento;
+import com.rogzart.proyecto_interfaces.Modelo.EventoLista;
 import com.rogzart.proyecto_interfaces.Modelo.Inventario;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.LogUser;
@@ -33,7 +34,6 @@ public class ListaEventos extends Fragment {
 
     ListView ListEventos;
     FloatingActionButton AgregarEvento;
-    SearchView BuscadorEventos;
     private OperacionesBaseDatos operador;
     private int cuenta;
     private FloatingActionButton BtnAgregar;
@@ -63,7 +63,6 @@ public class ListaEventos extends Fragment {
         Conexion conexion = new Conexion(getContext());
         Act = new ActualizacionBaseDatos(getContext());
         AgregarEvento = (FloatingActionButton) getView().findViewById(R.id.eventos_agregar);
-        BuscadorEventos = (SearchView) getView().findViewById(R.id.eventos_buscador);
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         cargando = getView().findViewById(R.id.progressBarE);
         if(conexion.isConnected()) {
@@ -78,24 +77,13 @@ public class ListaEventos extends Fragment {
 
 
     private void CargarListaEventos() {
-        ArrayList<Evento> arrayList = operador.LeerTablaEvento();
+        ArrayList<EventoLista> arrayList = operador.LeerTablaEventoLista();
         cuenta = arrayList.size();
         //Toast.makeText(getContext(), "" + arrayList.size(), Toast.LENGTH_SHORT).show();
         final EventosAdaptador miLista = new EventosAdaptador(arrayList, getContext());
         ListEventos.setAdapter(miLista);
 
-        BuscadorEventos.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String query) {
-                miLista.getFilter().filter(query);
-                return false;
-            }
-        });
 
         BtnAgregar = getView().findViewById(R.id.eventos_agregar);
         BtnAgregar.setOnClickListener(new View.OnClickListener() {

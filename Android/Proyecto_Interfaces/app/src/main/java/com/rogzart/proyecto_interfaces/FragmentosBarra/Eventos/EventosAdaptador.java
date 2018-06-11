@@ -3,13 +3,16 @@ package com.rogzart.proyecto_interfaces.FragmentosBarra.Eventos;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +24,7 @@ import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaAdapta
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Scouter.Administracion_Scouter;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Evento;
+import com.rogzart.proyecto_interfaces.Modelo.EventoLista;
 import com.rogzart.proyecto_interfaces.Modelo.TipoEvento;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
@@ -33,13 +37,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EventosAdaptador extends BaseAdapter implements Filterable {
-    private ArrayList<Evento> Cosas;
+    private ArrayList<EventoLista> Cosas;
+    //private ArrayList<Evento> Cosas;
     private ArrayList<TipoEvento>Cosas2;
     private Context contexto;
     private CustomFilter MiFiltro;
     private OperacionesBaseDatos operador;
+    private LinearLayout layout;
     private ArrayList<TipoEvento> filterList;
-    public EventosAdaptador(ArrayList<Evento> cosas, Context contexto) {
+    public EventosAdaptador(ArrayList<EventoLista> cosas, Context contexto) {
         this.Cosas = cosas;
         this.contexto = contexto;
 
@@ -80,6 +86,7 @@ public class EventosAdaptador extends BaseAdapter implements Filterable {
         TextView Informacion= (TextView) v.findViewById(R.id.list_evento_informacion);
         FloatingActionButton EliminarEvento = (FloatingActionButton) v.findViewById(R.id.list_evento_borrar);
         OperacionesBaseDatos operador= OperacionesBaseDatos.obtenerInstancia(contexto);
+        layout= (LinearLayout) v.findViewById(R.id.LayoutEventos);
 
 
         Informacion.setText(Cosas.get(position).getInformacion());
@@ -88,7 +95,16 @@ public class EventosAdaptador extends BaseAdapter implements Filterable {
         Lugar.setText(Cosas.get(position).getLugar());
 
         TipoEvento tipoEvento = operador.ObtenerTipoEvento(Cosas.get(position).getFkTipoEvento());
+        if(Cosas.get(position).getFkTipoEvento()==1){
+            layout.setBackgroundColor(Color.LTGRAY);
+            }
+        if(Cosas.get(position).getFkTipoEvento()==2){
+            layout.setBackgroundColor(Color.WHITE);
+
+        }
+
         TipoEventoT.setText(tipoEvento.getNombre());
+
 
         EliminarEvento.setOnClickListener(new View.OnClickListener() {
             @Override

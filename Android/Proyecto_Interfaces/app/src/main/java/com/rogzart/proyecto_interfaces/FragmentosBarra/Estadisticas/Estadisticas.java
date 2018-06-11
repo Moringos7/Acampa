@@ -58,16 +58,17 @@ public class Estadisticas extends Fragment {
         mensuales.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean existeServicio= operador.verificarEventoServicio(generarFecha());
-                if(!existeServicio ) {
+                boolean existeServicio= operador.verificarEventoServicioEstadisticas(generarFecha());
+                /*if(!existeServicio ) {
                     configurarDialogs();
                     Toast.makeText(getContext(), "No hay datos de Servicio, se activarán las estadisticas mensuales un dia despues del evento", Toast.LENGTH_SHORT).show();
                     Toast.makeText(getContext(), "Fecha dia siguiente "+generarFecha(), Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getContext(), "Fecha"+generarFecha(), Toast.LENGTH_SHORT).show();
+                    */
                     Intent mensuales = new Intent(getActivity(), EstadisticasMain.class);
                     getActivity().startActivity(mensuales);
-                }
+                //}
 
             }
         });

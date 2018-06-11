@@ -69,7 +69,6 @@ public class Convivio extends Fragment {
         conexion = new Conexion(getContext());
         General = getView().findViewById(R.id.InterfazConvivio);
         Cargando = getView().findViewById(R.id.layoutActualizandoConvivio);
-        Toast.makeText(getContext(), ""+FechaActual, Toast.LENGTH_SHORT).show();
         configurarDialogs();
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         if(operador.verificarEventoConvivio(FechaActual)){
