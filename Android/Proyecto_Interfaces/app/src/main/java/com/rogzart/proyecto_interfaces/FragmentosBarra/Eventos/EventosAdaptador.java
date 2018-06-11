@@ -21,6 +21,7 @@ import com.rogzart.proyecto_interfaces.FragmentosBarra.Inventario.IG.ListaAdapta
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Scouter.Administracion_Scouter;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Evento;
+import com.rogzart.proyecto_interfaces.Modelo.EventoLista;
 import com.rogzart.proyecto_interfaces.Modelo.TipoEvento;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.VolleySingleton;
@@ -33,13 +34,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EventosAdaptador extends BaseAdapter implements Filterable {
-    private ArrayList<Evento> Cosas;
+    private ArrayList<EventoLista> Cosas;
     private ArrayList<TipoEvento>Cosas2;
     private Context contexto;
+    private Evento evento;
     private CustomFilter MiFiltro;
     private OperacionesBaseDatos operador;
     private ArrayList<TipoEvento> filterList;
-    public EventosAdaptador(ArrayList<Evento> cosas, Context contexto) {
+
+    public EventosAdaptador(ArrayList<EventoLista> cosas, Context contexto) {
         this.Cosas = cosas;
         this.contexto = contexto;
 
@@ -71,6 +74,7 @@ public class EventosAdaptador extends BaseAdapter implements Filterable {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflate = LayoutInflater.from(contexto);
+
         View v = inflate.inflate(R.layout.list_eventos,null);
         final Conexion conexion = new Conexion(contexto);
         TextView Fecha= (TextView) v.findViewById(R.id.list_evento_fecha);

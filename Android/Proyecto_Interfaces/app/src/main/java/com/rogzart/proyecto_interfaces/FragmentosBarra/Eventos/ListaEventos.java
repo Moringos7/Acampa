@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.Scouter.Administracion_Scouter;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Evento;
+import com.rogzart.proyecto_interfaces.Modelo.EventoLista;
 import com.rogzart.proyecto_interfaces.Modelo.Inventario;
 import com.rogzart.proyecto_interfaces.R;
 import com.rogzart.proyecto_interfaces.Singleton.LogUser;
@@ -35,12 +36,14 @@ public class ListaEventos extends Fragment {
     FloatingActionButton AgregarEvento;
     SearchView BuscadorEventos;
     private OperacionesBaseDatos operador;
+
     private int cuenta;
     private FloatingActionButton BtnAgregar;
     private ActualizacionBaseDatos Act;
     private HiloCargaLista Hilo;
     private ProgressBar cargando;
     private Conexion conexion;
+
 
     public ListaEventos(){
 
@@ -78,7 +81,7 @@ public class ListaEventos extends Fragment {
 
 
     private void CargarListaEventos() {
-        ArrayList<Evento> arrayList = operador.LeerTablaEvento();
+        ArrayList<EventoLista> arrayList = operador.LeerTablaEvento();
         cuenta = arrayList.size();
         //Toast.makeText(getContext(), "" + arrayList.size(), Toast.LENGTH_SHORT).show();
         final EventosAdaptador miLista = new EventosAdaptador(arrayList, getContext());

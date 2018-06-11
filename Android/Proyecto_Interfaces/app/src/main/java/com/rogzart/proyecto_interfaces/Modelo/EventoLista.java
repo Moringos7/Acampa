@@ -2,16 +2,16 @@ package com.rogzart.proyecto_interfaces.Modelo;
 
 import java.io.Serializable;
 
-public class Evento implements Serializable{
+public class EventoLista implements Serializable{
     private int IdEvento;
     private String Fecha;
-    private Evento evento;
+    private EventoLista evento;
     private String Hora;
     private String Lugar;
     private String Informacion;
     private Integer FkTipoEvento;
-
-    public Evento(){
+    private String anio,mes,dia;
+    public EventoLista(){
 
     }
 
@@ -24,9 +24,13 @@ public class Evento implements Serializable{
     }
 
     public String getFecha() {
+        String  []datos=Fecha.split("-");
+        anio=datos[0];
+        mes=datos[1];
+        dia=datos[2];
+        String fechafinal= datos[2]+"/ "+datos[1]+"/ "+datos[0];
 
-
-        return Fecha;
+        return fechafinal;
     }
 
     public void setFecha(String fecha) {

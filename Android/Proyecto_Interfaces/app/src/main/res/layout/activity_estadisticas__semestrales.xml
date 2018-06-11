@@ -211,12 +211,12 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
-                android:text="Promedio de voluntarios"
+                android:text="Promedio de voluntarios Asistentes"
                 android:textSize="24sp" />
 
 
 
-            <com.github.mikephil.charting.charts.PieChart
+            <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/Estadisticas_semestrales_grafica2"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
@@ -224,7 +224,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp">
 
-            </com.github.mikephil.charting.charts.PieChart>
+            </com.github.mikephil.charting.charts.BarChart>
 
             <TextView
                 android:id="@+id/textView28"

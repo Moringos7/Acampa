@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -23,6 +24,7 @@ public class Estadisticas extends Fragment {
     private OperacionesBaseDatos operador;
     private AlertDialog.Builder AlertaEvento;
     Button btnMensuales,btnSemestrales;
+    ImageView mensuales,semestrales;
 
 
 
@@ -49,39 +51,39 @@ public class Estadisticas extends Fragment {
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
 
 
+        mensuales=  (ImageView) getView().findViewById(R.id.ic_mensuales);
+        semestrales=  (ImageView) getView().findViewById(R.id.ic_semestrales);
 
-        btnMensuales = (Button) getView().findViewById(R.id.Boton_grafica);
-        btnSemestrales= (Button) getView().findViewById(R.id.Boton_Semestrales);
 
-
-        btnMensuales.setOnClickListener(new View.OnClickListener() {
+        mensuales.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean existeServicio= operador.verificarEventoServicio(generarFecha());
-                // if(!existeServicio ) {
+                 if(!existeServicio ) {
                 configurarDialogs();
-                //Toast.makeText(getContext(), "No hay datos de Servicio, se activarán las estadisticas mensuales un dia despues del evento", Toast.LENGTH_SHORT).show();
-                //}else{
-                //Toast.makeText(getContext(), "Fecha"+generarFecha(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "No hay datos de Servicio, se activarán las estadisticas mensuales un dia despues del evento", Toast.LENGTH_SHORT).show();
+                     Toast.makeText(getContext(), "Fecha dia siguiente "+generarFecha(), Toast.LENGTH_SHORT).show();
+                }else{
+                     Toast.makeText(getContext(), "Fecha"+generarFecha(), Toast.LENGTH_SHORT).show();
                 Intent mensuales = new Intent(getActivity(), EstadisticasMain.class);
                 getActivity().startActivity(mensuales);
-                //}
+                }
 
             }
         });
-        btnSemestrales.setOnClickListener(new View.OnClickListener() {
+        semestrales.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean existeConvivio= operador.verificarEventoConvivio(generarFechaConvivio());
-                //if(!existeConvivio ) {
+                if(!existeConvivio ) {
                 configurarDialogs();
-                //Toast.makeText(getContext(), "Fecha"+generarFechaConvivio(), Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getContext(), "No hay datos de Convivio, se activarán las estadisticas mensuales un dia despues del evento", Toast.LENGTH_SHORT).show();
-                //}else{
+                Toast.makeText(getContext(), "Fecha"+generarFechaConvivio(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "No hay datos de Convivio, se activarán las estadisticas mensuales un dia despues del evento", Toast.LENGTH_SHORT).show();
+                }else{
 
                 Intent semestrales = new Intent(getActivity(), Estadisticas_Semestrales.class);
                 getActivity().startActivity(semestrales);
-                //}
+                }
 
 
             }
@@ -141,7 +143,7 @@ public class Estadisticas extends Fragment {
     private String generarFecha() {
         String Fecha;
         Calendar c = Calendar.getInstance();
-        int Dia = c.get(Calendar.DAY_OF_MONTH)+1;
+        int Dia = c.get(Calendar.DAY_OF_MONTH);
         int Mes = c.get(Calendar.MONTH) + 1;
         int Anio = c.get(Calendar.YEAR);
         String decenaD = "";
@@ -158,7 +160,7 @@ public class Estadisticas extends Fragment {
     private String generarFechaConvivio() {
         String Fecha;
         Calendar c = Calendar.getInstance();
-        int Dia = c.get(Calendar.DAY_OF_MONTH)+1;
+        int Dia = c.get(Calendar.DAY_OF_MONTH);
         int Mes = c.get(Calendar.MONTH) + 1;
         int Anio = c.get(Calendar.YEAR);
         String decenaD = "";
