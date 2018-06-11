@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -72,6 +73,7 @@ public class ListaInventario extends Fragment {
     ListView listaInventario, listaInventarioE;
     ScrollView scroll;
     ImageView ImagenProducto;
+    TextView tvnota;
     Button BtnGeneral, BtnExtras, ABtnGuardar, btnguardar, btnrestar,btnsumar;
     EditText ANombre,ACantidad,ADescripcion, AComentario;
     Bitmap bitmap;
@@ -126,10 +128,12 @@ public class ListaInventario extends Fragment {
         BtnExtras = (Button) getView().findViewById(R.id.list_inventario_general_btnE);
         resultados = (TextView) getView().findViewById(R.id.list_Inventario_general_resultados);
         resultadosE = (TextView) getView().findViewById(R.id.resultadosE);
+        tvnota = (TextView) getView().findViewById(R.id.TVNota);
         listaInventario = (ListView) getView().findViewById(R.id.listaGeneral);
         listaInventarioE = (ListView) getView().findViewById(R.id.listaExtras);
         buscador = (SearchView) getView().findViewById(R.id.list_inventario_general_buscador);
         buscadorE = (SearchView) getView().findViewById(R.id.buscadorExtras);
+
         botonAgregar = (FloatingActionButton) getView().findViewById(R.id.list_inventario_general_agregar);
         AExistencia.setText(String.valueOf(resultadoE));
 
@@ -280,6 +284,7 @@ public class ListaInventario extends Fragment {
                 {
                     @Override
                     public void onResponse(String response) {
+                        tvnota.setTextColor(Color.BLACK);
                         Toast.makeText(getContext(),  response, Toast.LENGTH_SHORT).show();
                         if(response.compareTo("Insertado") == 0){
                             HiloCargaLista x = new HiloCargaLista();
@@ -292,7 +297,9 @@ public class ListaInventario extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
-                        Toast.makeText(getContext(), ""+error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Favor de ingresar una imagen al producto", Toast.LENGTH_SHORT).show();
+                        tvnota.setTextColor(Color.RED);
+
                     }
                 }
         ) {

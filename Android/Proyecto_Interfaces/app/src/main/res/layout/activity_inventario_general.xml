@@ -155,12 +155,28 @@
                 app:rippleColor="?attr/colorError"
                 app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
-            <ImageView
-                android:id="@+id/agregar_producto_imagen"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginTop="30dp"
-                app:srcCompat="@drawable/inventario" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/agregar_producto_imagen"
+                    android:layout_width="170dp"
+                    android:layout_height="100dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/inventario" />
+
+                <TextView
+                    android:id="@+id/TVNota"
+                    android:layout_width="100dp"
+                    android:layout_height="82dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="1"
+                    android:text="(Presionar para agregar imagen)"
+                    android:textAlignment="gravity" />
+            </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
 
