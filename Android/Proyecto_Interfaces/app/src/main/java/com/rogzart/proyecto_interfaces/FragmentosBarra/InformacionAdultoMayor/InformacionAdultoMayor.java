@@ -65,17 +65,20 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
     private MapView mMapView;
     private GoogleMap mGoogleMap;
     private LatLng latLng;
-    private TextView InfoDependencia,Info,Nombre,Apellidos,Diabetico,Calle,Colonia,VoluntarioFrecuente;
+    private TextView InfoDependencia,Info,Nombre,Apellidos,Diabetico,Calle,Colonia,VoluntarioFrecuente,TextDespensa;
     private TextView Nivel1,Nivel2,Nivel3;
     private ImageView Fotografia,FotografiaDomicilio;
     private Boolean Visible = false;
     private Conexion conexion;
-    private Button btnVoluntarioFrecuente,BtnRecoger,btnTrazarRutaAdultoMayor;
-    private LinearLayout Cercanos,Convivio,LayoutExiste;
+    private Button btnVoluntarioFrecuente,BtnRecoger,btnTrazarRutaAdultoMayor,BtnDespensa;
+    private LinearLayout Cercanos,Convivio,LayoutExiste,LinearDespensa;
+    private boolean despensa = false;
 
     @SuppressLint("ValidFragment")
     public InformacionAdultoMayor(Bundle paquete) {
         AdultoMayor = (AdultoMayor) paquete.getSerializable("AdultoMayor");
+        despensa = paquete.getBoolean("despensa");
+
     }
     public static InformacionAdultoMayor newInstance(Bundle paquete){
         InformacionAdultoMayor fragment = new InformacionAdultoMayor(paquete);
@@ -95,6 +98,10 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
         configurarDialogs();
         configurarComentarios();
         configurarBotonConvivio();
+        if(despensa){
+            configurarBotonDespensa();
+        }
+
     }
     private void configurarDialogs(){
         Alerta = new AlertDialog.Builder(getContext());
@@ -362,6 +369,91 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
         }else{
             LayoutExiste.setVisibility(View.VISIBLE);
         }
+    }
+    void configurarBotonDespensa(){
+        LinearDespensa = getView().findViewById(R.id.Despensas);
+        BtnDespensa = getView().findViewById(R.id.Despensa);
+        LinearDespensa.setVisibility(View.VISIBLE);
+        TextDespensa = getView().findViewById(R.id.TextoDespensa);
+
+        if(conexion.isConnected()){
+            conexion.setRuta("WebService/Asignacion/wsCheckEntrega.php");
+            StringRequest sRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
+                    new Response.Listener<String>()
+                    {
+                        @Override
+                        public void onResponse(String response) {
+                            if(response.compareTo("0") == 0){
+                                BtnDespensa.setVisibility(View.VISIBLE);
+                                TextDespensa.setVisibility(View.GONE);
+                            }else if(response.compareTo("1") == 0){
+                                BtnDespensa.setVisibility(View.GONE);
+                                TextDespensa.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    },
+                    new Response.ErrorListener()
+                    {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getContext(), ""+error, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            ) {
+                @Override
+                protected Map<String, String> getParams()
+                {
+                    Map<String, String>  params = new HashMap<String, String>();
+                    params.put("IdAdultoMayor",String.valueOf(AdultoMayor.getIdAdultoMayor()));
+                    params.put("Fecha",generarFechaActual());
+                    return params;
+                }
+            };
+            VolleySingleton.getInstance(getContext()).addToRequestQueue(sRequest);
+        }else{
+
+        }
+
+        BtnDespensa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(conexion.isConnected()){
+                    conexion.setRuta("WebService/Asignacion/wsEntregaDespensa.php");
+                    StringRequest sRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
+                            new Response.Listener<String>()
+                            {
+                                @Override
+                                public void onResponse(String response) {
+                                    Toast.makeText(getContext(), ""+response, Toast.LENGTH_SHORT).show();
+                                    if(response.compareTo("Actualizado") == 0){
+                                        BtnDespensa.setVisibility(View.GONE);
+                                        TextDespensa.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener()
+                            {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(getContext(), ""+error, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                    ) {
+                        @Override
+                        protected Map<String, String> getParams()
+                        {
+                            Map<String, String>  params = new HashMap<String, String>();
+                            params.put("IdAdultoMayor",String.valueOf(AdultoMayor.getIdAdultoMayor()));
+                            params.put("Fecha",generarFechaActual());
+                            return params;
+                        }
+                    };
+                    VolleySingleton.getInstance(getContext()).addToRequestQueue(sRequest);
+                }else{
+                    Toast.makeText(getContext(), "Verifica tu conexion a Internet", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {

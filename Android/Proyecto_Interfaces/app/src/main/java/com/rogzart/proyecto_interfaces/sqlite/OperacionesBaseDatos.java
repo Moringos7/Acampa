@@ -460,7 +460,7 @@ public final class OperacionesBaseDatos {
     public boolean verificarEventoServicio(String Fecha){
         boolean Existe = false;
         SQLiteDatabase query = baseDatos.getReadableDatabase();
-        Cursor c = query.rawQuery("SELECT * FROM evento,tipoevento WHERE Fecha =  ? AND  FkTipoEvento = IdTipoEvento AND tipoevento.Nombre = ? ",new String[]{Fecha,"Servicio",});
+        Cursor c = query.rawQuery("SELECT * FROM evento,tipoevento WHERE Fecha =  ? AND  FkTipoEvento = IdTipoEvento AND tipoevento.Nombre = ? ",new String[]{Fecha,"Servicio"});
         if(c.moveToFirst()) {
             Existe = true;
         }

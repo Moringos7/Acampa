@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +41,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-
 
 public class AsignacionAdultoMayorCoordinador extends Fragment {
 
@@ -90,12 +90,14 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         if(!EventoDisponible){
             AlertaEvento.show();
         }else {
+            cargarLista();
             configurarHilos();
+
         }
         //LinearprogressBar.setVisibility(View.VISIBLE);
         ////Botones de Administracion
         LinearLayout Botones = getView().findViewById(R.id.layoutBotones);
-        Botones.setVisibility(View.VISIBLE);
+        Botones.setVisibility(View.GONE);
         Button btn = getView().findViewById(R.id.btntemporal);
         btn.setText("Recargar");
         btn.setOnClickListener(new View.OnClickListener() {
@@ -110,13 +112,13 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         BTN.setText("Status");
         BTN.setOnClickListener(
                 new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Peticiones: "+NumeroPeticiones, Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), "Estado Hilo1: "+Activado, Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), "Estado Hilo2: "+myHiloC.getStatus(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getContext(), "Peticiones: "+NumeroPeticiones, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Estado Hilo1: "+Activado, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Estado Hilo2: "+myHiloC.getStatus(), Toast.LENGTH_SHORT).show();
+                    }
+                });
         //Botones de Administracion
     }
     @Override
@@ -145,9 +147,6 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                 cancelar();
             }
         });
-
-
-
         AlertaFin = new AlertDialog.Builder(getContext());
         AlertaFin.setTitle("Fin de Asignaciones");
         AlertaFin.setMessage("Ha terminado de Asignar a todos los adultos mayores");
@@ -202,13 +201,11 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                 }
             }
         }
-        if(arrayList.size() == 0){
-            listaG.setVisibility(View.GONE);
-        }
         ListaAdaptadorAsignacionAdultoMayor miLista = new ListaAdaptadorAsignacionAdultoMayor(arrayList, getContext(),FechaActual,Selecciones);
-        //LinearprogressBar.setVisibility(View.GONE);
+        LinearprogressBar.setVisibility(View.GONE);
         listaG.setAdapter(miLista);
         Asignaciones();
+
     }
     private void Asignaciones(){
         int NumAdultosMayores;
@@ -222,8 +219,6 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         if(NumAdultosMayores == 0){
             AlertaFin.show();
             DetenerHilos();
-        }else{
-            LinearprogressBar.setVisibility(View.VISIBLE);
         }
     }
     private void DetenerHilos(){
@@ -274,6 +269,9 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                         if(cuenta != NumeroPeticiones){
                             A = true;
                             NumeroPeticiones = cuenta;
+                        }else{
+                            LinearprogressBar.setVisibility(View.VISIBLE);
+
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -285,7 +283,6 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
                     Toast.makeText(getContext(), "Fallo Conexion", Toast.LENGTH_SHORT).show();
                 }
             });
-
         }
         @Override
         protected Void doInBackground(Void... voids) {
@@ -294,20 +291,20 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
             while(Salir){
                 VolleySingleton.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
                 if(A){
-                   operador.EliminarDatosTabla("recoger");
-                   operador.EliminarDatosTabla("asignacion");
-                   new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext());
+                    operador.EliminarDatosTabla("recoger");
+                    operador.EliminarDatosTabla("asignacion");
+                    new ActualizacionBaseDatos(getContext()).ActualizacionAsignacion(getContext());
                     new ActualizacionBaseDatos(getContext()).ActualizacionRecoger(getContext());
 
                     Salir = false;
-                   A = false;
+                    A = false;
                 }
                 if(isCancelled()){
-                   break;
+                    break;
                 }
                 try{
                     Thread.sleep(2000);}
-                    catch (InterruptedException e) {
+                catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -325,6 +322,5 @@ public class AsignacionAdultoMayorCoordinador extends Fragment {
         }
 
     }
-
 }
 

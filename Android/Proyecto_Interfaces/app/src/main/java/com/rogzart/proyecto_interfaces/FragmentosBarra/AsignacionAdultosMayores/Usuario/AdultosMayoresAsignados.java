@@ -72,7 +72,7 @@ public class AdultosMayoresAsignados extends Fragment implements View.OnClickLis
                 AdultoMayor miAdultoMayor = (AdultoMayor) parent.getItemAtPosition(position);
                 Bundle miPaquete = new Bundle();
                 miPaquete.putSerializable("AdultoMayor",miAdultoMayor);
-
+                miPaquete.putBoolean("despensa",true);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.contenedor, InformacionAdultoMayor.newInstance(miPaquete));
                 ft.addToBackStack(null);

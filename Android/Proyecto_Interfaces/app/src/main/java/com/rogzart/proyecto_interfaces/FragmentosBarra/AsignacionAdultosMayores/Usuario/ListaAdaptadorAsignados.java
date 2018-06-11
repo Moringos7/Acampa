@@ -1,17 +1,22 @@
 package com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Usuario;
 
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.InformacionAdultoMayor.InformacionAdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.UsuarioAsignacion;
@@ -50,13 +55,13 @@ public class ListaAdaptadorAsignados extends BaseAdapter {
         LayoutInflater inflate = LayoutInflater.from(contexto);
         View v = inflate.inflate(R.layout.list_item_regular,null);
         conexion = new Conexion(contexto);
-        AdultoMayor adultomayor = AdultosMayores.get(position);
+        final AdultoMayor adultomayor = AdultosMayores.get(position);
         final ImageView Imagen;
         TextView Texto;
+        Button BtnInfo,BtnDespensa;
 
         Imagen = v.findViewById(R.id.imagen_list_regular);
         Texto = v.findViewById(R.id.texto_list_regular);
-
         String Nombre = ""+adultomayor.getNombre()+" "+adultomayor.getApellidoPaterno()+" "+adultomayor.getApellidoMaterno();
         Texto.setText(Nombre);
 
@@ -73,6 +78,7 @@ public class ListaAdaptadorAsignados extends BaseAdapter {
             }
         });
         VolleySingleton.getInstance(contexto).addToRequestQueue(imageRequest);
+
         return v;
     }
 }
