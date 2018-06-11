@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.rogzart.proyecto_interfaces.Modelo.Conexion;
 import com.rogzart.proyecto_interfaces.Modelo.Evento;
@@ -24,7 +23,6 @@ public class ListaEventosMain extends Fragment {
     private Context contexto;
     private EditText ETipoEvento, ELugar,EHora,EFecha,EInformacion;
     private Button btnGuardar;
-
 
     public ListaEventosMain() {
 
@@ -50,7 +48,6 @@ public class ListaEventosMain extends Fragment {
     }
     public void onActivityCreated (Bundle state) {
         super.onActivityCreated(state);
-
         ETipoEvento = (EditText) getView().findViewById(R.id.detalles_eventos_tipoeventos);
         EFecha = (EditText) getView().findViewById(R.id.detalles_evento_fecha);
         EInformacion = (EditText) getView().findViewById(R.id.detalles_evento_informacion);
@@ -59,6 +56,7 @@ public class ListaEventosMain extends Fragment {
         Conexion conexion= new Conexion(getContext());
         operador= OperacionesBaseDatos.obtenerInstancia(contexto);
 
+        EFecha.setText(String.valueOf(evento.getFecha()));
         EHora.setText(String.valueOf(evento.getHora()));
         EInformacion.setText(evento.getInformacion());
         ELugar.setText(evento.getLugar());

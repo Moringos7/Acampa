@@ -53,6 +53,7 @@ public class MenuAdministrar extends Fragment {
 
             }
         });
+        /*
         Button AdultosMayores = (Button)getView().findViewById(R.id.btnAdultosMayores);
         AdultosMayores.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +81,7 @@ public class MenuAdministrar extends Fragment {
                     Toast.makeText(getContext(), "Verifique su conexion", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 
     }
 

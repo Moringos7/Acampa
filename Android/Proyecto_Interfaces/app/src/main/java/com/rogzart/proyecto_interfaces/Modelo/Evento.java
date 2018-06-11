@@ -5,12 +5,10 @@ import java.io.Serializable;
 public class Evento implements Serializable{
     private int IdEvento;
     private String Fecha;
-    private Evento evento;
     private String Hora;
     private String Lugar;
     private String Informacion;
     private Integer FkTipoEvento;
-
     public Evento(){
 
     }
@@ -24,8 +22,6 @@ public class Evento implements Serializable{
     }
 
     public String getFecha() {
-
-
         return Fecha;
     }
 

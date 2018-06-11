@@ -34,7 +34,7 @@
             android:layout_marginBottom="10dp"
             android:theme="@style/RaisedButton"
             android:textColor="#fff"/>
-
+      <!--
         <Button
             android:layout_width="160dp"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             android:id="@+id/btnCoordiadores"
             android:theme="@style/RaisedButton"
             android:textColor="#fff"/>
-
+-->
     </LinearLayout>
 
 </FrameLayout>

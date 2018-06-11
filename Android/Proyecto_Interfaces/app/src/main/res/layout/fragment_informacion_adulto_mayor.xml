@@ -16,7 +16,36 @@
             android:orientation="vertical"
             tools:layout_editor_absoluteX="52dp"
             tools:layout_editor_absoluteY="0dp">
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="15dp"
+                android:id="@+id/Despensas"
+                android:visibility="visible">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/Despensa"
+                    android:layout_gravity="center"
+                    android:background="#53b029"
+                    android:textColor="#fff"
+                    android:textAllCaps="false"
+                    android:text="Entregar despensa"
+                    android:padding="5dp"
+                    android:visibility="gone"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TextoDespensa"
+                    android:text="Despensa Entregada"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:textColor="#53b029"
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
+            </LinearLayout>
             <ImageView
                 android:id="@+id/ImagenAdultoMayor"
                 android:layout_width="110dp"

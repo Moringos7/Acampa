@@ -16,11 +16,11 @@
 
 
         <LinearLayout
+            android:id="@+id/LayoutEventos"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="20dp"
-            android:background="@android:color/darker_gray"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -63,7 +63,8 @@
                         android:layout_weight="1"
                         android:fontFamily="cursive"
                         android:text="Tipo Evento"
-                        android:textSize="24sp" />
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
 
                     <android.support.design.widget.FloatingActionButton
                         android:id="@+id/list_evento_borrar"
@@ -73,7 +74,7 @@
                         android:layout_weight="1"
                         android:clickable="true"
                         android:src="@drawable/x"
-                        app:backgroundTint="@android:color/darker_gray" />
+                        app:backgroundTint="@android:color/white" />
                 </LinearLayout>
 
                 <TextView

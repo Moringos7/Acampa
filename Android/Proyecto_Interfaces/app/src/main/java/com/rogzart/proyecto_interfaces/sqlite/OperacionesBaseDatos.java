@@ -412,7 +412,7 @@ public final class OperacionesBaseDatos {
         valores.put(evento.FkTipoEveto,x.getFkTipoEvento());
         query.insert("evento",null,valores);
     }
-    public ArrayList<EventoLista> LeerTablaEvento(){
+    public  ArrayList<EventoLista> LeerTablaEventoLista(){
         ArrayList<EventoLista> list = new ArrayList<EventoLista>();
         EventoLista x;
         SQLiteDatabase query = baseDatos.getReadableDatabase();
@@ -420,6 +420,25 @@ public final class OperacionesBaseDatos {
         if(c.moveToFirst()) {
             do {
                 x = new EventoLista();
+                x.setIdEvento(c.getInt(1));
+                x.setFecha(c.getString(2));
+                x.setHora(c.getString(3));
+                x.setLugar(c.getString(4));
+                x.setInformacion(c.getString(5));
+                x.setFkTipoEvento(c.getInt(6));
+                list.add(x);
+            } while (c.moveToNext());
+        }
+        return list;
+    }
+    public ArrayList<Evento> LeerTablaEvento(){
+        ArrayList<Evento> list = new ArrayList<Evento>();
+        Evento x;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM evento",null);
+        if(c.moveToFirst()) {
+            do {
+                x = new Evento();
                 x.setIdEvento(c.getInt(1));
                 x.setFecha(c.getString(2));
                 x.setHora(c.getString(3));
@@ -460,6 +479,15 @@ public final class OperacionesBaseDatos {
     }
     public boolean verificarEventoServicio(String Fecha){
         boolean Existe = false;
+        SQLiteDatabase query = baseDatos.getReadableDatabase();
+        Cursor c = query.rawQuery("SELECT * FROM evento,tipoevento WHERE Fecha =  ? AND  FkTipoEvento = IdTipoEvento AND tipoevento.Nombre = ? ",new String[]{Fecha,"Servicio"});
+        if(c.moveToFirst()) {
+            Existe = true;
+        }
+        return Existe;
+    }
+    public boolean verificarEventoServicioEstadisticas(String Fecha){
+        boolean Existe = false;
         String[]parteFecha2 = Fecha.split("-");
         int Ifecha = Integer.parseInt(parteFecha2[2]);
         int Mfecha = Integer.parseInt(parteFecha2[1]);
@@ -473,15 +501,13 @@ public final class OperacionesBaseDatos {
         }
         else{
             Ifecha=30;
-
-
         }
         String dia= String.valueOf(Ffecha);
         SQLiteDatabase query = baseDatos.getReadableDatabase();
         //Cursor c = query.rawQuery("SELECT * FROM evento,tipoevento WHERE Fecha =  ? AND  FkTipoEvento = IdTipoEvento AND tipoevento.Nombre = ? ",new String[]{Fecha,"Servicio",});
         Cursor c = query.rawQuery("SELECT * FROM evento,tipoevento WHERE substr(Fecha,1,4)= ? " +
                 "AND substr(Fecha,6,2)= ? AND substr(Fecha,9,2)= ? AND FkTipoEvento = IdTipoEvento " +
-                "AND tipoevento.Nombre = ? ",new String[]{parteFecha2[0],parteFecha2[1],dia,"Servicio",});
+                "AND tipoevento.Nombre = ? ",new String[]{parteFecha2[0],parteFecha2[1],parteFecha2[2],"Servicio",});
         if(c.moveToFirst()) {
             Existe = true;
         }

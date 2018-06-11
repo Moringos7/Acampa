@@ -48,12 +48,11 @@
         </SearchView>
 
         <ListView
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
             android:id="@+id/idListaConvivio"
-            android:visibility="visible"/>
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:visibility="visible" />
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -63,15 +62,12 @@
                 android:id="@+id/BRecoger"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:text="Agregar a Mis Asignados" />
             <Button
                 android:id="@+id/BAsignados"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:text="Mis Asignados" />
 
         </LinearLayout>
