@@ -487,7 +487,11 @@ public class Estadisticas_Semestrales extends AppCompatActivity{
         double Acudieron4 = operador.asignacionesMes(mes4, Fanio4);
         double Acudieron5 = operador.asignacionesMes(mes5, Fanio5);
         double Acudieron6 = operador.asignacionesMes(mes6, Fanio6);
+        //Toast.makeText(this, "Asignaciones Abril: "+Acudieron3, Toast.LENGTH_SHORT).show();
+
+
         double usuarios = operador.numeroUsuarios();
+        //Toast.makeText(this, "Usuarios "+usuarios, Toast.LENGTH_SHORT).show();
         double ADivision1 = ((float) (Acudieron1 / usuarios));
         double ADivision2 = ((float) (Acudieron2 / usuarios));
         double ADivision3 = ((float) (Acudieron3 / usuarios));
@@ -502,17 +506,12 @@ public class Estadisticas_Semestrales extends AppCompatActivity{
         Asistentes6 = (float) ((ADivision6) * 100);
 
         NoAcudieron1 = (100 - Asistentes1);
-
         NoAcudieron2 = (100 - Asistentes2);
-
         NoAcudieron3 = (100 - Asistentes3);
-
-
         NoAcudieron4 = (100 - Asistentes4);
-
         NoAcudieron5 = (100 - Asistentes5);
-
         NoAcudieron6 = (100 - Asistentes6);
+
 
 
 
@@ -619,7 +618,7 @@ public class Estadisticas_Semestrales extends AppCompatActivity{
 
     private void DatosGrafica2(float asistentes1, float asistentes2, float asistentes3, float asistentes4, float asistentes5, float asistentes6, float noAcudieron1, float noAcudieron2, float noAcudieron3, float noAcudieron4, float noAcudieron5, float noAcudieron6) {
         Log.d(TAG, "addDataSet started");
-       // Toast.makeText(this, "NoAsistentesEnero"+noAcudieron1, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, "NoAsistentesEnero"+noAcudieron1, Toast.LENGTH_SHORT).show();
         ArrayList<BarEntry> grupo1 = new ArrayList<>();
 
         grupo1.add(new BarEntry(0, asistentes6));
@@ -671,9 +670,9 @@ public class Estadisticas_Semestrales extends AppCompatActivity{
         l.setYEntrySpace(5f);
         //create pie data object
         BarData data1 = new BarData(set1,set2);
-        data1.setBarWidth(0.45f);
+        data1.setBarWidth(0.43f);
         barchart2.setData(data1);
-        barchart2.groupBars(0f,0.06f,0.02f);
+        barchart2.groupBars(-.50f,0.06f,0.06f);
         barchart2.setFitBars(true);
         set2.setColors(colors2);
     }
