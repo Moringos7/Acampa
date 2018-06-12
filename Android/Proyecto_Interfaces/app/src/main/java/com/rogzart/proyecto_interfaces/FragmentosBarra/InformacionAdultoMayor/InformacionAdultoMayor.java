@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rogzart.proyecto_interfaces.Adultos.Adultos;
+import com.rogzart.proyecto_interfaces.FragmentosBarra.AsignacionAdultosMayores.Coordinador.AsignacionAdultoMayorCoordinador;
 import com.rogzart.proyecto_interfaces.FragmentosBarra.VoluntarioFrecuente.AsignarVoluntarioFrecuente;
 import com.rogzart.proyecto_interfaces.MapsActivity;
 import com.rogzart.proyecto_interfaces.Modelo.AdultoMayor;
@@ -73,9 +75,10 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
     private ImageView Fotografia,FotografiaDomicilio;
     private Boolean Visible = false;
     private Conexion conexion;
-    private Button btnVoluntarioFrecuente,BtnRecoger,btnTrazarRutaAdultoMayor,BtnDespensa;
-    private LinearLayout Cercanos,Convivio,LayoutExiste,LinearDespensa;
+    private Button btnVoluntarioFrecuente,BtnRecoger,btnTrazarRutaAdultoMayor,BtnDespensa,BtnAgregarComentario,BtnEnviarComentario;
+    private LinearLayout Cercanos,Convivio,LayoutExiste,LinearDespensa,LayoutComentario;
     private boolean despensa = false;
+    private EditText ComentarioNuevo;
 
     @SuppressLint("ValidFragment")
     public InformacionAdultoMayor(Bundle paquete) {
@@ -321,13 +324,77 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
     void configurarComentarios(){
 
         NumeroComentario = getView().findViewById(R.id.Comentarios);
-        ArrayList<ComentarioAM> comentarios = operador.obtenerComentarioAdultoMayor(AdultoMayor.getIdAdultoMayor());
+        BtnAgregarComentario = getView().findViewById(R.id.BtnAgregarComentario);
+        BtnEnviarComentario = getView().findViewById(R.id.BtnEnviarComentario);
+        LayoutComentario = getView().findViewById(R.id.LayoutComentario);
+        final ArrayList<ComentarioAM> comentarios = operador.obtenerComentarioAdultoMayor(AdultoMayor.getIdAdultoMayor());
         NumeroComentario.setText("Comentarios: "+comentarios.size());
-
+        ComentarioNuevo = getView().findViewById(R.id.ComentarioNuevo);
         RecyclerView Comentarios =  getView().findViewById(R.id.ListaComentarios);
         Comentarios.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         Comentarios.setAdapter(new AdaptadorComentarios(comentarios,getContext()));
 
+        BtnAgregarComentario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(LayoutComentario.getVisibility() == View.VISIBLE){
+                    LayoutComentario.setVisibility(View.GONE);
+                }else{
+                    LayoutComentario.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+        BtnEnviarComentario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String Mensaje = ComentarioNuevo.getText().toString();
+                if(Mensaje.length() < 10){
+                    Toast.makeText(getContext(), "Escribe un comentario más largo", Toast.LENGTH_SHORT).show();
+                }else{
+                    if(conexion.isConnected()){
+                        conexion.setRuta("WebService/ComentarioAM/wsComentarioAMCreate.php");
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, conexion.getRuta(),
+                                new Response.Listener<String>()
+                                {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        Toast.makeText(getContext(), ""+response, Toast.LENGTH_SHORT).show();
+                                        if(response.compareTo("Guardado") == 0) {
+                                            LayoutComentario.setVisibility(View.GONE);
+                                            operador.EliminarDatosTabla("comentarioam");
+                                            if(!(new ActualizacionBaseDatos(getContext()).ActualizacionComentarioAM(getContext()))){
+                                                HiloComentario hiloComentario = new HiloComentario();
+                                                hiloComentario.execute();
+                                            }
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener()
+                                {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Toast.makeText(getContext(), ""+error, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                        ) {
+                            @Override
+                            protected Map<String, String> getParams()
+                            {
+                                Map<String, String>  params = new HashMap<String, String>();
+                                params.put("Id",String.valueOf(AdultoMayor.getIdAdultoMayor()));
+                                params.put("Nombre",Mensaje);
+                                params.put("Fecha",generarFechaActual());
+                                return params;
+                            }
+                        };
+                        VolleySingleton.getInstance(getContext()).addToRequestQueue(stringRequest);
+                    }else{
+                        Toast.makeText(getContext(), "Verifica tu conexion a Internet", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
 
 
     }
@@ -532,6 +599,25 @@ public class InformacionAdultoMayor extends Fragment implements OnMapReadyCallba
             configurarBotonConvivio();
         }
     }
+    private class HiloComentario extends AsyncTask<Void, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            configurarComentarios();
+        }
+    }
+
 
 
 }

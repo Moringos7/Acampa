@@ -33,7 +33,8 @@ public class AdaptadorComentarios extends RecyclerView.Adapter<ComentariosViewHo
     public void onBindViewHolder(ComentariosViewHolder holder, int position) {
 
 
-        holder.getFecha().setText(comentario.get(position).getFecha());
+        String []parteFecha = comentario.get(position).getFecha().split("-");
+        holder.getFecha().setText(""+parteFecha[2]+"/"+parteFecha[1]+"/"+parteFecha[0]);
         holder.getComnetario().setText(comentario.get(position).getNombre());
     }
 

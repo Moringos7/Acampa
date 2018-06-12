@@ -307,11 +307,79 @@
                 android:textColor="#898988"
                 android:textSize="20sp" />
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/Comentarios"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="left|center"
+                        android:text="Comentarios: n"
+                        android:textColor="#898988"
+                        android:textSize="20sp" />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Agregar"
+                        android:id="@+id/BtnAgregarComentario"
+                        android:layout_marginLeft="30dp"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/LayoutComentario"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rectangulo"
+                        android:id="@+id/ComentarioNuevo"
+                        android:paddingTop="5dp"
+                        android:hint="Escribe tu comentario"
+                        android:textSize="17sp"
+                        android:textColor="#000"
+                        android:padding="10dp"/>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/BtnEnviarComentario"
+                        android:text="Enviar"
+                        android:textSize="15sp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="#fff"
+                        android:background="#2D73BF"/>
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/ListaComentarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
+            </LinearLayout>
+            <LinearLayout
                 android:id="@+id/LayoutConvivio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:paddingBottom="50dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -327,7 +395,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/btnRecoger"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="40dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_marginTop="20dp"
                     android:background="#53b029"
                     android:text="Aceptar"
@@ -350,31 +418,7 @@
                     android:textColor="#000"
                     android:textSize="18sp" />
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp"
-                android:paddingBottom="50dp">
 
-                <TextView
-                    android:id="@+id/Comentarios"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="left"
-                    android:text="Comentarios: n"
-                    android:textColor="#898988"
-                    android:textSize="20sp" />
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/ListaComentarios"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
-            </LinearLayout>
         </LinearLayout>
 
 
