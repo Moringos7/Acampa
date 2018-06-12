@@ -22,7 +22,7 @@ public class Conexion {
 
 
         ///Codigo añadido
-
+        /*
         try {
             Process p = Runtime.getRuntime().exec("ping -c 1 www.google.com");
             int val = p.waitFor();
@@ -34,8 +34,7 @@ public class Conexion {
             e.printStackTrace();
         }
         return false;
-
-        /*
+        */
        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         Network[] networks = connectivityManager.getAllNetworks();
         NetworkInfo networkInfo;
@@ -46,7 +45,6 @@ public class Conexion {
             }
         }
         return false;
-        */
     }
     public void setRuta(String comp){
         this.Ruta = comp;
