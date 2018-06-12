@@ -23,10 +23,10 @@
                 android:text="Selecione los Adultos Mayores a buscar"
                 android:textSize="19sp" />
 
-            <SearchView
-                android:layout_width="match_parent"
-                android:layout_height="50dp" >
-            </SearchView>
+        <SearchView
+            android:id="@+id/lugares_buscador"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"></SearchView>
 
             <ListView
                 android:layout_width="match_parent"

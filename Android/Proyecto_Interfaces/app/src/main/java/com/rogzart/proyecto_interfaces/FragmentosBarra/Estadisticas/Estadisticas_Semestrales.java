@@ -500,24 +500,14 @@ public class Estadisticas_Semestrales extends AppCompatActivity{
         Asistentes4 = (float) ((ADivision4) * 100);
         Asistentes5 = (float) ((ADivision5) * 100);
         Asistentes6 = (float) ((ADivision6) * 100);
-        if(Asistentes1 >0.00){
+
             NoAcudieron1 = (100 - Asistentes1);
-        }
-        if(Asistentes2 >0.00){
-            NoAcudieron1 = (100 - Asistentes2);
-        }
-        if(Asistentes3 >0.00){
-            NoAcudieron1 = (100 - Asistentes3);
-        }
-        if(Asistentes4 >0.00){
-            NoAcudieron1 = (100 - Asistentes4);
-        }
-        if(Asistentes5 >0.00){
-            NoAcudieron1 = (100 - Asistentes5);
-        }
-        if(Asistentes6 >0.00){
-            NoAcudieron1 = (100 - Asistentes6);
-        }
+            NoAcudieron2 = (100 - Asistentes2);
+            NoAcudieron3 = (100 - Asistentes3);
+            NoAcudieron4 = (100 - Asistentes4);
+            NoAcudieron5 = (100 - Asistentes5);
+            NoAcudieron6 = (100 - Asistentes6);
+
 
 
 

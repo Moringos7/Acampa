@@ -14,6 +14,7 @@ import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -44,6 +45,7 @@ public class Convivio extends Fragment {
     private OperacionesBaseDatos operador;
     private AlertDialog.Builder AlertaEvento;
     private AlertDialog.Builder AlertaScouter;
+    private SearchView buscador;
     private LogUser ControlUser;
     private ListView ListaG;
     private Button Btn,btnAsigandos;
@@ -69,14 +71,27 @@ public class Convivio extends Fragment {
         conexion = new Conexion(getContext());
         General = getView().findViewById(R.id.InterfazConvivio);
         Cargando = getView().findViewById(R.id.layoutActualizandoConvivio);
+        buscador = getView().findViewById(R.id.BusquedaConvivio);
         configurarDialogs();
         operador = OperacionesBaseDatos.obtenerInstancia(getContext());
         if(operador.verificarEventoConvivio(FechaActual)){
             //Toast.makeText(getContext(), "Existe", Toast.LENGTH_SHORT).show();
             ArrayList<AdultoMayor> adultos = operador.obtenerAdultosMayoresConvivio(FechaActual);
             ListaG = getView().findViewById(R.id.idListaConvivio);
-            AdaptadorConvivio miLista = new AdaptadorConvivio(adultos,getContext());
+            final AdaptadorConvivio miLista = new AdaptadorConvivio(adultos,getContext());
             ListaG.setAdapter(miLista);
+            buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String query) {
+                    miLista.getFilter().filter(query);
+                    return false;
+                }
+            });
             configurarBoton();
         }else{
             //Toast.makeText(getContext(), "No Existe", Toast.LENGTH_SHORT).show();
